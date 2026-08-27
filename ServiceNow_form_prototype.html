@@ -52,6 +52,30 @@
       display: block;
     }
 
+    .field-help-toggle {
+      width: 1.8rem;
+      height: 1.8rem;
+      margin-left: 0.4rem;
+      border: 1px solid #9ca3af;
+      border-radius: 50%;
+      background: #e5e7eb;
+      color: #4b5563;
+      font-size: 1.2rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .field-help-list {
+      margin: 0;
+      padding-left: 1.8rem;
+      color: var(--uom-muted);
+      font-size: 1.3rem;
+    }
+
+    .field-help-list li + li {
+      margin-top: 0.4rem;
+    }
+
     .form-path {
       border: 0;
       margin: 0;
@@ -183,7 +207,24 @@
       </div>
 
       <form id="donor-reuse-form" novalidate>
-        <h2 class="form-section-title">1. Request type</h2>
+        <h2 class="form-section-title">ELIGIBILITY</h2>
+
+        <div class="form-group required">
+          <label class="control-label" id="f-science-faculty-label">Are you a member of the Science Faculty?</label>
+          <div class="radio-group inline" role="group" aria-labelledby="f-science-faculty-label">
+            <label class="radio-item"><input type="radio" name="science_faculty_member" value="yes" required /> Yes</label>
+            <label class="radio-item"><input type="radio" name="science_faculty_member" value="no" /> No</label>
+          </div>
+          <div class="conditional-panel" id="science-faculty-panel">
+            <div class="alert alert-info" role="note">
+              <span class="alert__icon" aria-hidden="true">i</span>
+              <div>This pilot service is currently only available to members of the Faculty of Science.</div>
+            </div>
+          </div>
+        </div>
+
+        <fieldset class="form-path" id="request-type-fields" hidden disabled>
+        <h2 class="form-section-title">REQUEST TYPE</h2>
 
         <div class="form-group required">
           <label class="control-label" id="f-request-type-label">What would you like to do?</label>
@@ -193,8 +234,10 @@
           </div>
         </div>
 
+        </fieldset>
+
         <fieldset class="form-path" id="donor-form-fields" hidden disabled>
-        <h2 class="form-section-title">Donation form: Your details</h2>
+        <h2 class="form-section-title">YOUR DETAILS</h2>
 
         <div class="uom-row">
           <div class="uom-col uom-col-6">
@@ -246,7 +289,7 @@
           </div>
         </div>
 
-        <h2 class="form-section-title">Donation form: About the item</h2>
+        <h2 class="form-section-title">ABOUT THE ITEM</h2>
 
         <div class="uom-row">
           <div class="uom-col uom-col-6">
@@ -303,12 +346,12 @@
           <textarea id="f-description" name="description" class="form-control" rows="4" placeholder="Describe what it is, what it was used for, and anything a receiver should know." required></textarea>
         </div>
 
-        <h2 class="form-section-title">Donation form: Condition</h2>
+        <h2 class="form-section-title">CONDITION</h2>
 
         <div class="uom-row">
           <div class="uom-col uom-col-6">
             <div class="form-group required">
-              <label class="control-label" for="f-condition-rating">Condition</label>
+              <label class="control-label" for="f-condition-rating">Condition <button type="button" class="field-help-toggle" aria-expanded="false" aria-controls="condition-help" onclick="toggleFieldHelp('condition-help', this)">?</button></label>
               <select id="f-condition-rating" name="condition_rating" class="form-control" required>
                 <option value="">-- Select condition --</option>
                 <option>Excellent</option>
@@ -316,6 +359,14 @@
                 <option>Fair</option>
                 <option>Poor</option>
               </select>
+              <div class="conditional-panel" id="condition-help">
+                <ul class="field-help-list">
+                  <li><strong>Excellent</strong> - Near-new condition, no visible wear or damage, complete and ready to reuse.</li>
+                  <li><strong>Good</strong> - Minor cosmetic wear only, complete and suitable for reuse.</li>
+                  <li><strong>Fair</strong> - Noticeable wear or minor missing accessories, but still usable with caveats.</li>
+                  <li><strong>Poor</strong> - Significant wear, damage or incomplete parts; may require repair or assessment before reuse.</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -323,7 +374,7 @@
         <div class="uom-row">
           <div class="uom-col uom-col-6">
             <div class="form-group required">
-              <label class="control-label" for="f-functional-status">Functional status</label>
+              <label class="control-label" for="f-functional-status">Functional status <button type="button" class="field-help-toggle" aria-expanded="false" aria-controls="functional-status-help" onclick="toggleFieldHelp('functional-status-help', this)">?</button></label>
               <select id="f-functional-status" name="functional_status" class="form-control" required>
                 <option value="">-- Select functional status --</option>
                 <option>Fully working</option>
@@ -332,6 +383,15 @@
                 <option>Not working</option>
                 <option>Unknown</option>
               </select>
+              <div class="conditional-panel" id="functional-status-help">
+                <ul class="field-help-list">
+                  <li><strong>Fully working</strong> - Performs as expected and can be reused without repair.</li>
+                  <li><strong>Working with issues</strong> - Usable, but has known limitations, faults or intermittent problems.</li>
+                  <li><strong>Needs repair</strong> - Not ready for use until repaired, serviced or assessed.</li>
+                  <li><strong>Not working</strong> - Does not currently function.</li>
+                  <li><strong>Unknown</strong> - Functional status has not been confirmed.</li>
+                </ul>
+              </div>
             </div>
           </div>
           <div class="uom-col uom-col-6">
@@ -399,7 +459,7 @@
           <span class="help-block">Attach manuals, service records or other support files. These can also be emailed to the service team after submission.</span>
         </div>
 
-        <h2 class="form-section-title">Donation form: Practicalities</h2>
+        <h2 class="form-section-title">PRACTICALITIES</h2>
 
         <div class="uom-row">
           <div class="uom-col uom-col-6">
@@ -481,7 +541,7 @@
           </div>
         </div>
 
-        <h2 class="form-section-title">Donation form: Eligibility check</h2>
+        <h2 class="form-section-title">ELIGIBILITY CHECK</h2>
 
         <div class="form-group required">
           <label class="control-label" id="f-hazardous-use-label">Has the item ever been used with chemicals, biological material, radioactive material, or hazardous waste?</label>
@@ -550,7 +610,7 @@
           </div>
         </div>
 
-        <h2 class="form-section-title">Donation form: Availability and preferences</h2>
+        <h2 class="form-section-title">AVAILABILITY AND PREFERENCES</h2>
 
         <div class="form-group required">
           <label class="control-label" for="f-hold-duration">How long can you hold the item in your lab?</label>
@@ -582,7 +642,7 @@
           <textarea id="f-receiver-restrictions" name="receiver_restrictions" class="form-control" rows="3" placeholder="e.g. must be within school, cross-faculty OK"></textarea>
         </div>
 
-        <h2 class="form-section-title">Donation form: Approval</h2>
+        <h2 class="form-section-title">APPROVAL</h2>
 
         <div class="form-group">
           <label class="control-label" for="f-financial-delegate">Financial delegate name</label>
@@ -601,7 +661,7 @@
         </fieldset>
 
         <fieldset class="form-path" id="receiver-form-fields" hidden disabled>
-        <h2 class="form-section-title">Request form: Your details</h2>
+        <h2 class="form-section-title">YOUR DETAILS</h2>
 
         <div class="uom-row">
           <div class="uom-col uom-col-6">
@@ -653,7 +713,7 @@
           </div>
         </div>
 
-        <h2 class="form-section-title">Request form: The item</h2>
+        <h2 class="form-section-title">THE ITEM</h2>
 
         <div class="uom-row">
           <div class="uom-col uom-col-6">
@@ -689,7 +749,7 @@
           <span class="help-block">Optional fallback detail if the inventory list has not been updated or the item is missing.</span>
         </div>
 
-        <h2 class="form-section-title">Request form: Intended use</h2>
+        <h2 class="form-section-title">INTENDED USE</h2>
 
         <div class="form-group required">
           <label class="control-label" for="r-intended-use">Brief description of what you'll use the item for</label>
@@ -707,7 +767,7 @@
           </select>
         </div>
 
-        <h2 class="form-section-title">Request form: Practicalities</h2>
+        <h2 class="form-section-title">PRACTICALITIES</h2>
 
         <div class="form-group required">
           <label class="control-label" for="r-collection-window">Preferred 3 day period collection date</label>
@@ -740,7 +800,7 @@
           </div>
         </div>
 
-        <h2 class="form-section-title">Request form: Cost</h2>
+        <h2 class="form-section-title">COST</h2>
 
         <div class="form-group required">
           <label class="control-label" id="r-transport-cost-label">If this item falls outside Campus Assist scope (over 200kg or cross-campus), are you willing to fund or share transport costs?</label>
@@ -760,7 +820,7 @@
           </div>
         </div>
 
-        <h2 class="form-section-title">Request form: Approval</h2>
+        <h2 class="form-section-title">APPROVAL</h2>
 
         <div class="form-group required">
           <label class="control-label" for="r-school-approval">School approval for the acquisition</label>
@@ -876,17 +936,29 @@
       path.disabled = !isEnabled;
     }
 
+    function toggleFieldHelp(id, button) {
+      var panel = document.getElementById(id);
+      if (!panel) return;
+      var isVisible = panel.classList.toggle('is-visible');
+      if (button) button.setAttribute('aria-expanded', isVisible ? 'true' : 'false');
+    }
+
     function updateRequestType() {
+      var scienceFacultyMember = getCheckedValue('science_faculty_member');
       var requestType = getCheckedValue('request_type');
+      var canContinue = scienceFacultyMember === 'yes';
       var isDonation = requestType === 'donate';
       var isReceiverRequest = requestType === 'request';
 
-      setPathEnabled('donor-form-fields', isDonation);
-      setPathEnabled('receiver-form-fields', isReceiverRequest);
+      showPanel('science-faculty-panel', scienceFacultyMember === 'no');
+      setPathEnabled('request-type-fields', canContinue);
+      setPathEnabled('donor-form-fields', canContinue && isDonation);
+      setPathEnabled('receiver-form-fields', canContinue && isReceiverRequest);
 
       var submitButton = document.getElementById('btn-submit');
       if (submitButton) {
-        submitButton.textContent = isDonation ? 'Submit donation' : 'Submit request';
+        submitButton.textContent = canContinue && isDonation ? 'Submit donation' : 'Submit request';
+        submitButton.disabled = scienceFacultyMember === 'no';
       }
     }
 
