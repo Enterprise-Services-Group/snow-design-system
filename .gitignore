@@ -1,0 +1,9 @@
+# Exclude original saved ServiceNow HTML sources and their browser-saved resource folders
+Faculty of Science Lab Operations Request - Staff Services.html
+Faculty of Science Lab Operations Request - Staff Services_files/
+FEIT lab services - Staff Services.html
+FEIT lab services - Staff Services_files/
+
+# OS
+.DS_Store
+Thumbs.db
