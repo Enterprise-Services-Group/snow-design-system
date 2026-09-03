@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Research Lab Equipment Reuse Initiative - Donation Form - Staff Services</title>
+  <link rel="stylesheet" href="css/uom-snow.css" />
+  <style>
+    .sp-main {
+      display: flex;
+      gap: var(--uom-space-xl);
+      max-width: var(--uom-container-max);
+      margin: 0 auto;
+      padding: var(--uom-space-lg) var(--uom-space-md);
+      align-items: flex-start;
+    }
+
+    .sp-form-col {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sp-summary-col {
+      flex: 0 0 30rem;
+      min-width: 30rem;
+    }
+
+    @media (max-width: 900px) {
+      .sp-main { flex-direction: column; }
+      .sp-summary-col { flex: 0 0 auto; min-width: 0; width: 100%; }
+    }
+
+    .form-section-title {
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--uom-navy);
+      margin: var(--uom-space-lg) 0 var(--uom-space-md);
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid var(--uom-border-subtle);
+    }
+
+    .conditional-panel {
+      display: none;
+      margin-top: var(--uom-space-sm);
+      padding: var(--uom-space-md);
+      background: var(--uom-bg);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius);
+    }
+
+    .conditional-panel.is-visible {
+      display: block;
+    }
+
+    .field-help-toggle {
+      width: 1.8rem;
+      height: 1.8rem;
+      margin-left: 0.4rem;
+      border: 1px solid #9ca3af;
+      border-radius: 50%;
+      background: #e5e7eb;
+      color: #4b5563;
+      font-size: 1.2rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .field-help-list {
+      margin: 0;
+      padding-left: 1.8rem;
+      color: var(--uom-muted);
+      font-size: 1.3rem;
+    }
+
+    .field-help-list li + li {
+      margin-top: 0.4rem;
+    }
+
+    .form-path {
+      border: 0;
+      margin: 0;
+      padding: 0;
+      min-inline-size: 0;
+    }
+
+    .prefilled-note {
+      font-size: 1.2rem;
+      color: var(--uom-muted);
+      margin: 0 0 var(--uom-space-sm);
+    }
+
+    .char-counter {
+      display: block;
+      font-size: 1.2rem;
+      color: var(--uom-muted);
+      margin-top: 0.4rem;
+    }
+
+    .error-summary {
+      display: none;
+      margin-bottom: var(--uom-space-md);
+    }
+
+    .error-summary.is-visible { display: block; }
+
+    .error-summary h3 {
+      font-size: 1.5rem;
+      margin: 0 0 0.6rem;
+    }
+
+    .error-summary ol {
+      margin: 0;
+      padding-left: 1.8rem;
+      font-size: 1.3rem;
+    }
+
+    .error-summary li + li { margin-top: 0.4rem; }
+
+    .error-summary a {
+      color: inherit;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .summary-card {
+      background: var(--uom-white);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius);
+      overflow: hidden;
+      position: sticky;
+      top: calc(var(--uom-header-height) + var(--uom-space-md));
+    }
+
+    .summary-card__head {
+      background-color: var(--uom-navy);
+      color: var(--uom-white);
+      padding: var(--uom-space-md) var(--uom-space-lg);
+    }
+
+    .summary-card__head h3 {
+      color: var(--uom-white);
+      font-size: 1.6rem;
+      margin: 0;
+    }
+
+    .summary-card__body {
+      padding: var(--uom-space-md) var(--uom-space-lg);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      font-size: 1.3rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--uom-border-subtle);
+      gap: 1rem;
+    }
+
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row__label { color: var(--uom-muted); flex-shrink: 0; }
+    .summary-row__value { font-weight: 500; text-align: right; }
+
+    .summary-card__footer {
+      padding: var(--uom-space-md) var(--uom-space-lg);
+      background: var(--uom-bg);
+      border-top: 1px solid var(--uom-border-subtle);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: var(--uom-space-sm);
+      align-items: center;
+      flex-wrap: wrap;
+      padding-top: var(--uom-space-md);
+    }
+
+    .confirmation {
+      display: none;
+      background: var(--uom-white);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius);
+      padding: var(--uom-space-xl);
+      text-align: center;
+    }
+
+    .confirmation.is-visible { display: block; }
+
+    .confirmation__icon {
+      width: 6rem;
+      height: 6rem;
+      border-radius: 50%;
+      background-color: var(--uom-success-bg);
+      color: var(--uom-success-fg);
+      font-size: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--uom-space-md);
+    }
+
+    .confirmation h2 { color: var(--uom-navy); }
+
+    .confirmation__ref {
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--uom-blue);
+      margin: var(--uom-space-sm) 0 var(--uom-space-md);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="uom-header" role="banner">
+    <div class="uom-header__inner">
+      <div class="uom-header__logo-block">
+        <img src="assets/logo.png" alt="The University of Melbourne" />
+      </div>
+      <div class="uom-header__breadcrumb">
+        <nav aria-label="breadcrumb">
+          <ol class="uom-breadcrumb">
+            <li><a href="#">Staff Services</a></li>
+            <li><a href="#">Request Something</a></li>
+            <li aria-current="page">Research Lab Equipment Reuse Initiative</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="uom-header__right">
+        <div class="uom-avatar" aria-label="User avatar" role="img">JD</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="uom-page-header">
+    <div class="uom-container" style="max-width:var(--uom-container-max);margin:0 auto;padding:0 var(--uom-space-md)">
+      <h1 class="uom-page-header__title">Research Lab Equipment Reuse Initiative</h1>
+      <p class="uom-page-header__desc">Use this form to list surplus laboratory equipment, furniture, consumables or glassware on the Research Equipment Reuse Store. This form captures only the essential details needed to review your submission. The reuse store team will follow up for operational information once your item is approved.</p>
+    </div>
+  </div>
+
+  <main class="sp-main">
+    <div class="sp-form-col">
+      <div class="alert alert-info" role="note">
+        <span class="alert__icon" aria-hidden="true">i</span>
+        <div>All fields marked with a <strong>*</strong> are required. The questions shown depend on the arrangement type you select, so you are only asked what is relevant to your donation.</div>
+      </div>
+
+      <form id="donation-form" novalidate>
+
+        <div class="alert alert-danger error-summary" id="error-summary" role="alert" tabindex="-1">
+          <span class="alert__icon" aria-hidden="true">!</span>
+          <div>
+            <h3 id="error-summary-title">There is a problem</h3>
+            <ol id="error-summary-list"></ol>
+          </div>
+        </div>
+
+        <h2 class="form-section-title">ELIGIBILITY</h2>
+
+        <div class="form-group required">
+          <label class="control-label" id="f-science-faculty-label">Are you a member of the Science Faculty?</label>
+          <div class="radio-group inline" role="group" aria-labelledby="f-science-faculty-label">
+            <label class="radio-item"><input type="radio" name="science_faculty_member" value="yes" required /> Yes</label>
+            <label class="radio-item"><input type="radio" name="science_faculty_member" value="no" /> No</label>
+          </div>
+          <div class="conditional-panel" id="science-faculty-panel">
+            <div class="alert alert-info" role="note">
+              <span class="alert__icon" aria-hidden="true">i</span>
+              <div>This service is currently only available to members of the Faculty of Science.</div>
+            </div>
+          </div>
+        </div>
+
+        <fieldset class="form-path" id="donation-fields" hidden disabled>
+
+          <h2 class="form-section-title">YOUR DETAILS</h2>
+
+          <p class="prefilled-note">Your name, email, campus and school are populated automatically from your Staff Hub profile.</p>
+
+          <div class="uom-row">
+            <div class="uom-col uom-col-6">
+              <div class="form-group">
+                <label class="control-label" for="f-name">Name</label>
+                <input type="text" id="f-name" name="name" class="form-control" value="Jane Doe" readonly />
+              </div>
+            </div>
+            <div class="uom-col uom-col-6">
+              <div class="form-group">
+                <label class="control-label" for="f-email">Email</label>
+                <input type="email" id="f-email" name="email" class="form-control" value="jane.doe@unimelb.edu.au" readonly />
+              </div>
+            </div>
+          </div>
+
+          <div class="uom-row">
+            <div class="uom-col uom-col-6">
+              <div class="form-group">
+                <label class="control-label" for="f-campus">Campus</label>
+                <input type="text" id="f-campus" name="campus" class="form-control" value="Parkville" readonly />
+              </div>
+            </div>
+            <div class="uom-col uom-col-6">
+              <div class="form-group">
+                <label class="control-label" for="f-school">School</label>
+                <input type="text" id="f-school" name="school" class="form-control" value="School of BioSciences" readonly />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label" for="f-contact-number">Preferred contact number</label>
+            <input type="tel" id="f-contact-number" name="contact_number" class="form-control" value="+61 " autocomplete="tel" />
+            <span class="help-block">Optional. Only provide this if you would like to be reached by phone during coordination.</span>
+          </div>
+
+          <h2 class="form-section-title">ABOUT THE ITEM</h2>
+
+          <div class="uom-row">
+            <div class="uom-col uom-col-6">
+              <div class="form-group required">
+                <label class="control-label" for="f-item-name">Item name</label>
+                <input type="text" id="f-item-name" name="item_name" class="form-control" required />
+              </div>
+            </div>
+            <div class="uom-col uom-col-6">
+              <div class="form-group required">
+                <label class="control-label" for="f-item-type">Item type</label>
+                <select id="f-item-type" name="item_type" class="form-control" required>
+                  <option value="">-- Select item type --</option>
+                  <option value="equipment">Equipment and Instruments</option>
+                  <option value="lab_furniture">Lab furniture</option>
+                  <option value="consumables">Consumables</option>
+                  <option value="glassware">Glassware and plasticware</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="conditional-panel" id="item-type-other-panel">
+            <div class="form-group required">
+              <label class="control-label" for="f-item-type-other">Please specify the item type</label>
+              <input type="text" id="f-item-type-other" name="item_type_other" class="form-control" />
+            </div>
+          </div>
+
+          <div class="conditional-panel" id="full-donation-only-panel">
+            <div class="alert alert-info" role="note">
+              <span class="alert__icon" aria-hidden="true">i</span>
+              <div>Consumables and glassware and plasticware can only be listed as a full donation. Shared-use and occasional-access arrangements are not available for these item types.</div>
+            </div>
+          </div>
+
+          <div class="uom-row">
+            <div class="uom-col uom-col-4">
+              <div class="form-group required">
+                <label class="control-label" for="f-quantity">Item quantity</label>
+                <select id="f-quantity" name="item_quantity" class="form-control" required>
+                  <option value="1" selected>1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6-10">6-10</option>
+                  <option value="11-20">11-20</option>
+                  <option value="20+">More than 20</option>
+                </select>
+              </div>
+            </div>
+            <div class="uom-col uom-col-4">
+              <div class="form-group required">
+                <label class="control-label" for="f-building">Building</label>
+                <select id="f-building" name="building" class="form-control" required>
+                  <option value="">-- Select building --</option>
+                  <option>BioSciences 2 (Building 122)</option>
+                  <option>BioSciences 4 (Building 147)</option>
+                  <option>Redmond Barry (Building 115)</option>
+                  <option>School of Chemistry (Building 153)</option>
+                  <option>Peter Hall (Building 160)</option>
+                </select>
+                <span class="help-block">Populated from the University building list.</span>
+              </div>
+            </div>
+            <div class="uom-col uom-col-4">
+              <div class="form-group required">
+                <label class="control-label" for="f-room">Room</label>
+                <select id="f-room" name="room" class="form-control" required>
+                  <option value="">-- Select room --</option>
+                  <option>Level 1, Room 1.12</option>
+                  <option>Level 2, Room 2.04</option>
+                  <option>Level 2, Room 2.18</option>
+                  <option>Level 3, Room 3.07</option>
+                  <option>Basement, Room B.02</option>
+                </select>
+                <span class="help-block">Populated from the University room list.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group required">
+            <label class="control-label" for="f-photos">Photos</label>
+            <div class="file-upload-wrapper">
+              <label class="file-upload-btn">
+                Choose files
+                <input type="file" id="f-photos" name="photos" accept=".jpg,.jpeg,.png,.heic" multiple required aria-label="Upload item photos" />
+              </label>
+              <span class="file-upload-name" id="f-photos-name">No files chosen</span>
+            </div>
+            <span class="help-block">At least one photo is required, up to a maximum of four. Ideally include multiple angles plus close-ups of any damage or wear.</span>
+          </div>
+
+          <div class="form-group required">
+            <label class="control-label" for="f-description">Short description</label>
+            <textarea id="f-description" name="description" class="form-control" rows="3" maxlength="250" placeholder="What the item is, what it was used for, and anything a receiver should know." required></textarea>
+            <span class="char-counter" id="f-description-counter">0 / 250 characters</span>
+          </div>
+
+          <h2 class="form-section-title">PREFERRED ARRANGEMENT</h2>
+
+          <div class="form-group required">
+            <label class="control-label" for="f-arrangement">Preferred arrangement</label>
+            <select id="f-arrangement" name="preferred_arrangement" class="form-control" required>
+              <option value="">-- Select arrangement --</option>
+              <option value="full_donation">Full donation</option>
+              <option value="shared_source">Shared source arrangement</option>
+              <option value="occasional_access">Occasional access</option>
+            </select>
+            <div class="conditional-panel is-visible" id="arrangement-help">
+              <ul class="field-help-list">
+                <li><strong>Full donation</strong> - I no longer need this item and am happy to transfer ownership to another recipient.</li>
+                <li><strong>Shared source arrangement</strong> - I will continue to house this item in its current location and make it available for other researchers to access and use. Ownership remains with my area, and the item will be listed as a shared resource.</li>
+                <li><strong>Occasional access</strong> - I am happy to donate this item but may require occasional access to it in the future. Access arrangements will need to be agreed between the donor and recipient.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="conditional-panel" id="shared-location-panel">
+            <div class="form-group required">
+              <label class="control-label" for="f-shared-location-only">For this arrangement, can this item only be used in its current location and is not available to be transported if requested?</label>
+              <select id="f-shared-location-only" name="shared_location_only" class="form-control">
+                <option value="">-- Select an option --</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+          </div>
+
+          <h2 class="form-section-title">CONDITION</h2>
+
+          <div class="uom-row">
+            <div class="uom-col uom-col-6">
+              <div class="form-group required">
+                <label class="control-label" for="f-condition">Condition <button type="button" class="field-help-toggle" aria-expanded="false" aria-controls="condition-help" onclick="toggleFieldHelp('condition-help', this)">?</button></label>
+                <select id="f-condition" name="condition" class="form-control" required>
+                  <option value="">-- Select condition --</option>
+                  <option>Excellent</option>
+                  <option>Good</option>
+                  <option>Fair</option>
+                  <option>Poor</option>
+                </select>
+                <div class="conditional-panel" id="condition-help">
+                  <ul class="field-help-list">
+                    <li><strong>Excellent</strong> - Near-new condition, no visible wear or damage, complete and ready to reuse.</li>
+                    <li><strong>Good</strong> - Minor cosmetic wear only, complete and suitable for reuse.</li>
+                    <li><strong>Fair</strong> - Noticeable wear or minor missing accessories, but still usable with caveats.</li>
+                    <li><strong>Poor</strong> - Significant wear, damage or incomplete parts; may require repair or assessment before reuse.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="uom-col uom-col-6">
+              <div class="form-group required">
+                <label class="control-label" for="f-functional-status">Functional status <button type="button" class="field-help-toggle" aria-expanded="false" aria-controls="functional-status-help" onclick="toggleFieldHelp('functional-status-help', this)">?</button></label>
+                <select id="f-functional-status" name="functional_status" class="form-control" required>
+                  <option value="">-- Select functional status --</option>
+                  <option value="fully_working">Fully working</option>
+                  <option value="minor_issues">Working with minor issues</option>
+                  <option value="needs_repair">Needs repair</option>
+                  <option value="not_working">Not working</option>
+                  <option value="unknown">Unknown</option>
+                </select>
+                <div class="conditional-panel" id="functional-status-help">
+                  <ul class="field-help-list">
+                    <li><strong>Fully working</strong> - Performs as expected and can be reused without repair.</li>
+                    <li><strong>Working with issues</strong> - Usable, but has known limitations, faults or intermittent problems.</li>
+                    <li><strong>Needs repair</strong> - Not ready for use until repaired, serviced or assessed.</li>
+                    <li><strong>Not working</strong> - Does not currently function.</li>
+                    <li><strong>Unknown</strong> - Functional status has not been confirmed.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="conditional-panel" id="known-issues-panel">
+            <div class="form-group required">
+              <label class="control-label" for="f-known-issues">Description of known issues</label>
+              <textarea id="f-known-issues" name="known_issues" class="form-control" rows="3" maxlength="250"></textarea>
+              <span class="char-counter" id="f-known-issues-counter">0 / 250 characters</span>
+            </div>
+          </div>
+
+          <div class="conditional-panel" id="service-history-panel">
+            <div class="form-group required">
+              <label class="control-label" for="f-serviced">Has this item been serviced or maintained within the last 5 years?</label>
+              <select id="f-serviced" name="serviced_last_5_years" class="form-control">
+                <option value="">-- Select an option --</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+
+            <div class="conditional-panel" id="service-records-panel">
+              <div class="form-group required">
+                <label class="control-label" for="f-service-records">Are service and maintenance records available?</label>
+                <select id="f-service-records" name="service_records_available" class="form-control">
+                  <option value="">-- Select an option --</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                  <option value="unknown">Unknown</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label" for="f-service-attachment">Manuals or supporting documents</label>
+              <div class="file-upload-wrapper">
+                <label class="file-upload-btn">
+                  Choose files
+                  <input type="file" id="f-service-attachment" name="service_attachment" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple aria-label="Upload manuals or supporting documents" />
+                </label>
+                <span class="file-upload-name" id="f-service-attachment-name">No files chosen</span>
+              </div>
+              <span class="help-block">Optional.</span>
+            </div>
+          </div>
+
+          <h2 class="form-section-title">ELIGIBILITY AND SAFETY</h2>
+
+          <div class="form-group required">
+            <label class="control-label" for="f-hazardous">Has the item ever been used with chemicals, biological material, radioactive material, or hazardous waste?</label>
+            <select id="f-hazardous" name="hazardous_use" class="form-control" required>
+              <option value="">-- Select an option --</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+
+          <div class="conditional-panel" id="decontamination-panel">
+            <div class="form-group required">
+              <label class="control-label" for="f-decontaminated">Has the item been decontaminated?</label>
+              <select id="f-decontaminated" name="decontaminated" class="form-control">
+                <option value="">-- Select an option --</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+                <option value="not_applicable">Not applicable</option>
+              </select>
+            </div>
+
+            <div class="conditional-panel" id="decontamination-process-panel">
+              <div class="form-group required">
+                <label class="control-label" for="f-decontamination-process">Please describe the decontamination process and provide any relevant records or certificates</label>
+                <textarea id="f-decontamination-process" name="decontamination_process" class="form-control" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="f-decontamination-files">Decontamination records or certificates</label>
+                <div class="file-upload-wrapper">
+                  <label class="file-upload-btn">
+                    Choose files
+                    <input type="file" id="f-decontamination-files" name="decontamination_files" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple aria-label="Upload decontamination records" />
+                  </label>
+                  <span class="file-upload-name" id="f-decontamination-files-name">No files chosen</span>
+                </div>
+                <span class="help-block">Optional.</span>
+              </div>
+            </div>
+
+            <div class="conditional-panel" id="decontamination-blocked-panel">
+              <div class="alert alert-warning" role="alert">
+                <span class="alert__icon" aria-hidden="true">!</span>
+                <div>Decontamination is required before this item can be listed. Please contact your school's OHS advisor or Lab Ops team for the appropriate procedure.</div>
+              </div>
+            </div>
+
+            <div class="conditional-panel" id="decontamination-na-panel">
+              <div class="form-group required">
+                <label class="control-label" for="f-decontamination-na">Please confirm why decontamination is not applicable</label>
+                <textarea id="f-decontamination-na" name="decontamination_not_applicable" class="form-control" rows="3" maxlength="250" placeholder="e.g. glassware used only with water, storage cabinet, non-contact equipment"></textarea>
+                <span class="char-counter" id="f-decontamination-na-counter">0 / 250 characters</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="conditional-panel" id="asset-tag-section-panel">
+            <div class="form-group required">
+              <label class="control-label" for="f-asset-tag">Does the item have an active University asset tag? <button type="button" class="field-help-toggle" aria-expanded="false" aria-controls="asset-tag-help" onclick="toggleFieldHelp('asset-tag-help', this)">?</button></label>
+              <select id="f-asset-tag" name="asset_tag" class="form-control">
+                <option value="">-- Select an option --</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+                <option value="unsure">Unsure</option>
+              </select>
+              <div class="conditional-panel" id="asset-tag-help">
+                <p style="margin:0;color:var(--uom-muted);font-size:1.3rem">Items purchased for more than $10,000 are typically assigned a University asset tag. This is usually a silver or white sticker displaying a barcode and a University asset number.</p>
+              </div>
+            </div>
+
+            <div class="conditional-panel" id="asset-number-panel">
+              <div class="form-group required">
+                <label class="control-label" for="f-asset-number">Asset number</label>
+                <input type="text" id="f-asset-number" name="asset_number" class="form-control" />
+              </div>
+            </div>
+
+            <div class="conditional-panel" id="asset-unsure-panel">
+              <div class="alert alert-info" role="note">
+                <span class="alert__icon" aria-hidden="true">i</span>
+                <div>Please consult your Faculty or Laboratory Operations team to verify its asset status before submitting the donation.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="conditional-panel" id="holding-panel">
+            <h2 class="form-section-title">HOLDING ACKNOWLEDGEMENT</h2>
+
+            <div class="form-group required">
+              <p style="font-size:1.3rem;color:var(--uom-muted)">If the item is small and easy to transfer, please keep it in your lab until a request is made. If you require the item to be moved to central storage, this may be possible subject to storage capacity and operational requirements. Please communicate this when the reuse store team reaches out.</p>
+              <div class="radio-group">
+                <label class="checkbox-item">
+                  <input type="checkbox" id="f-holding-ack" name="holding_acknowledgement" data-field-label="Holding acknowledgement" />
+                  I acknowledge the above.
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <h2 class="form-section-title">APPROVAL AND DECLARATION</h2>
+
+          <div class="form-group required">
+            <div class="radio-group">
+              <label class="checkbox-item">
+                <input type="checkbox" id="f-ownership-ack" name="ownership_acknowledgement" data-field-label="Ownership acknowledgement" required />
+                I confirm I have the authority to release this item for reuse and that, to the best of my knowledge, the information provided about the item and its condition is accurate. I understand that once the item is transferred, ownership passes to the receiving lab user or School, and I will no longer have a claim on the item unless a conditional transfer arrangement has been agreed in writing.
+              </label>
+            </div>
+          </div>
+
+          <div class="conditional-panel" id="financial-delegate-panel">
+            <div class="form-group required">
+              <label class="control-label" for="f-financial-delegate">Financial delegate name</label>
+              <input type="text" id="f-financial-delegate" name="financial_delegate" class="form-control" />
+              <span class="help-block">Name the financial delegate who has authorised release of this asset.</span>
+            </div>
+          </div>
+
+          <h2 class="form-section-title">WHAT HAPPENS NEXT</h2>
+
+          <div class="alert alert-info" role="note">
+            <span class="alert__icon" aria-hidden="true">i</span>
+            <div>
+              After submission, the Reuse Store team will review the information provided and may contact you if additional details are required.
+              If approved, your item will be listed on the Research Equipment Reuse Store and made available for other researchers to view and request.
+              This process may take up to 10 business days, although we will endeavour to process submissions as quickly as possible.
+              You will be notified once your item has been published.
+            </div>
+          </div>
+
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-lg" id="btn-submit">Submit donation</button>
+          <button type="button" class="btn btn-secondary" id="btn-cancel">Cancel</button>
+        </div>
+      </form>
+
+      <div class="confirmation" id="confirmation" aria-live="polite">
+        <div class="confirmation__icon" aria-hidden="true">✓</div>
+        <h2>Donation submitted</h2>
+        <p>Your item has been submitted to the Reuse Store team for review.</p>
+        <p class="confirmation__ref" id="confirmation-ref">REQ0012345</p>
+        <p style="color:var(--uom-muted);font-size:1.4rem">This process may take up to 10 business days. You will be notified once your item has been published.</p>
+        <div style="margin-top:var(--uom-space-lg)">
+          <a href="index.html" class="btn btn-secondary">Back to design system</a>
+          <button class="btn btn-primary" onclick="resetForm()" style="margin-left:0.8rem">Submit another donation</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="sp-summary-col" aria-label="Request summary">
+      <div class="summary-card">
+        <div class="summary-card__head">
+          <h3>Request summary</h3>
+        </div>
+        <div class="summary-card__body">
+          <div class="summary-row">
+            <span class="summary-row__label">Service</span>
+            <span class="summary-row__value">Research Lab Equipment Reuse Initiative</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-row__label">Request type</span>
+            <span class="summary-row__value">Donation submission</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-row__label">Arrangement</span>
+            <span class="summary-row__value" id="summary-arrangement">Not selected</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-row__label">Review time</span>
+            <span class="summary-row__value">Up to 10 business days</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-row__label">Status</span>
+            <span class="summary-row__value"><span class="badge badge-secondary">Draft</span></span>
+          </div>
+        </div>
+        <div class="summary-card__footer">
+          <p style="font-size:1.2rem;color:var(--uom-muted);margin:0">
+            Detailed practicalities such as dimensions, weight and power requirements are collected in a follow-up form after approval.
+          </p>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="uom-footer">
+    <div class="uom-footer__inner">
+      <div class="uom-footer__lockup">
+        <img src="assets/lockup.png" alt="The University of Melbourne" />
+      </div>
+      <ul class="uom-footer__links">
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Accessibility</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Copyright</a></li>
+      </ul>
+    </div>
+    <span class="uom-footer__copy">2026 The University of Melbourne - Staff Services</span>
+  </footer>
+
+  <script>
+    var FULL_DONATION_ONLY_TYPES = ['consumables', 'glassware'];
+
+    function getValue(id) {
+      var el = document.getElementById(id);
+      return el ? el.value : '';
+    }
+
+    function getCheckedValue(name) {
+      var checked = document.querySelector('input[name="' + name + '"]:checked');
+      return checked ? checked.value : '';
+    }
+
+    function showPanel(id, shouldShow) {
+      var panel = document.getElementById(id);
+      if (panel) panel.classList.toggle('is-visible', shouldShow);
+    }
+
+    function setRequired(id, isRequired) {
+      var field = document.getElementById(id);
+      if (field) field.required = isRequired;
+    }
+
+    function setPathEnabled(id, isEnabled) {
+      var path = document.getElementById(id);
+      if (!path) return;
+      path.hidden = !isEnabled;
+      path.disabled = !isEnabled;
+    }
+
+    function toggleFieldHelp(id, button) {
+      var panel = document.getElementById(id);
+      if (!panel) return;
+      var isVisible = panel.classList.toggle('is-visible');
+      if (button) button.setAttribute('aria-expanded', isVisible ? 'true' : 'false');
+    }
+
+    // Consumables and glassware may only be listed as a full donation.
+    function applyArrangementRestrictions(itemType) {
+      var arrangement = document.getElementById('f-arrangement');
+      var restricted = FULL_DONATION_ONLY_TYPES.indexOf(itemType) !== -1;
+
+      Array.prototype.forEach.call(arrangement.options, function(option) {
+        if (option.value === 'shared_source' || option.value === 'occasional_access') {
+          option.disabled = restricted;
+        }
+      });
+
+      if (restricted) {
+        arrangement.value = 'full_donation';
+      }
+
+      showPanel('full-donation-only-panel', restricted);
+    }
+
+    function updateConditionalFields() {
+      var isEligible = getCheckedValue('science_faculty_member') === 'yes';
+      showPanel('science-faculty-panel', getCheckedValue('science_faculty_member') === 'no');
+      setPathEnabled('donation-fields', isEligible);
+
+      var itemType = getValue('f-item-type');
+      showPanel('item-type-other-panel', itemType === 'other');
+      setRequired('f-item-type-other', itemType === 'other');
+      applyArrangementRestrictions(itemType);
+
+      var arrangement = getValue('f-arrangement');
+      var isShared = arrangement === 'shared_source';
+      var transfersOwnership = arrangement === 'full_donation' || arrangement === 'occasional_access';
+
+      showPanel('shared-location-panel', isShared);
+      setRequired('f-shared-location-only', isShared);
+
+      var functionalStatus = getValue('f-functional-status');
+      var needsIssueDescription = functionalStatus === 'minor_issues'
+        || functionalStatus === 'needs_repair'
+        || functionalStatus === 'not_working';
+      showPanel('known-issues-panel', needsIssueDescription);
+      setRequired('f-known-issues', needsIssueDescription);
+
+      showPanel('service-history-panel', transfersOwnership);
+      setRequired('f-serviced', transfersOwnership);
+      var servicedRecently = transfersOwnership && getValue('f-serviced') === 'yes';
+      showPanel('service-records-panel', servicedRecently);
+      setRequired('f-service-records', servicedRecently);
+
+      var hazardous = getValue('f-hazardous') === 'yes';
+      showPanel('decontamination-panel', hazardous);
+      setRequired('f-decontaminated', hazardous);
+
+      var decontaminated = hazardous ? getValue('f-decontaminated') : '';
+      showPanel('decontamination-process-panel', decontaminated === 'yes');
+      setRequired('f-decontamination-process', decontaminated === 'yes');
+      showPanel('decontamination-blocked-panel', decontaminated === 'no');
+      showPanel('decontamination-na-panel', decontaminated === 'not_applicable');
+      setRequired('f-decontamination-na', decontaminated === 'not_applicable');
+
+      showPanel('asset-tag-section-panel', transfersOwnership);
+      setRequired('f-asset-tag', transfersOwnership);
+      var assetTag = transfersOwnership ? getValue('f-asset-tag') : '';
+      showPanel('asset-number-panel', assetTag === 'yes');
+      setRequired('f-asset-number', assetTag === 'yes');
+      showPanel('asset-unsure-panel', assetTag === 'unsure');
+
+      showPanel('holding-panel', transfersOwnership);
+      setRequired('f-holding-ack', transfersOwnership);
+
+      var needsDelegate = transfersOwnership && assetTag === 'yes';
+      showPanel('financial-delegate-panel', needsDelegate);
+      setRequired('f-financial-delegate', needsDelegate);
+
+      var summary = document.getElementById('summary-arrangement');
+      var arrangementLabels = {
+        full_donation: 'Full donation',
+        shared_source: 'Shared source arrangement',
+        occasional_access: 'Occasional access'
+      };
+      summary.textContent = arrangementLabels[arrangement] || 'Not selected';
+
+      // Submit stays clickable so blockers are explained on submit rather than failing silently.
+      document.getElementById('btn-submit').disabled = false;
+    }
+
+    function updateFileLabels() {
+      document.querySelectorAll('input[type="file"]').forEach(function(input) {
+        var nameEl = document.getElementById(input.id + '-name');
+        if (!nameEl) return;
+        if (!input.files.length) {
+          nameEl.textContent = 'No files chosen';
+          return;
+        }
+        nameEl.textContent = input.files.length === 1 ? input.files[0].name : input.files.length + ' files selected';
+      });
+    }
+
+    function enforcePhonePrefix(input) {
+      if (!input.value || input.value.indexOf('+61') !== 0) {
+        input.value = '+61 ' + input.value.replace(/^\+?61\s*/, '').trimStart();
+      }
+    }
+
+    function bindCharCounter(fieldId) {
+      var field = document.getElementById(fieldId);
+      var counter = document.getElementById(fieldId + '-counter');
+      if (!field || !counter) return;
+      var update = function() {
+        counter.textContent = field.value.length + ' / ' + field.maxLength + ' characters';
+      };
+      field.addEventListener('input', update);
+      update();
+    }
+
+    function clearErrors() {
+      document.querySelectorAll('.form-group.has-error').forEach(function(group) {
+        group.classList.remove('has-error');
+        var msg = group.querySelector('.error-message');
+        if (msg) msg.remove();
+      });
+      document.querySelectorAll('[aria-invalid="true"]').forEach(function(field) {
+        field.removeAttribute('aria-invalid');
+      });
+      var summary = document.getElementById('error-summary');
+      summary.classList.remove('is-visible');
+      document.getElementById('error-summary-list').innerHTML = '';
+    }
+
+    function clearFieldError(field) {
+      var group = field.closest('.form-group');
+      if (!group || !group.classList.contains('has-error')) return;
+      group.classList.remove('has-error');
+      var msg = group.querySelector('.error-message');
+      if (msg) msg.remove();
+      group.querySelectorAll('[aria-invalid="true"]').forEach(function(f) {
+        f.removeAttribute('aria-invalid');
+      });
+    }
+
+    // A field only counts as answerable when every conditional panel above it is open.
+    function isFieldVisible(field) {
+      if (field.disabled || field.closest('fieldset[disabled]')) return false;
+      var panel = field.closest('.conditional-panel');
+      while (panel) {
+        if (!panel.classList.contains('is-visible')) return false;
+        panel = panel.parentElement ? panel.parentElement.closest('.conditional-panel') : null;
+      }
+      return true;
+    }
+
+    function getFieldLabel(field) {
+      if (field.getAttribute('data-field-label')) return field.getAttribute('data-field-label');
+      var group = field.closest('.form-group');
+      var label = group ? group.querySelector('.control-label') : null;
+      if (!label) return 'This field';
+      var clone = label.cloneNode(true);
+      clone.querySelectorAll('button').forEach(function(button) { button.remove(); });
+      return clone.textContent.trim();
+    }
+
+    function markError(field, message) {
+      field.setAttribute('aria-invalid', 'true');
+      var group = field.closest('.form-group');
+      if (!group || group.classList.contains('has-error')) return;
+      group.classList.add('has-error');
+      var err = document.createElement('span');
+      err.className = 'error-message';
+      err.textContent = message;
+      group.appendChild(err);
+    }
+
+    function renderErrorSummary(issues) {
+      var summary = document.getElementById('error-summary');
+      var list = document.getElementById('error-summary-list');
+      var title = document.getElementById('error-summary-title');
+
+      list.innerHTML = '';
+      title.textContent = issues.length === 1
+        ? 'There is 1 problem to fix before you can submit'
+        : 'There are ' + issues.length + ' problems to fix before you can submit';
+
+      issues.forEach(function(issue) {
+        var item = document.createElement('li');
+        var link = document.createElement('a');
+        link.href = '#' + issue.field.id;
+        link.textContent = issue.message;
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          issue.field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          issue.field.focus({ preventScroll: true });
+        });
+        item.appendChild(link);
+        list.appendChild(item);
+      });
+
+      summary.classList.add('is-visible');
+      summary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      summary.focus({ preventScroll: true });
+    }
+
+    document.querySelectorAll('select, input[type="radio"]').forEach(function(field) {
+      field.addEventListener('change', updateConditionalFields);
+    });
+
+    document.querySelectorAll('input, select, textarea').forEach(function(field) {
+      var handler = function() { clearFieldError(field); };
+      field.addEventListener('input', handler);
+      field.addEventListener('change', handler);
+    });
+
+    document.querySelectorAll('input[type="file"]').forEach(function(input) {
+      input.addEventListener('change', updateFileLabels);
+    });
+
+    document.querySelectorAll('input[type="tel"]').forEach(function(input) {
+      enforcePhonePrefix(input);
+      input.addEventListener('focus', function() { enforcePhonePrefix(input); });
+      input.addEventListener('input', function() { enforcePhonePrefix(input); });
+      input.addEventListener('blur', function() { enforcePhonePrefix(input); });
+    });
+
+    bindCharCounter('f-description');
+    bindCharCounter('f-known-issues');
+    bindCharCounter('f-decontamination-na');
+
+    document.getElementById('btn-cancel').addEventListener('click', function() {
+      if (confirm('Discard your changes?')) resetForm();
+    });
+
+    document.getElementById('donation-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      updateConditionalFields();
+      clearErrors();
+
+      var issues = [];
+
+      if (getCheckedValue('science_faculty_member') !== 'yes') {
+        var eligibility = document.querySelector('input[name="science_faculty_member"]');
+        var eligibilityMessage = getCheckedValue('science_faculty_member') === 'no'
+          ? 'This service is only available to members of the Faculty of Science.'
+          : 'Confirm whether you are a member of the Science Faculty.';
+        markError(eligibility, eligibilityMessage);
+        issues.push({ field: eligibility, message: eligibilityMessage });
+      }
+
+      this.querySelectorAll('[required]').forEach(function(field) {
+        if (!isFieldVisible(field)) return;
+
+        var valuePresent;
+        if (field.type === 'radio') valuePresent = !!document.querySelector('input[name="' + field.name + '"]:checked');
+        else if (field.type === 'checkbox') valuePresent = field.checked;
+        else if (field.type === 'file') valuePresent = field.files.length > 0;
+        else valuePresent = field.value.trim() !== '';
+
+        if (!valuePresent) {
+          var label = getFieldLabel(field);
+          var message = field.type === 'checkbox'
+            ? 'Tick to confirm: ' + label
+            : 'Enter or select: ' + label;
+          markError(field, field.type === 'checkbox' ? 'You must tick this box to continue.' : 'This field is required.');
+          issues.push({ field: field, message: message });
+        }
+      });
+
+      var decontaminated = document.getElementById('f-decontaminated');
+      if (isFieldVisible(decontaminated) && decontaminated.value === 'no') {
+        var blockedMessage = 'Decontamination is required before this item can be listed. Contact your school\'s OHS advisor or Lab Ops team for the appropriate procedure.';
+        markError(decontaminated, blockedMessage);
+        issues.push({ field: decontaminated, message: blockedMessage });
+      }
+
+      var photos = document.getElementById('f-photos');
+      if (isFieldVisible(photos) && photos.files.length > 4) {
+        var photoMessage = 'Upload a maximum of four photos.';
+        markError(photos, photoMessage);
+        issues.push({ field: photos, message: photoMessage });
+      }
+
+      if (issues.length) {
+        renderErrorSummary(issues);
+        return;
+      }
+
+      document.getElementById('confirmation-ref').textContent = 'REQ' + Math.floor(1000000 + Math.random() * 9000000);
+      this.style.display = 'none';
+      var confirmation = document.getElementById('confirmation');
+      confirmation.classList.add('is-visible');
+      confirmation.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    function resetForm() {
+      var form = document.getElementById('donation-form');
+      form.reset();
+      form.style.display = 'block';
+      document.getElementById('confirmation').classList.remove('is-visible');
+      clearErrors();
+      updateConditionalFields();
+      updateFileLabels();
+      document.querySelectorAll('input[type="tel"]').forEach(enforcePhonePrefix);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    updateConditionalFields();
+  </script>
+
+</body>
+</html>

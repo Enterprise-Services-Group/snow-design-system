@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Research Equipment Reuse Store - Request Checkout - Staff Services</title>
+  <link rel="stylesheet" href="css/uom-snow.css" />
+  <style>
+    .sp-main {
+      display: flex;
+      gap: var(--uom-space-xl);
+      max-width: var(--uom-container-max);
+      margin: 0 auto;
+      padding: var(--uom-space-lg) var(--uom-space-md);
+      align-items: flex-start;
+    }
+
+    .sp-form-col {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sp-summary-col {
+      flex: 0 0 30rem;
+      min-width: 30rem;
+    }
+
+    @media (max-width: 900px) {
+      .sp-main { flex-direction: column; }
+      .sp-summary-col { flex: 0 0 auto; min-width: 0; width: 100%; }
+    }
+
+    .form-section-title {
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--uom-navy);
+      margin: var(--uom-space-lg) 0 var(--uom-space-md);
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid var(--uom-border-subtle);
+    }
+
+    .conditional-panel {
+      display: none;
+      margin-top: var(--uom-space-sm);
+      padding: var(--uom-space-md);
+      background: var(--uom-bg);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius);
+    }
+
+    .conditional-panel.is-visible { display: block; }
+
+    .form-path {
+      border: 0;
+      margin: 0;
+      padding: 0;
+      min-inline-size: 0;
+    }
+
+    .prefilled-note {
+      font-size: 1.2rem;
+      color: var(--uom-muted);
+      margin: 0 0 var(--uom-space-sm);
+    }
+
+    .char-counter {
+      display: block;
+      font-size: 1.2rem;
+      color: var(--uom-muted);
+      margin-top: 0.4rem;
+    }
+
+    .cart-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.3rem;
+      background: var(--uom-white);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius);
+      overflow: hidden;
+    }
+
+    .cart-table th,
+    .cart-table td {
+      text-align: left;
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--uom-border-subtle);
+      vertical-align: top;
+    }
+
+    .cart-table thead th {
+      background: var(--uom-navy);
+      color: var(--uom-white);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .cart-table tbody tr:last-child td { border-bottom: none; }
+    .cart-table td.cart-qty { text-align: center; }
+    .cart-table__id { font-family: monospace; white-space: nowrap; }
+
+    .cart-table-wrap { overflow-x: auto; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .error-summary {
+      display: none;
+      margin-bottom: var(--uom-space-md);
+    }
+
+    .error-summary.is-visible { display: block; }
+
+    .error-summary h3 {
+      font-size: 1.5rem;
+      margin: 0 0 0.6rem;
+    }
+
+    .error-summary ol {
+      margin: 0;
+      padding-left: 1.8rem;
+      font-size: 1.3rem;
+    }
+
+    .error-summary li + li { margin-top: 0.4rem; }
+
+    .error-summary a {
+      color: inherit;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .summary-card {
+      background: var(--uom-white);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius);
+      overflow: hidden;
+      position: sticky;
+      top: calc(var(--uom-header-height) + var(--uom-space-md));
+    }
+
+    .summary-card__head {
+      background-color: var(--uom-navy);
+      color: var(--uom-white);
+      padding: var(--uom-space-md) var(--uom-space-lg);
+    }
+
+    .summary-card__head h3 {
+      color: var(--uom-white);
+      font-size: 1.6rem;
+      margin: 0;
+    }
+
+    .summary-card__body { padding: var(--uom-space-md) var(--uom-space-lg); }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      font-size: 1.3rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--uom-border-subtle);
+      gap: 1rem;
+    }
+
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row__label { color: var(--uom-muted); flex-shrink: 0; }
+    .summary-row__value { font-weight: 500; text-align: right; }
+
+    .summary-card__footer {
+      padding: var(--uom-space-md) var(--uom-space-lg);
+      background: var(--uom-bg);
+      border-top: 1px solid var(--uom-border-subtle);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: var(--uom-space-sm);
+      align-items: center;
+      flex-wrap: wrap;
+      padding-top: var(--uom-space-md);
+    }
+
+    .confirmation {
+      display: none;
+      background: var(--uom-white);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius);
+      padding: var(--uom-space-xl);
+    }
+
+    .confirmation.is-visible { display: block; }
+
+    .confirmation__icon {
+      width: 6rem;
+      height: 6rem;
+      border-radius: 50%;
+      background-color: var(--uom-success-bg);
+      color: var(--uom-success-fg);
+      font-size: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--uom-space-md);
+    }
+
+    .confirmation h2 {
+      color: var(--uom-navy);
+      text-align: center;
+    }
+
+    .confirmation__ref {
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--uom-blue);
+      margin: var(--uom-space-sm) 0 var(--uom-space-md);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="uom-header" role="banner">
+    <div class="uom-header__inner">
+      <div class="uom-header__logo-block">
+        <img src="assets/logo.png" alt="The University of Melbourne" />
+      </div>
+      <div class="uom-header__breadcrumb">
+        <nav aria-label="breadcrumb">
+          <ol class="uom-breadcrumb">
+            <li><a href="#">Staff Services</a></li>
+            <li><a href="#">Research Equipment Reuse Store</a></li>
+            <li aria-current="page">Checkout</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="uom-header__right">
+        <div class="uom-avatar" aria-label="User avatar" role="img">AS</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="uom-page-header">
+    <div class="uom-container" style="max-width:var(--uom-container-max);margin:0 auto;padding:0 var(--uom-space-md)">
+      <h1 class="uom-page-header__title">Request items from your cart</h1>
+      <p class="uom-page-header__desc">This single form covers every item currently in your cart. Item details and quantities are carried over automatically from the catalogue, so you only need to complete your delivery and use details once.</p>
+    </div>
+  </div>
+
+  <main class="sp-main">
+    <div class="sp-form-col">
+      <div class="alert alert-info" role="note">
+        <span class="alert__icon" aria-hidden="true">i</span>
+        <div>
+          <strong>Need help?</strong> Contact the Research Equipment Reuse Store Team at
+          <a href="mailto:reuse-store@unimelb.edu.au">reuse-store@unimelb.edu.au</a>.
+          If you are unsure whether an item is suitable for your space or project, please contact us before submitting your request.
+        </div>
+      </div>
+
+      <form id="receiver-form" novalidate>
+
+        <div class="alert alert-danger error-summary" id="error-summary" role="alert" tabindex="-1">
+          <span class="alert__icon" aria-hidden="true">!</span>
+          <div>
+            <h3 id="error-summary-title">There is a problem</h3>
+            <ol id="error-summary-list"></ol>
+          </div>
+        </div>
+
+        <h2 class="form-section-title">ELIGIBILITY</h2>
+
+        <div class="form-group required">
+          <label class="control-label" id="f-science-faculty-label">Are you a member of the Science Faculty?</label>
+          <div class="radio-group inline" role="group" aria-labelledby="f-science-faculty-label">
+            <label class="radio-item"><input type="radio" name="science_faculty_member" value="yes" required /> Yes</label>
+            <label class="radio-item"><input type="radio" name="science_faculty_member" value="no" /> No</label>
+          </div>
+          <div class="conditional-panel" id="science-faculty-panel">
+            <div class="alert alert-info" role="note">
+              <span class="alert__icon" aria-hidden="true">i</span>
+              <div>This service is currently only available to members of the Faculty of Science.</div>
+            </div>
+          </div>
+        </div>
+
+        <fieldset class="form-path" id="request-fields" hidden disabled>
+
+          <h2 class="form-section-title">YOUR DETAILS</h2>
+
+          <p class="prefilled-note">Your name, email, campus and school are populated automatically from your Staff Hub profile.</p>
+
+          <div class="uom-row">
+            <div class="uom-col uom-col-6">
+              <div class="form-group">
+                <label class="control-label" for="f-name">Name</label>
+                <input type="text" id="f-name" name="name" class="form-control" value="Alex Singh" readonly />
+              </div>
+            </div>
+            <div class="uom-col uom-col-6">
+              <div class="form-group">
+                <label class="control-label" for="f-email">Email</label>
+                <input type="email" id="f-email" name="email" class="form-control" value="alex.singh@unimelb.edu.au" readonly />
+              </div>
+            </div>
+          </div>
+
+          <div class="uom-row">
+            <div class="uom-col uom-col-6">
+              <div class="form-group">
+                <label class="control-label" for="f-campus">Campus</label>
+                <input type="text" id="f-campus" name="campus" class="form-control" value="Parkville" readonly />
+              </div>
+            </div>
+            <div class="uom-col uom-col-6">
+              <div class="form-group">
+                <label class="control-label" for="f-school">School</label>
+                <input type="text" id="f-school" name="school" class="form-control" value="School of Chemistry" readonly />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label" for="f-contact-number">Preferred contact number</label>
+            <input type="tel" id="f-contact-number" name="contact_number" class="form-control" value="+61 " autocomplete="tel" />
+            <span class="help-block">Optional. Only provide this if you would like to be reached by phone during coordination.</span>
+          </div>
+
+          <div class="uom-row">
+            <div class="uom-col uom-col-6">
+              <div class="form-group required">
+                <label class="control-label" for="f-building">Building the item will be received</label>
+                <select id="f-building" name="destination_building" class="form-control" required>
+                  <option value="">-- Select building --</option>
+                  <option>BioSciences 2 (Building 122)</option>
+                  <option>BioSciences 4 (Building 147)</option>
+                  <option>Redmond Barry (Building 115)</option>
+                  <option>School of Chemistry (Building 153)</option>
+                  <option>Peter Hall (Building 160)</option>
+                </select>
+                <span class="help-block">Populated from the University building list.</span>
+              </div>
+            </div>
+            <div class="uom-col uom-col-6">
+              <div class="form-group required">
+                <label class="control-label" for="f-room">Room the item will be received</label>
+                <select id="f-room" name="destination_room" class="form-control" required>
+                  <option value="">-- Select room --</option>
+                  <option>Level 1, Room 1.12</option>
+                  <option>Level 2, Room 2.04</option>
+                  <option>Level 2, Room 2.18</option>
+                  <option>Level 3, Room 3.07</option>
+                  <option>Basement, Room B.02</option>
+                </select>
+                <span class="help-block">Populated from the University room list.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">Receiving contact if different from yourself</label>
+            <span class="help-block">Optional. Complete this if someone else will accept delivery on your behalf.</span>
+            <div class="uom-row">
+              <div class="uom-col uom-col-4">
+                <input type="text" id="f-alt-contact-name" name="alt_contact_name" class="form-control" placeholder="Name" aria-label="Receiving contact name" />
+              </div>
+              <div class="uom-col uom-col-4">
+                <input type="email" id="f-alt-contact-email" name="alt_contact_email" class="form-control" placeholder="Email" aria-label="Receiving contact email" />
+              </div>
+              <div class="uom-col uom-col-4">
+                <input type="tel" id="f-alt-contact-phone" name="alt_contact_phone" class="form-control" value="+61 " placeholder="Phone" aria-label="Receiving contact phone" />
+              </div>
+            </div>
+          </div>
+
+          <h2 class="form-section-title">YOUR REQUESTED ITEMS</h2>
+
+          <p class="prefilled-note">These items are carried over from your cart. Review them for accuracy — they cannot be edited here. To change quantities or remove an item, return to your cart. The current location column shows whether an item is held in the reuse store or still in the donor's lab.</p>
+
+          <div class="cart-table-wrap">
+            <table class="cart-table">
+              <caption class="sr-only">Items currently in your cart</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Item ID</th>
+                  <th scope="col">Item name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Qty</th>
+                  <th scope="col">Arrangement</th>
+                  <th scope="col">Current location</th>
+                </tr>
+              </thead>
+              <tbody id="cart-table-body"></tbody>
+            </table>
+          </div>
+
+          <h2 class="form-section-title">INTENDED USE</h2>
+
+          <div class="form-group required">
+            <label class="control-label" for="f-intended-use">Brief description of what you'll use the item(s) for</label>
+            <textarea id="f-intended-use" name="intended_use" class="form-control" rows="3" maxlength="250" required></textarea>
+            <span class="char-counter" id="f-intended-use-counter">0 / 250 characters</span>
+            <span class="help-block">One description covering all items in your cart. If items will be used for different purposes, note that here. This helps us prioritise requests where multiple users have requested the same item.</span>
+          </div>
+
+          <h2 class="form-section-title">PRACTICALITIES</h2>
+
+          <div class="form-group required">
+            <label class="control-label" for="f-preferred-date">Preferred date to have equipment in your lab</label>
+            <input type="date" id="f-preferred-date" name="preferred_date" class="form-control" required />
+            <span class="help-block">It can take up to 10 business days for the logistics team to process requests. Please choose a date at least 10 business days from now. Staff and Logistics will try their best to process your request and have items delivered as soon as possible.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label" id="f-access-label">Any access constraints at your destination</label>
+            <div class="radio-group inline" role="group" aria-labelledby="f-access-label">
+              <label class="checkbox-item"><input type="checkbox" name="access_constraints" value="biosecurity" /> Biosecurity</label>
+              <label class="checkbox-item"><input type="checkbox" name="access_constraints" value="swipe" /> Swipe access required</label>
+              <label class="checkbox-item"><input type="checkbox" name="access_constraints" value="lift" /> Lift access required</label>
+              <label class="checkbox-item"><input type="checkbox" name="access_constraints" value="ppe" /> PPE required</label>
+              <label class="checkbox-item"><input type="checkbox" name="access_constraints" value="restricted_hours" /> Restricted hours</label>
+              <label class="checkbox-item"><input type="checkbox" id="f-access-other" name="access_constraints" value="other" /> Other</label>
+            </div>
+            <div class="conditional-panel" id="access-other-panel">
+              <div class="form-group required">
+                <label class="control-label" for="f-access-other-detail">Please describe the access constraint</label>
+                <input type="text" id="f-access-other-detail" name="access_constraints_other" class="form-control" />
+              </div>
+            </div>
+          </div>
+
+          <h2 class="form-section-title">COST WILLINGNESS</h2>
+
+          <div class="alert alert-info" role="note">
+            <span class="alert__icon" aria-hidden="true">i</span>
+            <div>Some items may fall outside Campus Assist's scope (typically items over 200kg or cross-campus moves). Others may require specialist disconnection. Cost may or may not be covered by the Sustainability Office or the donor.</div>
+          </div>
+
+          <div class="form-group required">
+            <label class="control-label" for="f-transport-cost">If any item in your cart falls outside Campus Assist scope, are you willing to fund or share transport costs?</label>
+            <select id="f-transport-cost" name="transport_cost" class="form-control" required>
+              <option value="">-- Select an option --</option>
+              <option value="yes">Yes</option>
+              <option value="discuss">To be discussed with my school</option>
+              <option value="no">No - do not proceed with those items if cost lands on me</option>
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label class="control-label" for="f-disconnection-cost">If disconnection is required and not covered by the donor, are you willing to fund it?</label>
+            <select id="f-disconnection-cost" name="disconnection_cost" class="form-control" required>
+              <option value="">-- Select an option --</option>
+              <option value="yes">Yes</option>
+              <option value="discuss">To be discussed</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label class="control-label" for="f-removalist">If this is specialist equipment, do you have a preferred removalist?</label>
+            <select id="f-removalist" name="preferred_removalist" class="form-control" required>
+              <option value="">-- Select an option --</option>
+              <option value="yes">Yes</option>
+              <option value="no">No - happy to go with the donor's removalist if available, or the reuse store team can help arrange</option>
+            </select>
+            <div class="conditional-panel" id="removalist-panel">
+              <div class="form-group required">
+                <label class="control-label" for="f-removalist-details">Removalist company name and contact details</label>
+                <textarea id="f-removalist-details" name="removalist_details" class="form-control" rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <h2 class="form-section-title">ITEM VIEWINGS</h2>
+
+          <div class="form-group">
+            <label class="control-label" id="f-viewing-label">Would you like to view any items before receiving them?</label>
+            <span class="help-block">Select any items you would like to view before confirming the request. The reuse store team will contact the donor to arrange viewing where possible. Viewing availability depends on the donor and on whether the item is at the reuse store or still in the donor's lab.</span>
+            <div class="radio-group" role="group" aria-labelledby="f-viewing-label" id="viewing-list"></div>
+            <div class="alert alert-info" role="note" style="margin-top:var(--uom-space-sm)">
+              <span class="alert__icon" aria-hidden="true">i</span>
+              <div>
+                If an item is listed as being in the reuse store, you are welcome to come in during store hours to view it — no booking is needed. Items still in a donor's lab require the reuse store team to arrange access with the donor.
+                <br /><br />
+                To minimise delays, viewings are not normally offered for consumables or standard glassware and plasticware. Requests to view specialised glassware or other unique items will be considered case-by-case by the Reuse Store team.
+              </div>
+            </div>
+          </div>
+
+          <h2 class="form-section-title">ACKNOWLEDGEMENTS</h2>
+
+          <div class="conditional-panel" id="shared-ack-panel">
+            <div class="form-group required">
+              <div class="radio-group">
+                <label class="checkbox-item">
+                  <input type="checkbox" id="f-shared-ack" name="shared_acknowledgement" data-field-label="Shared item access acknowledgement" />
+                  I acknowledge that if any of the items I am requesting are Open shared donation items, I have read the item description for the specific procedure to gain and maintain access to the item. I understand that the item remains in the donor's lab and I will need to follow the donor's access process.
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="conditional-panel" id="occasional-ack-panel">
+            <div class="form-group required">
+              <div class="radio-group">
+                <label class="checkbox-item">
+                  <input type="checkbox" id="f-occasional-ack" name="occasional_acknowledgement" data-field-label="Occasional access conditions acknowledgement" />
+                  I acknowledge that if any of the items I am requesting are Occasional access items, I have read the item description for the conditions of use, including the donor's right to occasional access after transfer. If I have any issues with the arrangement, I will contact the donor directly using the contact information listed on the item page.
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <h2 class="form-section-title">APPROVAL AND DECLARATION</h2>
+
+          <div class="form-group required">
+            <div class="radio-group">
+              <label class="checkbox-item">
+                <input type="checkbox" id="f-receiver-declaration" name="receiver_declaration" data-field-label="Receiver declaration" required />
+                I confirm that I have the authority to request these items on behalf of my research group, teaching lab, or school. I have consulted the relevant school coordinator or Faculty Infrastructure Planning team where appropriate to confirm there is space and clearance for the items in my destination lab. Where OHS compliance is required, I have consulted my school's OHS advisor.
+              </label>
+            </div>
+          </div>
+
+          <div class="alert alert-info" role="note">
+            <span class="alert__icon" aria-hidden="true">i</span>
+            <div>Please allow up to 10 business days for your request to be processed. The reuse store team will contact you with next steps.</div>
+          </div>
+
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-lg" id="btn-submit">Submit request</button>
+          <button type="button" class="btn btn-secondary" id="btn-cancel">Cancel</button>
+        </div>
+      </form>
+
+      <div class="confirmation" id="confirmation" aria-live="polite">
+        <div class="confirmation__icon" aria-hidden="true">✓</div>
+        <h2>Thank you for your request</h2>
+        <p class="confirmation__ref" id="confirmation-ref">REQ0012345</p>
+        <p id="confirmation-summary">Your submission covers 0 items from your cart and has been received by the reuse store team.</p>
+        <p>Please allow up to 10 business days for your request to be processed. During this time, the reuse store team will:</p>
+        <ul>
+          <li>Confirm availability of each item with the donor</li>
+          <li>Coordinate viewing arrangements for any items you asked to view</li>
+          <li>Assess transport and coordination requirements</li>
+          <li>Contact you to arrange collection or delivery</li>
+        </ul>
+        <p style="color:var(--uom-muted);font-size:1.4rem">You will receive email updates as your request progresses. If you have questions in the meantime, please reply to your ServiceNow ticket confirmation email.</p>
+        <div style="margin-top:var(--uom-space-lg)">
+          <a href="index.html" class="btn btn-secondary">Back to design system</a>
+          <button class="btn btn-primary" onclick="resetForm()" style="margin-left:0.8rem">Start another request</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="sp-summary-col" aria-label="Request summary">
+      <div class="summary-card">
+        <div class="summary-card__head">
+          <h3>Cart summary</h3>
+        </div>
+        <div class="summary-card__body">
+          <div class="summary-row">
+            <span class="summary-row__label">Service</span>
+            <span class="summary-row__value">Research Equipment Reuse Store</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-row__label">Request type</span>
+            <span class="summary-row__value">Item request</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-row__label">Items in cart</span>
+            <span class="summary-row__value" id="summary-item-count">0</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-row__label">Total quantity</span>
+            <span class="summary-row__value" id="summary-total-qty">0</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-row__label">Processing time</span>
+            <span class="summary-row__value">Up to 10 business days</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-row__label">Status</span>
+            <span class="summary-row__value"><span class="badge badge-secondary">Draft</span></span>
+          </div>
+        </div>
+        <div class="summary-card__footer">
+          <p style="font-size:1.2rem;color:var(--uom-muted);margin:0">
+            Your cart may contain a mix of full donation, occasional access and shared items. Check the arrangement column for each item.
+          </p>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="uom-footer">
+    <div class="uom-footer__inner">
+      <div class="uom-footer__lockup">
+        <img src="assets/lockup.png" alt="The University of Melbourne" />
+      </div>
+      <ul class="uom-footer__links">
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Accessibility</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Copyright</a></li>
+      </ul>
+    </div>
+    <span class="uom-footer__copy">2026 The University of Melbourne - Staff Services</span>
+  </footer>
+
+  <script>
+    // Stands in for the cart the catalogue hands to the checkout page.
+    var CART_ITEMS = [
+      { id: 'ES-014', name: 'Benchtop centrifuge', category: 'Equipment - small', qty: 1, arrangement: 'Full donation', location: 'Reuse store' },
+      { id: 'GP-032', name: '500 mL Erlenmeyer flasks', category: 'Glassware and plasticware', qty: 6, arrangement: 'Full donation', location: 'Reuse store' },
+      { id: 'EL-007', name: 'HPLC system (Agilent 1200)', category: 'Equipment - specialised', qty: 1, arrangement: 'Open shared donation', location: "Donor's lab" }
+    ];
+
+    function getValue(id) {
+      var el = document.getElementById(id);
+      return el ? el.value : '';
+    }
+
+    function getCheckedValue(name) {
+      var checked = document.querySelector('input[name="' + name + '"]:checked');
+      return checked ? checked.value : '';
+    }
+
+    function showPanel(id, shouldShow) {
+      var panel = document.getElementById(id);
+      if (panel) panel.classList.toggle('is-visible', shouldShow);
+    }
+
+    function setRequired(id, isRequired) {
+      var field = document.getElementById(id);
+      if (field) field.required = isRequired;
+    }
+
+    function setPathEnabled(id, isEnabled) {
+      var path = document.getElementById(id);
+      if (!path) return;
+      path.hidden = !isEnabled;
+      path.disabled = !isEnabled;
+    }
+
+    function cartHasArrangement(arrangement) {
+      return CART_ITEMS.some(function(item) { return item.arrangement === arrangement; });
+    }
+
+    function renderCart() {
+      var body = document.getElementById('cart-table-body');
+      body.innerHTML = '';
+
+      CART_ITEMS.forEach(function(item) {
+        var row = document.createElement('tr');
+        row.innerHTML = '<td class="cart-table__id">' + item.id + '</td>'
+          + '<td>' + item.name + '</td>'
+          + '<td>' + item.category + '</td>'
+          + '<td class="cart-qty">' + item.qty + '</td>'
+          + '<td>' + item.arrangement + '</td>'
+          + '<td>' + item.location + '</td>';
+        body.appendChild(row);
+      });
+
+      var totalQty = CART_ITEMS.reduce(function(sum, item) { return sum + item.qty; }, 0);
+      document.getElementById('summary-item-count').textContent = CART_ITEMS.length;
+      document.getElementById('summary-total-qty').textContent = totalQty;
+    }
+
+    function buildItemCheckbox(item, groupName) {
+      var label = document.createElement('label');
+      label.className = 'checkbox-item';
+      var input = document.createElement('input');
+      input.type = 'checkbox';
+      input.name = groupName;
+      input.value = item.id;
+      label.appendChild(input);
+      label.appendChild(document.createTextNode(' ' + item.id + ' - ' + item.name + ' (' + item.location + ')'));
+      return label;
+    }
+
+    function renderViewingList() {
+      var viewingList = document.getElementById('viewing-list');
+      viewingList.innerHTML = '';
+      CART_ITEMS.forEach(function(item) {
+        viewingList.appendChild(buildItemCheckbox(item, 'view_before_receiving'));
+      });
+    }
+
+    function setMinimumPreferredDate() {
+      var date = new Date();
+      var added = 0;
+      while (added < 10) {
+        date.setDate(date.getDate() + 1);
+        var day = date.getDay();
+        if (day !== 0 && day !== 6) added++;
+      }
+      var min = date.toISOString().split('T')[0];
+      var field = document.getElementById('f-preferred-date');
+      field.min = min;
+      field.value = min;
+    }
+
+    function updateConditionalFields() {
+      var isEligible = getCheckedValue('science_faculty_member') === 'yes';
+      showPanel('science-faculty-panel', getCheckedValue('science_faculty_member') === 'no');
+      setPathEnabled('request-fields', isEligible);
+
+      var otherAccess = document.getElementById('f-access-other').checked;
+      showPanel('access-other-panel', otherAccess);
+      setRequired('f-access-other-detail', otherAccess);
+
+      var wantsRemovalist = getValue('f-removalist') === 'yes';
+      showPanel('removalist-panel', wantsRemovalist);
+      setRequired('f-removalist-details', wantsRemovalist);
+
+      var hasShared = cartHasArrangement('Open shared donation');
+      showPanel('shared-ack-panel', hasShared);
+      setRequired('f-shared-ack', hasShared);
+
+      var hasOccasional = cartHasArrangement('Occasional access');
+      showPanel('occasional-ack-panel', hasOccasional);
+      setRequired('f-occasional-ack', hasOccasional);
+    }
+
+    function enforcePhonePrefix(input) {
+      if (!input.value || input.value.indexOf('+61') !== 0) {
+        input.value = '+61 ' + input.value.replace(/^\+?61\s*/, '').trimStart();
+      }
+    }
+
+    function bindCharCounter(fieldId) {
+      var field = document.getElementById(fieldId);
+      var counter = document.getElementById(fieldId + '-counter');
+      if (!field || !counter) return;
+      var update = function() {
+        counter.textContent = field.value.length + ' / ' + field.maxLength + ' characters';
+      };
+      field.addEventListener('input', update);
+      update();
+    }
+
+    function clearErrors() {
+      document.querySelectorAll('.form-group.has-error').forEach(function(group) {
+        group.classList.remove('has-error');
+        var msg = group.querySelector('.error-message');
+        if (msg) msg.remove();
+      });
+      document.querySelectorAll('[aria-invalid="true"]').forEach(function(field) {
+        field.removeAttribute('aria-invalid');
+      });
+      document.getElementById('error-summary').classList.remove('is-visible');
+      document.getElementById('error-summary-list').innerHTML = '';
+    }
+
+    function clearFieldError(field) {
+      var group = field.closest('.form-group');
+      if (!group || !group.classList.contains('has-error')) return;
+      group.classList.remove('has-error');
+      var msg = group.querySelector('.error-message');
+      if (msg) msg.remove();
+      group.querySelectorAll('[aria-invalid="true"]').forEach(function(f) {
+        f.removeAttribute('aria-invalid');
+      });
+    }
+
+    // A field only counts as answerable when every conditional panel above it is open.
+    function isFieldVisible(field) {
+      if (field.disabled || field.closest('fieldset[disabled]')) return false;
+      var panel = field.closest('.conditional-panel');
+      while (panel) {
+        if (!panel.classList.contains('is-visible')) return false;
+        panel = panel.parentElement ? panel.parentElement.closest('.conditional-panel') : null;
+      }
+      return true;
+    }
+
+    function getFieldLabel(field) {
+      if (field.getAttribute('data-field-label')) return field.getAttribute('data-field-label');
+      var group = field.closest('.form-group');
+      var label = group ? group.querySelector('.control-label') : null;
+      if (!label) return 'This field';
+      var clone = label.cloneNode(true);
+      clone.querySelectorAll('button').forEach(function(button) { button.remove(); });
+      return clone.textContent.trim();
+    }
+
+    function markError(field, message) {
+      field.setAttribute('aria-invalid', 'true');
+      var group = field.closest('.form-group');
+      if (!group || group.classList.contains('has-error')) return;
+      group.classList.add('has-error');
+      var err = document.createElement('span');
+      err.className = 'error-message';
+      err.textContent = message;
+      group.appendChild(err);
+    }
+
+    function renderErrorSummary(issues) {
+      var summary = document.getElementById('error-summary');
+      var list = document.getElementById('error-summary-list');
+      var title = document.getElementById('error-summary-title');
+
+      list.innerHTML = '';
+      title.textContent = issues.length === 1
+        ? 'There is 1 problem to fix before you can submit'
+        : 'There are ' + issues.length + ' problems to fix before you can submit';
+
+      issues.forEach(function(issue) {
+        var item = document.createElement('li');
+        var link = document.createElement('a');
+        link.href = '#' + issue.field.id;
+        link.textContent = issue.message;
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          issue.field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          issue.field.focus({ preventScroll: true });
+        });
+        item.appendChild(link);
+        list.appendChild(item);
+      });
+
+      summary.classList.add('is-visible');
+      summary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      summary.focus({ preventScroll: true });
+    }
+
+    document.querySelectorAll('select, input[type="radio"], input[type="checkbox"]').forEach(function(field) {
+      field.addEventListener('change', updateConditionalFields);
+    });
+
+    document.querySelectorAll('input, select, textarea').forEach(function(field) {
+      var handler = function() { clearFieldError(field); };
+      field.addEventListener('input', handler);
+      field.addEventListener('change', handler);
+    });
+
+    document.querySelectorAll('input[type="tel"]').forEach(function(input) {
+      enforcePhonePrefix(input);
+      input.addEventListener('focus', function() { enforcePhonePrefix(input); });
+      input.addEventListener('input', function() { enforcePhonePrefix(input); });
+      input.addEventListener('blur', function() { enforcePhonePrefix(input); });
+    });
+
+    document.getElementById('btn-cancel').addEventListener('click', function() {
+      if (confirm('Discard your changes?')) resetForm();
+    });
+
+    document.getElementById('receiver-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      updateConditionalFields();
+      clearErrors();
+
+      var issues = [];
+
+      if (getCheckedValue('science_faculty_member') !== 'yes') {
+        var eligibility = document.querySelector('input[name="science_faculty_member"]');
+        var eligibilityMessage = getCheckedValue('science_faculty_member') === 'no'
+          ? 'This service is only available to members of the Faculty of Science.'
+          : 'Confirm whether you are a member of the Science Faculty.';
+        markError(eligibility, eligibilityMessage);
+        issues.push({ field: eligibility, message: eligibilityMessage });
+      }
+
+      this.querySelectorAll('[required]').forEach(function(field) {
+        if (!isFieldVisible(field)) return;
+
+        var valuePresent;
+        if (field.type === 'radio') valuePresent = !!document.querySelector('input[name="' + field.name + '"]:checked');
+        else if (field.type === 'checkbox') valuePresent = field.checked;
+        else valuePresent = field.value.trim() !== '';
+
+        if (!valuePresent) {
+          var label = getFieldLabel(field);
+          var message = field.type === 'checkbox'
+            ? 'Tick to confirm: ' + label
+            : 'Enter or select: ' + label;
+          markError(field, field.type === 'checkbox' ? 'You must tick this box to continue.' : 'This field is required.');
+          issues.push({ field: field, message: message });
+        }
+      });
+
+      var preferredDate = document.getElementById('f-preferred-date');
+      if (isFieldVisible(preferredDate) && preferredDate.value && preferredDate.min && preferredDate.value < preferredDate.min) {
+        var dateMessage = 'Choose a preferred date at least 10 business days from today.';
+        markError(preferredDate, dateMessage);
+        issues.push({ field: preferredDate, message: dateMessage });
+      }
+
+      if (issues.length) {
+        renderErrorSummary(issues);
+        return;
+      }
+
+      var totalItems = CART_ITEMS.length;
+      document.getElementById('confirmation-ref').textContent = 'REQ' + Math.floor(1000000 + Math.random() * 9000000);
+      document.getElementById('confirmation-summary').textContent =
+        'Your submission covers ' + totalItems + (totalItems === 1 ? ' item' : ' items') + ' from your cart and has been received by the reuse store team.';
+      this.style.display = 'none';
+      var confirmation = document.getElementById('confirmation');
+      confirmation.classList.add('is-visible');
+      confirmation.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    function resetForm() {
+      var form = document.getElementById('receiver-form');
+      form.reset();
+      form.style.display = 'block';
+      document.getElementById('confirmation').classList.remove('is-visible');
+      clearErrors();
+      setMinimumPreferredDate();
+      updateConditionalFields();
+      document.querySelectorAll('input[type="tel"]').forEach(enforcePhonePrefix);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    renderCart();
+    renderViewingList();
+    setMinimumPreferredDate();
+    bindCharCounter('f-intended-use');
+    updateConditionalFields();
+  </script>
+
+</body>
+</html>
