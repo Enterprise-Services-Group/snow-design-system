@@ -691,7 +691,6 @@
       <button class="store-tab is-active" data-tab="browse" onclick="goTab('browse')">Browse all items</button>
       <button class="store-tab" data-tab="recent" onclick="goTab('recent')">Recently added</button>
       <button class="store-tab" data-tab="shared" onclick="goTab('shared')">Shared equipment</button>
-      <button class="store-tab" data-tab="how" onclick="goTab('how')">How it works</button>
       <button class="store-tab" data-tab="requests" onclick="goTab('requests')">My requests</button>
     </nav>
   </header>
@@ -794,7 +793,7 @@
         <ul>
           <li><a href="ServiceNow_form_prototype_ver2.html">Donate an item</a></li>
           <li><a href="ServiceNow_receiver_form_prototype.html">Request items in your cart</a></li>
-          <li><a href="#" onclick="goTab('how'); return false;">How it works</a></li>
+          <li><a href="home.html#how-it-works">How it works</a></li>
         </ul>
       </div>
       <div>
@@ -1055,6 +1054,7 @@
       }
 
       if (state.tab === 'shared' && !isShared(item)) return false;
+      if (state.tab !== 'shared' && isShared(item)) return false;
       if (state.tab === 'recent' && !isNew(item)) return false;
 
       return true;
@@ -1092,7 +1092,8 @@
     function renderSidebar() {
       renderCheckboxFilter('filter-category', 'category', CATEGORIES);
       renderCheckboxFilter('filter-condition', 'condition', CONDITIONS);
-      renderCheckboxFilter('filter-arrangement', 'arrangement', ARRANGEMENTS);
+      renderCheckboxFilter('filter-arrangement', 'arrangement',
+        state.tab === 'shared' ? ARRANGEMENTS : ARRANGEMENTS.filter(function(a) { return a !== 'Open shared donation'; }));
       renderCheckboxFilter('filter-availability', 'availability', AVAILABILITIES);
       renderCheckboxFilter('filter-access', 'access', ACCESS_OPTIONS);
 
@@ -1311,48 +1312,6 @@
         + '</dl>' + viewing;
     }
 
-    function howItWorksView() {
-      return '<div class="prose">'
-        + '<h2>How it works</h2>'
-        + '<p>The Lab Reuse Store lets Faculty of Science labs pass surplus equipment, furniture, glassware and consumables to other labs that need them. Donating and requesting are both free.</p>'
-
-        + '<h3>Donor process</h3>'
-        + '<div class="step-grid">'
-          + '<div class="step"><div class="step__num">1</div><strong>Submit your item</strong><p>Complete the donation form with photos, condition and your preferred arrangement.</p></div>'
-          + '<div class="step"><div class="step__num">2</div><strong>Review</strong><p>The reuse store team checks eligibility and safety, and follows up for operational detail.</p></div>'
-          + '<div class="step"><div class="step__num">3</div><strong>Listed</strong><p>Your item is published to the catalogue with its own item ID.</p></div>'
-          + '<div class="step"><div class="step__num">4</div><strong>Matched</strong><p>When a lab requests it, we coordinate collection or access.</p></div>'
-        + '</div>'
-
-        + '<h3 style="margin-top:var(--uom-space-lg)">Receiver process</h3>'
-        + '<div class="step-grid">'
-          + '<div class="step"><div class="step__num">1</div><strong>Browse</strong><p>Filter the catalogue by category, condition, arrangement and access needs.</p></div>'
-          + '<div class="step"><div class="step__num">2</div><strong>Add to cart</strong><p>Add everything you need. One form covers your whole cart.</p></div>'
-          + '<div class="step"><div class="step__num">3</div><strong>Request</strong><p>Submit the request form with your delivery details and intended use.</p></div>'
-          + '<div class="step"><div class="step__num">4</div><strong>Collect</strong><p>We confirm availability and arrange collection or delivery.</p></div>'
-        + '</div>'
-
-        + '<h3 style="margin-top:var(--uom-space-lg)">The three arrangement types</h3>'
-        + '<table class="request-table"><thead><tr><th>Type</th><th>Ownership</th><th>Where the item lives</th></tr></thead><tbody>'
-          + '<tr><td><strong>Full donation</strong></td><td>Transfers to you</td><td>Moves to your lab</td></tr>'
-          + '<tr><td><strong>Occasional access</strong></td><td>Transfers to you</td><td>Moves to your lab, donor may need occasional access</td></tr>'
-          + '<tr><td><strong>Open shared donation</strong></td><td>Stays with the donor</td><td>Stays in the donor lab; you book time to use it</td></tr>'
-        + '</tbody></table>'
-
-        + '<h3 style="margin-top:var(--uom-space-lg)">Viewing items</h3>'
-        + '<p>Items held at the reuse store can be viewed during store hours with no booking. Items still in a donor lab are viewable by arrangement. Viewings are not normally offered for consumables or standard glassware.</p>'
-
-        + '<h3>Cost</h3>'
-        + '<p>Items are free. Transport within Campus Assist scope is generally covered by the Sustainability Office. Items over 200kg, cross-campus moves, or specialist disconnection may carry a cost, which is flagged on the item page and confirmed before anything proceeds.</p>'
-
-        + '<h3>Frequently asked questions</h3>'
-        + '<details class="spec"><summary>Does adding an item to my cart reserve it?</summary><p>No. Items are allocated when a request is submitted and confirmed, so another lab can still request the same item first.</p></details>'
-        + '<details class="spec"><summary>Can I list chemicals or hazardous waste?</summary><p>No. Chemicals and hazardous waste are out of scope. Equipment previously used with hazardous material must be decontaminated before listing.</p></details>'
-        + '<details class="spec"><summary>What if an item needs repair?</summary><p>Items needing repair, and even non-working items, are still listed. They are often valuable for parts or teaching. The condition tag makes this clear before you request.</p></details>'
-        + '<details class="spec"><summary>How long does a request take?</summary><p>Allow up to 10 business days for processing.</p></details>'
-        + '</div>';
-    }
-
     function myRequestsView() {
       return '<div class="prose">'
         + '<h2>My requests</h2>'
@@ -1379,8 +1338,6 @@
 
       if (state.detailId) {
         content.innerHTML = detailView(getItem(state.detailId));
-      } else if (state.tab === 'how') {
-        content.innerHTML = howItWorksView();
       } else if (state.tab === 'requests') {
         content.innerHTML = myRequestsView();
       } else if (state.tab === 'shared') {
