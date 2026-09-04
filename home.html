@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faculty of Science Lab Reuse Initiative</title>
+  <link rel="stylesheet" href="css/uom-snow.css" />
+  <style>
+    body { background: var(--uom-bg); }
+
+    .wrap { max-width: var(--uom-container-max); margin: 0 auto; padding: 0 var(--uom-space-md); }
+
+    /* ── Header ── */
+    .site-header {
+      background: var(--uom-white);
+      border-bottom: 1px solid var(--uom-border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .site-header__inner {
+      max-width: var(--uom-container-max);
+      margin: 0 auto;
+      padding: var(--uom-space-md);
+      display: flex;
+      align-items: center;
+      gap: var(--uom-space-md);
+    }
+
+    .site-brand { display: flex; align-items: center; gap: var(--uom-space-md); text-decoration: none; }
+    .site-brand:hover { text-decoration: none; }
+    .site-brand img { width: 6.4rem; height: 6.4rem; display: block; }
+    .site-brand__title { font-size: 2.2rem; font-weight: 500; color: var(--uom-navy); line-height: 1.2; }
+    .site-brand__sub { display: block; font-size: 1.2rem; color: var(--uom-muted); font-weight: 400; }
+
+    .site-nav { margin-left: auto; display: flex; align-items: center; gap: var(--uom-space-md); }
+    .site-nav a { font-size: 1.4rem; color: var(--uom-navy); text-decoration: none; }
+    .site-nav a:hover { text-decoration: underline; }
+
+    .btn-donate {
+      background: var(--uom-btn-primary-bg);
+      color: var(--uom-btn-primary-fg);
+      font-size: var(--uom-font-size-base);
+      font-weight: var(--uom-font-weight-medium);
+      padding: 0.8rem 1.6rem;
+      border-radius: var(--uom-radius-sm);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn-donate:hover, .btn-donate:focus { background: var(--uom-btn-hover-bg); color: var(--uom-white); text-decoration: none; }
+
+    /* ── Hero ── */
+    .hero {
+      background: var(--uom-navy);
+      color: var(--uom-white);
+      padding: var(--uom-space-xl) 0;
+    }
+    .hero__grid { display: flex; gap: var(--uom-space-xl); align-items: center; }
+    .hero__copy { flex: 1; min-width: 0; }
+    .hero h1 { color: var(--uom-white); font-size: 3.6rem; margin: 0 0 var(--uom-space-sm); }
+    .hero p { color: rgba(255,255,255,0.82); font-size: 1.6rem; margin: 0 0 var(--uom-space-md); max-width: 60rem; }
+    .hero__actions { display: flex; flex-wrap: wrap; gap: var(--uom-space-sm); }
+
+    .hero__badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.92);
+      font-size: 1.2rem;
+      padding: 0.3rem 1rem;
+      border-radius: 2rem;
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.08rem;
+    }
+
+    .btn-ghost {
+      display: inline-block;
+      border: 1px solid rgba(255,255,255,0.6);
+      color: var(--uom-white);
+      background: transparent;
+      font-size: 1.4rem;
+      padding: 0.8rem 1.6rem;
+      border-radius: var(--uom-radius-sm);
+      text-decoration: none;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.12); color: var(--uom-white); text-decoration: none; }
+
+    .hero__collage {
+      flex: 0 0 38rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+    .hero__collage img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: var(--uom-radius-sm);
+      display: block;
+    }
+
+    /* ── Sections ── */
+    .section { padding: var(--uom-space-xl) 0; }
+    .section--alt { background: var(--uom-white); border-block: 1px solid var(--uom-border-subtle); }
+    .section h2 { font-size: 2.6rem; color: var(--uom-navy); margin: 0 0 var(--uom-space-sm); }
+    .section__lead { font-size: 1.5rem; color: var(--uom-text); max-width: 70rem; margin: 0 0 var(--uom-space-lg); }
+
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr)); gap: var(--uom-space-md); }
+
+    .info-card {
+      background: var(--uom-white);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius);
+      padding: var(--uom-space-md);
+    }
+    .section--alt .info-card { background: var(--uom-bg); }
+    .info-card h3 { font-size: 1.6rem; color: var(--uom-navy); margin: 0 0 0.6rem; }
+    .info-card p { font-size: 1.35rem; margin: 0; color: var(--uom-text); }
+
+    .step { position: relative; padding-left: 5.2rem; }
+    .step__num {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 3.6rem;
+      height: 3.6rem;
+      border-radius: 50%;
+      background: var(--uom-blue);
+      color: var(--uom-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    .step h3 { font-size: 1.6rem; color: var(--uom-navy); margin: 0.4rem 0 0.6rem; }
+    .step p { font-size: 1.35rem; margin: 0; }
+
+    .cta {
+      background: var(--uom-blue);
+      color: var(--uom-white);
+      border-radius: var(--uom-radius);
+      padding: var(--uom-space-xl);
+      text-align: center;
+    }
+    .cta h2 { color: var(--uom-white); margin-bottom: var(--uom-space-sm); }
+    .cta p { color: rgba(255,255,255,0.9); font-size: 1.5rem; max-width: 60rem; margin: 0 auto var(--uom-space-md); }
+
+    .faq { background: var(--uom-white); border: 1px solid var(--uom-border-subtle); border-radius: var(--uom-radius); padding: 0 var(--uom-space-md); }
+    .faq details { border-bottom: 1px solid var(--uom-border-subtle); padding: var(--uom-space-sm) 0; }
+    .faq details:last-child { border-bottom: none; }
+    .faq summary { font-size: 1.45rem; font-weight: 500; color: var(--uom-navy); cursor: pointer; }
+    .faq p { font-size: 1.35rem; margin: 0.8rem 0 0; }
+
+    .site-footer { background: var(--uom-navy); color: #cfe0f0; padding: var(--uom-space-xl) 0 var(--uom-space-lg); margin-top: var(--uom-space-xl); }
+    .site-footer h3 { color: var(--uom-white); font-size: 1.5rem; margin: 0 0 0.8rem; }
+    .site-footer a { color: #cfe0f0; font-size: 1.3rem; }
+    .site-footer ul { list-style: none; padding: 0; margin: 0; }
+    .site-footer li { margin-bottom: 0.4rem; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr)); gap: var(--uom-space-lg); }
+    .footer-base { margin-top: var(--uom-space-lg); padding-top: var(--uom-space-md); border-top: 1px solid rgba(255,255,255,0.2); font-size: 1.2rem; }
+
+    @media (max-width: 900px) {
+      .hero__grid { flex-direction: column; align-items: flex-start; }
+      .hero__collage { flex-basis: auto; width: 100%; }
+      .site-nav { width: 100%; margin-left: 0; flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-brand" href="home.html">
+        <img src="assets/logo.png" alt="The University of Melbourne" />
+        <span class="site-brand__title">
+          Faculty of Science Lab Reuse Initiative
+          <span class="site-brand__sub">Research equipment and consumables reuse programme</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="#how-it-works">How it works</a>
+        <a href="#faq">FAQ</a>
+        <a href="reuse-store.html">Browse the store</a>
+        <a class="btn-donate" href="ServiceNow_form_prototype_ver2.html">Click to donate</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="wrap hero__grid">
+      <div class="hero__copy">
+        <span class="hero__badge">FACULTY OF SCIENCE &middot; SUSTAINABILITY</span>
+        <h1>Give lab equipment a second life</h1>
+        <p>
+          Every year the Faculty disposes of working equipment, glassware and unopened consumables
+          simply because one lab no longer needs them. The Lab Reuse Initiative connects those items
+          with researchers and teaching staff who do &mdash; saving money, cutting waste and keeping
+          usable kit out of landfill.
+        </p>
+        <div class="hero__actions">
+          <a class="btn-donate" href="ServiceNow_form_prototype_ver2.html">Click to donate an item</a>
+          <a class="btn-ghost" href="reuse-store.html">Browse available items</a>
+        </div>
+      </div>
+      <div class="hero__collage">
+        <img src="assets/Dummy%20Photos/Equipment%20American%20Scientific%20Products%20Vortex%20Mixer.jpeg" alt="Vortex mixer" />
+        <img src="assets/Dummy%20Photos/Pyrex%20Glass%20bottle%201000%20mL.jpeg" alt="Pyrex glass bottle" />
+        <img src="assets/Dummy%20Photos/Sorenson%20Pipette%20tips%205-10%20uL%20Filtered%2C%20sterile%2C%20universal%20fit.jpeg" alt="Sterile filtered pipette tips" />
+        <img src="assets/Dummy%20Photos/Cabinet.jpeg" alt="Steel laboratory storage cabinet" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ── What it is ── -->
+  <section class="section" id="about">
+    <div class="wrap">
+      <h2>What is the Lab Reuse Initiative?</h2>
+      <p class="section__lead">
+        A Faculty-wide programme, supported by the Sustainability Office, that lists surplus laboratory
+        items in a single online store. Staff and students across Western Edge can browse what is
+        available, request items free of charge, and arrange collection with help from the reuse team.
+      </p>
+      <div class="card-grid">
+        <div class="info-card">
+          <h3>Free to donate</h3>
+          <p>Listing an item takes about ten minutes. The Sustainability Office covers approved transport costs, so clearing your lab does not come out of your grant.</p>
+        </div>
+        <div class="info-card">
+          <h3>Free to receive</h3>
+          <p>Items in the store are offered at no cost to Faculty of Science labs, teaching programmes and student projects. You only need to say how the item will be used.</p>
+        </div>
+        <div class="info-card">
+          <h3>Safety checked</h3>
+          <p>Every listing records condition, hazardous material history, decontamination status and handling requirements before it goes live.</p>
+        </div>
+        <div class="info-card">
+          <h3>Share, don't only give</h3>
+          <p>Not ready to part with something? List it for occasional access or open shared use and keep it in your lab while others book time on it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How it works ── -->
+  <section class="section section--alt" id="how-it-works">
+    <div class="wrap">
+      <h2>How the process works</h2>
+      <p class="section__lead">Five steps from the moment you decide an item is surplus to the moment it lands in its new lab.</p>
+      <div class="card-grid">
+        <div class="step">
+          <span class="step__num">1</span>
+          <h3>List the item</h3>
+          <p>Complete the donation form with photos, condition, dimensions and any safety history. You will need your supervisor's name for approval.</p>
+        </div>
+        <div class="step">
+          <span class="step__num">2</span>
+          <h3>Review and approval</h3>
+          <p>The reuse team checks the submission, confirms safety details and assigns a unique item ID such as ES&#8209;014.</p>
+        </div>
+        <div class="step">
+          <span class="step__num">3</span>
+          <h3>Published to the store</h3>
+          <p>The listing appears in the online store where staff and students can filter by category, condition, availability and access requirements.</p>
+        </div>
+        <div class="step">
+          <span class="step__num">4</span>
+          <h3>Request and match</h3>
+          <p>An interested lab adds the item to their cart and submits a request explaining the intended use. The reuse team confirms the match with you.</p>
+        </div>
+        <div class="step">
+          <span class="step__num">5</span>
+          <h3>Collection and handover</h3>
+          <p>Collection is scheduled, usually within five to fifteen business days. Campus assist or an external contractor moves the item and the listing is closed.</p>
+        </div>
+        <div class="step">
+          <span class="step__num">6</span>
+          <h3>Final call date</h3>
+          <p>If no one requests an item by its final call date, the reuse team contacts you to agree on external donation, recycling or disposal.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ── -->
+  <section class="section" id="faq">
+    <div class="wrap">
+      <h2>Common questions</h2>
+      <div class="faq">
+        <details open>
+          <summary>Does it cost anything?</summary>
+          <p>No. Listing and receiving items is free. Approved transport within Western Edge is covered by the Sustainability Office. Specialist disconnection or external contractor work is discussed case by case.</p>
+        </details>
+        <details>
+          <summary>What can I donate?</summary>
+          <p>Small and large equipment, specialised instruments, glassware and plasticware, unopened consumables, storage and lab furniture. Items may be fully working, working with minor issues, or listed for parts &mdash; just describe the condition honestly.</p>
+        </details>
+        <details>
+          <summary>What about items that held hazardous material?</summary>
+          <p>They can still be listed. You must record the hazardous material history and the decontamination steps taken. The reuse team will not publish a listing until that information is complete.</p>
+        </details>
+        <details>
+          <summary>Can I keep using the item?</summary>
+          <p>Yes. Choose "occasional access" if you need it back for short periods, or "open shared donation" if the item stays in your lab and others book time on it.</p>
+        </details>
+        <details>
+          <summary>How long does it take?</summary>
+          <p>Approval usually takes a few business days. Collection is typically scheduled within five to fifteen business days once a match is confirmed.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section class="section">
+    <div class="wrap">
+      <div class="cta">
+        <h2>Have something your lab no longer needs?</h2>
+        <p>Take a few photos, note the model and condition, and list it in about ten minutes. Someone across the Faculty is probably looking for it.</p>
+        <a class="btn-donate" href="ServiceNow_form_prototype_ver2.html">Click to donate</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <h3>Lab Reuse Initiative</h3>
+        <p style="font-size:1.3rem;margin:0">A Faculty of Science programme supported by the Sustainability Office.</p>
+      </div>
+      <div>
+        <h3>Take part</h3>
+        <ul>
+          <li><a href="ServiceNow_form_prototype_ver2.html">Donate an item</a></li>
+          <li><a href="reuse-store.html">Browse the store</a></li>
+          <li><a href="ServiceNow_receiver_form_prototype.html">Request items</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Prototype links</h3>
+        <ul>
+          <li><a href="index.html">Design system</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="wrap footer-base">Prototype for demonstration purposes only. Figures shown are indicative.</div>
+  </footer>
+
+</body>
+</html>
