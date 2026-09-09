@@ -224,20 +224,6 @@
       background: var(--uom-white);
     }
 
-    .filter-advanced-toggle {
-      background: none;
-      border: none;
-      padding: 0;
-      color: var(--uom-blue);
-      font-family: var(--uom-font);
-      font-size: 1.3rem;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-
-    .filter-advanced { display: none; margin-top: var(--uom-space-sm); }
-    .filter-advanced.is-open { display: block; }
-
     /* ── Result bar and filter tags ───────────────────── */
     .result-bar {
       display: flex;
@@ -376,6 +362,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 0.8rem;
+      margin-top: auto;
       font-size: 1.2rem;
       color: var(--uom-muted);
     }
@@ -432,7 +419,7 @@
       padding: 0 var(--uom-space-md) var(--uom-space-md);
     }
 
-    .item-card__actions .btn { width: 100%; text-align: center; font-size: 1.3rem; padding: 0.7rem 0.8rem; }
+    .item-card__actions .btn { width: 100%; text-align: center; font-size: 1.3rem; font-weight: 400; padding: 0.7rem 0.8rem; }
 
     .empty-state {
       background: var(--uom-white);
@@ -444,13 +431,10 @@
     }
 
     /* ── Detail view ──────────────────────────────────── */
-    .detail-layout { display: flex; gap: var(--uom-space-lg); align-items: flex-start; }
-    .detail-main { flex: 1; min-width: 0; }
+    .detail-layout { display: block; }
+    .detail-main { min-width: 0; }
 
     .detail-side {
-      flex: 0 0 26rem;
-      position: sticky;
-      top: 14rem;
       background: var(--uom-white);
       border: 1px solid var(--uom-border-subtle);
       border-radius: var(--uom-radius);
@@ -459,6 +443,16 @@
       flex-direction: column;
       gap: 0.8rem;
     }
+
+    .detail-overview { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(30rem, 0.9fr); gap: var(--uom-space-lg); align-items: start; }
+
+    .detail-summary { display: flex; flex-direction: column; gap: var(--uom-space-md); }
+
+    .detail-summary .detail-panel { margin-bottom: 0; }
+
+    .detail-title-row { display: flex; align-items: center; justify-content: space-between; gap: var(--uom-space-md); }
+
+    .detail-title-row h3 { min-width: 0; }
 
     .detail-panel {
       background: var(--uom-white);
@@ -476,7 +470,51 @@
       border-bottom: 2px solid var(--uom-border-subtle);
     }
 
-    .gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; }
+    .gallery { display: flex; flex-direction: column; gap: 0.8rem; }
+
+    .gallery__main {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 10px, #e8e8e8 10px, #e8e8e8 20px);
+      border-radius: var(--uom-radius-sm);
+      overflow: hidden;
+    }
+
+    .gallery__main img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+    .gallery__arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3.6rem;
+      height: 3.6rem;
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 69, 118, 0.88);
+      color: var(--uom-white);
+      font-size: 2.4rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .gallery__arrow:hover, .gallery__arrow:focus { background: var(--uom-blue); }
+    .gallery__arrow--prev { left: 0.8rem; }
+    .gallery__arrow--next { right: 0.8rem; }
+
+    .gallery__thumbs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.8rem; }
+
+    .gallery__thumb {
+      aspect-ratio: 1;
+      border: 2px solid transparent;
+      border-radius: var(--uom-radius-sm);
+      overflow: hidden;
+      padding: 0;
+      background: var(--uom-bg);
+      cursor: pointer;
+    }
+
+    .gallery__thumb.is-active { border-color: var(--uom-blue); }
+    .gallery__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     .gallery__slot {
       aspect-ratio: 1;
@@ -522,9 +560,12 @@
       color: var(--uom-link-alt);
     }
 
-    details.spec { border-top: 1px solid var(--uom-border-subtle); padding: 0.8rem 0; }
-    details.spec summary { cursor: pointer; font-weight: 500; font-size: 1.4rem; color: var(--uom-navy); }
-    details.spec[open] summary { margin-bottom: var(--uom-space-sm); }
+    .detail-tabs { margin-top: var(--uom-space-lg); }
+    .detail-tabs--summary { margin-top: var(--uom-space-md); }
+    details.detail-tab { background: var(--uom-white); border: 1px solid var(--uom-border-subtle); border-radius: var(--uom-radius); margin-bottom: 0.8rem; }
+    details.detail-tab summary { cursor: pointer; font-weight: 500; font-size: 1.5rem; color: var(--uom-navy); padding: var(--uom-space-md); }
+    details.detail-tab[open] summary { border-bottom: 1px solid var(--uom-border-subtle); }
+    .detail-tab__body { padding: var(--uom-space-md); }
 
     .back-link {
       background: none;
@@ -586,6 +627,7 @@
 
     .cart-drawer__body { flex: 1; overflow-y: auto; padding: var(--uom-space-md) var(--uom-space-lg); }
     .cart-drawer__foot { border-top: 1px solid var(--uom-border-subtle); padding: var(--uom-space-md) var(--uom-space-lg); display: flex; gap: 0.8rem; }
+    .cart-drawer__foot .btn { font-weight: 400; }
 
     .cart-line { display: flex; gap: var(--uom-space-sm); padding: var(--uom-space-sm) 0; border-bottom: 1px solid var(--uom-border-subtle); }
 
@@ -600,6 +642,8 @@
       font-size: 1rem;
       color: #999;
     }
+
+    .cart-line__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit; }
 
     .cart-line__body { flex: 1; min-width: 0; }
     .cart-line__name { font-size: 1.3rem; font-weight: 500; margin: 0 0 0.4rem; }
@@ -651,8 +695,8 @@
     @media (max-width: 900px) {
       .store-main { flex-direction: column; }
       .store-sidebar { position: static; width: 100%; flex: 0 0 auto; max-height: none; }
-      .detail-layout { flex-direction: column; }
-      .detail-side { position: static; width: 100%; flex: 0 0 auto; }
+      .detail-overview { grid-template-columns: 1fr; }
+      .detail-side { width: 100%; }
       .store-header__top { flex-wrap: wrap; }
       .store-search { order: 3; flex-basis: 100%; }
     }
@@ -691,6 +735,7 @@
       <button class="store-tab is-active" data-tab="browse" onclick="goTab('browse')">Browse all items</button>
       <button class="store-tab" data-tab="recent" onclick="goTab('recent')">Recently added</button>
       <button class="store-tab" data-tab="shared" onclick="goTab('shared')">Shared equipment</button>
+      <button class="store-tab" data-tab="selling" onclick="goTab('selling')">Selling</button>
       <button class="store-tab" data-tab="requests" onclick="goTab('requests')">My requests</button>
     </nav>
   </header>
@@ -738,18 +783,6 @@
         <div id="filter-access"></div>
       </div>
 
-      <div class="filter-group">
-        <button class="filter-advanced-toggle" id="advanced-toggle" aria-expanded="false">Advanced filters</button>
-        <div class="filter-advanced" id="advanced-panel">
-          <h3 class="filter-group__title" style="margin-top:var(--uom-space-sm)">Last serviced</h3>
-          <select class="filter-select" id="filter-serviced">
-            <option value="">Any</option>
-            <option>Serviced in last 5 years</option>
-            <option>Not serviced in last 5 years</option>
-            <option>Unknown</option>
-          </select>
-        </div>
-      </div>
     </aside>
 
     <!-- Main content -->
@@ -990,6 +1023,162 @@
         viewing: 'donor', campusAssist: 'No - external contractor required', disconnection: 'No', collectionDays: '15',
         transportFunding: 'To be discussed', disconnectionFunding: 'Not applicable',
         photos: [' Hand Sanitizer Dispensing Station.jpeg', 'Econ-O-Pak Tools disposable surgical pad.jpeg', 'Tools nut and bolt kit set.jpeg']
+      },
+      {
+        id: 'GP-041', name: '100 mL graduated cylinders', category: 'Glassware and plasticware', qty: 8,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Reuse store (Building 184)', school: 'School of Chemistry', listed: 5, finalCall: '22 November 2026',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Eight clear graduated cylinders suitable for routine measuring and teaching laboratory use. Clean and free from visible chips or cracks.',
+        dimensions: '5 x 5 x 25 cm each', weight: '0.2 kg each', power: 'No power required', storage: 'None required',
+        manufacturer: 'Duran', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Washed and dried', handling: 'Handle as laboratory glassware',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['100 mL graduated cylinder.jpeg']
+      },
+      {
+        id: 'CO-026', name: 'ART pipette tips, 10 uL', category: 'Consumables', qty: 6,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Reuse store (Building 184)', school: 'School of BioSciences', listed: 7, finalCall: '1 December 2026',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Six unopened packs of 10 uL ART filtered pipette tips. Suitable for compatible pipettes and stored in their original packaging.',
+        dimensions: '12 x 9 x 6 cm per pack', weight: '0.2 kg per pack', power: 'No power required', storage: 'Keep sealed and dry',
+        manufacturer: 'ART', age: '2025', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Not applicable - unopened stock', handling: 'Keep packaging dry',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['ART Pipette tips 10 uL REACH 2140-HR.jpeg']
+      },
+      {
+        id: 'EX-031', name: 'Centrilutor micro-electroeluter', category: 'Equipment - specialised', qty: 1,
+        condition: 'Working with minor issues', arrangement: 'Full donation', availability: 'Available in store to view',
+        location: 'BioSciences 4 (Building 147)', school: 'School of BioSciences', listed: 14, finalCall: '6 December 2026',
+        serviced: 'Not serviced in last 5 years', access: ['Fits in a standard lift'],
+        description: 'Amicon Centrilutor micro-electroeluter for specialised sample preparation. Powers on and is offered with the accessories shown.',
+        dimensions: '35 x 30 x 25 cm', weight: '8 kg', power: 'Standard socket', storage: 'Bench storage',
+        manufacturer: 'Amicon', age: 'Unknown', serviceRecords: 'Partial',
+        hazardous: 'Yes', decontamination: 'Cleaned; history to be confirmed', handling: 'Two-person lift recommended',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5-10',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Amicon Equipment Centrilutor micro-electroeluter.jpeg']
+      },
+      {
+        id: 'CO-027', name: 'Eppendorf pipette-tip refill boxes', category: 'Consumables', qty: 10,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Reuse store (Building 184)', school: 'School of BioSciences', listed: 10, finalCall: '5 December 2026',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Empty Eppendorf refill boxes in various sizes for laboratories reusing compatible tip racks and storage systems.',
+        dimensions: '30 x 20 x 10 cm each', weight: '0.3 kg each', power: 'No power required', storage: 'Keep dry',
+        manufacturer: 'Eppendorf', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Clean and empty', handling: 'None',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Eppendorf Pipette tips various sizes empty refill box.jpeg']
+      },
+      {
+        id: 'EX-032', name: 'Laboratory microscope', category: 'Equipment - specialised', qty: 1,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'BioSciences 2 (Building 122)', school: 'School of BioSciences', listed: 8, finalCall: '10 December 2026',
+        serviced: 'Serviced in last 5 years', access: ['Fits in a standard lift'],
+        description: 'Laboratory microscope suitable for teaching, inspection, and routine sample viewing. Offered with the accessories shown.',
+        dimensions: '30 x 35 x 45 cm', weight: '8 kg', power: 'Standard socket', storage: 'Dust cover recommended',
+        manufacturer: 'Unknown', age: 'Unknown', serviceRecords: 'Available',
+        hazardous: 'No', decontamination: 'Not applicable - non-contact equipment', handling: 'Carry by arm and base',
+        viewing: 'donor', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Equipment Microscopes.jpeg']
+      },
+      {
+        id: 'OT-006', name: 'Trinitron display monitor', category: 'Other', qty: 1,
+        condition: 'Working with minor issues', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Reuse store (Building 184)', school: 'Faculty operations', listed: 16, finalCall: '14 December 2026',
+        serviced: 'Unknown', access: ['Requires ground floor or freight lift access'],
+        description: 'Older Trinitron display available for specialist teaching, demonstration, or parts use. Power and display condition should be checked before collection.',
+        dimensions: '50 x 50 x 50 cm', weight: '35 kg', power: 'Standard socket', storage: 'Keep upright',
+        manufacturer: 'Sony Trinitron', age: 'Unknown', serviceRecords: 'Not available',
+        hazardous: 'No', decontamination: 'Wiped down', handling: 'Two-person lift; keep upright',
+        viewing: 'store', campusAssist: 'No - external contractor required', disconnection: 'No', collectionDays: '15',
+        transportFunding: 'To be discussed', disconnectionFunding: 'Not applicable',
+        photos: ['Equipment Trinitron TV Various.jpeg']
+      },
+      {
+        id: 'GP-042', name: 'Laboratory funnels', category: 'Glassware and plasticware', qty: 10,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available in store to view',
+        location: 'Reuse store (Building 184)', school: 'School of Chemistry', listed: 19, finalCall: '18 December 2026',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Assorted laboratory funnels for transferring liquids and powders. Clean and suitable for general non-hazardous teaching or research use.',
+        dimensions: '10 x 10 x 15 cm each', weight: '0.1 kg each', power: 'No power required', storage: 'None required',
+        manufacturer: 'Unknown', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Washed and dried', handling: 'Handle as laboratory glassware',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Funnel.jpeg']
+      },
+      {
+        id: 'EL-028', name: 'Incubator shelf', category: 'Equipment - large', qty: 2,
+        condition: 'Working with minor issues', arrangement: 'Full donation', availability: 'Available now',
+        location: 'BioSciences 2 (Building 122)', school: 'School of BioSciences', listed: 22, finalCall: '20 December 2026',
+        serviced: 'Unknown', access: ['Requires ground floor or freight lift access'],
+        description: 'Two circular-hole shelves removed from laboratory incubator equipment. Check dimensions against the receiving unit before requesting.',
+        dimensions: '60 cm diameter each', weight: '5 kg each', power: 'No power required', storage: 'Store flat',
+        manufacturer: 'Unknown', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'Yes', decontamination: 'Cleaned; history to be confirmed', handling: 'Protect edges during transport',
+        viewing: 'donor', campusAssist: 'Yes', disconnection: 'No', collectionDays: '10',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Incubator Shelf circle holes.jpeg']
+      },
+      {
+        id: 'SF-030', name: 'Metal freezer racks', category: 'Storage and lab furniture', qty: 20,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Reuse store (Building 184)', school: 'School of BioSciences', listed: 25, finalCall: '8 January 2027',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Metal freezer racks for standard-sized storage boxes. Offered individually or as a group, subject to availability.',
+        dimensions: '14 x 14 x 30 cm each', weight: '1 kg each', power: 'No power required', storage: 'Keep dry',
+        manufacturer: 'Unknown', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Wiped down', handling: 'None',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Metal freezer racks for standard sized boxes..jpeg']
+      },
+      {
+        id: 'GP-043', name: 'Quick-seal glass centrifuge tubes', category: 'Glassware and plasticware', qty: 24,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Reuse store (Building 184)', school: 'School of Chemistry', listed: 28, finalCall: '12 January 2027',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Quick-seal glass centrifuge tubes for compatible laboratory workflows. Inspect seals and confirm rotor compatibility before use.',
+        dimensions: '2 x 2 x 10 cm each', weight: '0.1 kg each', power: 'No power required', storage: 'Store in protective packaging',
+        manufacturer: 'Unknown', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Washed and dried', handling: 'Handle as laboratory glassware',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Tubes Quick-seal centrifuge tube, glass.jpeg']
+      },
+      {
+        id: 'GP-044', name: 'Petri dishes', category: 'Glassware and plasticware', qty: 30,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Reuse store (Building 184)', school: 'School of BioSciences', listed: 30, finalCall: '15 January 2027',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Assorted Petri dishes for teaching, sample handling, or non-hazardous culture demonstrations. Condition varies by pack.',
+        dimensions: '9 cm diameter each', weight: '0.1 kg each', power: 'No power required', storage: 'Keep covered and dry',
+        manufacturer: 'Unknown', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Washed and dried', handling: 'Handle carefully',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Petri Dishes culture.jpeg']
+      },
+      {
+        id: 'SF-031', name: 'Laboratory storage tubes', category: 'Storage and lab furniture', qty: 40,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available in store to view',
+        location: 'Reuse store (Building 184)', school: 'School of BioSciences', listed: 34, finalCall: '20 January 2027',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Assorted storage tubes and holders for organising small laboratory components. Offered as a mixed lot.',
+        dimensions: 'Various sizes', weight: '0.1 kg each', power: 'No power required', storage: 'Keep dry',
+        manufacturer: 'Unknown', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Cleaned and empty', handling: 'None',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Storage tube storage.jpeg']
       }
     ];
 
@@ -1098,7 +1287,6 @@
       renderCheckboxFilter('filter-access', 'access', ACCESS_OPTIONS);
 
       document.getElementById('filter-location').value = state.filters.location;
-      document.getElementById('filter-serviced').value = state.filters.serviced;
 
       // Arrangement is fixed on the shared tab, so the filter is disabled there.
       var group = document.getElementById('arrangement-group');
@@ -1155,7 +1343,6 @@
             + '<span class="tag ' + conditionTagClass(item.condition) + '">' + item.condition + '</span>'
             + '<span class="tag tag--outline">' + arrangementShort(item.arrangement) + '</span>'
           + '</div>'
-          + '<p class="item-card__meta">' + escapeHtml(item.school) + ' &middot; ' + escapeHtml(item.location) + '</p>'
           + '<div class="item-card__avail">'
             + '<span>' + item.availability + '</span>'
             + '<span class="item-card__qty">QTY ' + item.qty + '</span>'
@@ -1196,43 +1383,59 @@
     function detailView(item) {
       var html = '<button class="back-link" onclick="closeDetail()">&larr; Back to results</button>';
 
-      html += '<div class="detail-layout"><div class="detail-main">';
-
-      html += '<div class="detail-panel">'
-        + '<h3 style="border:none;font-size:2.2rem;margin-bottom:0.4rem">' + escapeHtml(item.name) + '</h3>'
-        + '<div class="id-line"><span class="id-code">' + item.id + '</span>'
-        + '<button class="copy-btn" onclick="copyId(\'' + item.id + '\', this)">Copy ID</button></div>'
-        + '<div class="tag-row">'
-          + '<span class="tag tag--qty">QTY ' + item.qty + '</span>'
-          + '<span class="tag tag--category">' + escapeHtml(item.category) + '</span>'
-          + '<span class="tag ' + conditionTagClass(item.condition) + '">' + item.condition + '</span>'
-          + '<span class="tag tag--outline" title="' + arrangementTooltip(item.arrangement) + '">' + item.arrangement + '</span>'
-          + '<span class="tag tag--navy">' + item.availability + '</span>'
-        + '</div></div>';
-
       var photos = item.photos || [];
-      var slots = '';
-      for (var p = 0; p < 4; p++) {
-        slots += photos[p]
-          ? '<div class="gallery__slot"><img src="' + photoUrl(photos[p]) + '" alt="' + escapeHtml(item.name) + ' photo ' + (p + 1) + '" loading="lazy" /></div>'
-          : '<div class="gallery__slot">Photo ' + (p + 1) + '<br />to be added</div>';
-      }
-      html += '<div class="detail-panel"><h3>Photos</h3><div class="gallery">' + slots + '</div></div>';
+      var firstPhoto = photos[0]
+        ? '<img id="detail-gallery-image" src="' + photoUrl(photos[0]) + '" alt="' + escapeHtml(item.name) + ' photo 1" />'
+        : '<span>Photo to be added</span>';
+      var galleryControls = photos.length > 1
+        ? '<button class="gallery__arrow gallery__arrow--prev" onclick="showGalleryPhoto(-1)" aria-label="Previous photo">&#8249;</button>'
+          + '<button class="gallery__arrow gallery__arrow--next" onclick="showGalleryPhoto(1)" aria-label="Next photo">&#8250;</button>'
+        : '';
+      var thumbnails = photos.map(function(photo, index) {
+        return '<button class="gallery__thumb' + (index === 0 ? ' is-active' : '') + '" onclick="showGalleryPhoto(' + index + ')" aria-label="View photo ' + (index + 1) + '">'
+          + '<img src="' + photoUrl(photo) + '" alt="" loading="lazy" /></button>';
+      }).join('');
 
-      html += '<div class="detail-panel"><h3>Key facts</h3><dl class="fact-list">'
-        + '<dt>Category</dt><dd>' + escapeHtml(item.category) + '</dd>'
-        + '<dt>Quantity available</dt><dd>' + item.qty + '</dd>'
-        + '<dt>Condition</dt><dd>' + item.condition + '</dd>'
-        + '<dt>Last serviced</dt><dd>' + item.serviced + '</dd>'
-        + '<dt>Location</dt><dd>' + escapeHtml(item.location) + '</dd>'
-        + '<dt>Listed</dt><dd>' + item.listed + ' days ago</dd>'
-        + '<dt>Final call date</dt><dd>' + item.finalCall + '</dd>'
-        + '</dl><p style="font-size:1.2rem;color:var(--uom-muted);margin:0">Precise room details are shared once a request is confirmed.</p></div>';
-
-      html += '<div class="detail-panel"><h3>Description</h3><p style="font-size:1.4rem;margin:0">' + escapeHtml(item.description) + '</p></div>';
-
-      html += '<div class="detail-panel"><h3>More information</h3>'
-        + '<details class="spec"><summary>Specifications</summary><dl class="fact-list">'
+      html += '<div class="detail-layout"><div class="detail-overview">'
+        + '<div class="detail-main">'
+        + '<div class="detail-panel"><h3>Photos</h3><div class="gallery">'
+        + '<div class="gallery__main">' + firstPhoto + galleryControls + '</div>'
+        + (thumbnails ? '<div class="gallery__thumbs">' + thumbnails + '</div>' : '')
+        + '</div></div></div>'
+        + '<div class="detail-summary">'
+        + '<div class="detail-panel">'
+          + '<div class="detail-title-row"><h3 style="border:none;font-size:2.2rem;margin-bottom:0.4rem">' + escapeHtml(item.name) + '</h3>'
+          + '<span class="tag tag--navy">' + item.availability + '</span></div>'
+          + '<div class="id-line"><span class="id-code">' + item.id + '</span>'
+          + '<button class="copy-btn" onclick="copyId(\'' + item.id + '\', this)">Copy ID</button></div>'
+          + '<div class="tag-row">'
+            + '<span class="tag tag--category">' + escapeHtml(item.category) + '</span>'
+            + '<span class="tag ' + conditionTagClass(item.condition) + '">' + item.condition + '</span>'
+            + '<span class="tag tag--outline" title="' + arrangementTooltip(item.arrangement) + '">' + item.arrangement + '</span>'
+          + '</div>'
+        + '</div>'
+        + '<div class="detail-panel"><h3>Description</h3><p style="font-size:1.4rem;margin:0">' + escapeHtml(item.description) + '</p></div>'
+        + '<div class="detail-panel"><h3>Key facts</h3><dl class="fact-list">'
+          + '<dt>Category</dt><dd>' + escapeHtml(item.category) + '</dd>'
+          + '<dt>QTY</dt><dd>' + item.qty + '</dd>'
+          + '<dt>Condition</dt><dd>' + item.condition + '</dd>'
+          + '<dt>Last serviced</dt><dd>' + item.serviced + '</dd>'
+          + '<dt>Location</dt><dd>' + escapeHtml(item.location) + '</dd>'
+          + '<dt>Listed</dt><dd>' + item.listed + ' days ago</dd>'
+          + '<dt>Final call date</dt><dd>' + item.finalCall + '</dd>'
+          + '</dl><p style="font-size:1.2rem;color:var(--uom-muted);margin:0">Precise room details are shared once a request is confirmed.</p>'
+          + (isShared(item) ? '<div class="detail-panel" style="margin-top:var(--uom-space-md)"><h3>Contact and booking</h3>'
+            + (item.donorEmail ? '<p style="font-size:1.4rem;margin:0 0 var(--uom-space-sm)"><strong>Donor email:</strong> <a href="mailto:' + item.donorEmail + '">' + item.donorEmail + '</a></p>' : '')
+            + (item.booking ? '<p style="font-size:1.4rem;margin:0"><strong>Booking information:</strong> ' + escapeHtml(item.booking) + '</p>' : '<p style="font-size:1.4rem;margin:0">Arrange access through the reuse store team, quoting item ID ' + item.id + '.</p>')
+            + '</div>' : '')
+          + '</div>'
+        + '<aside class="detail-side">'
+          + (!isShared(item) ? '<button class="btn btn-primary" onclick="addToCart(\'' + item.id + '\')">Add to cart</button>' : '')
+          + '<p style="font-size:1.2rem;color:var(--uom-muted);margin:0.8rem 0 0">Item ID <strong>' + item.id + '</strong> &middot; quote this when contacting the reuse store team.</p>'
+        + '</aside>'
+        + '</div></div>'
+        + '<div class="detail-tabs">'
+        + '<details class="detail-tab"><summary>Specifications</summary><div class="detail-tab__body"><dl class="fact-list">'
           + '<dt>Dimensions</dt><dd>' + item.dimensions + '</dd>'
           + '<dt>Approximate weight</dt><dd>' + item.weight + '</dd>'
           + '<dt>Power requirements</dt><dd>' + item.power + '</dd>'
@@ -1240,45 +1443,48 @@
           + '<dt>Manufacturer / model</dt><dd>' + escapeHtml(item.manufacturer) + '</dd>'
           + '<dt>Age or year of purchase</dt><dd>' + item.age + '</dd>'
           + '<dt>Service records</dt><dd>' + item.serviceRecords + '</dd>'
-        + '</dl></details>'
-        + '<details class="spec"><summary>Safety and handling</summary><dl class="fact-list">'
+        + '</dl>'
+        + (isShared(item) ? '<div style="margin-top:var(--uom-space-md)"><h3>Availability and viewing</h3>' + availabilityBlock(item) + '</div>' : '')
+        + '</div></details>'
+        + '<details class="detail-tab"><summary>Safety and handling</summary><div class="detail-tab__body"><dl class="fact-list">'
           + '<dt>Hazardous material history</dt><dd>' + item.hazardous + '</dd>'
           + '<dt>Decontamination status</dt><dd>' + escapeHtml(item.decontamination) + '</dd>'
           + '<dt>Special handling</dt><dd>' + escapeHtml(item.handling) + '</dd>'
-        + '</dl></details></div>';
-
-      html += '<div class="detail-panel"><h3>Availability and viewing</h3>' + availabilityBlock(item) + '</div>';
+        + '</dl></div></details>'
+        + (!isShared(item) ? '<details class="detail-tab"><summary>Availability and viewing</summary><div class="detail-tab__body">' + availabilityBlock(item) + '</div></details>' : '');
 
       if (!isShared(item)) {
-        html += '<div class="detail-panel"><h3>Delivery and logistics</h3><dl class="fact-list">'
+        html += '<details class="detail-tab"><summary>Delivery and logistics</summary><div class="detail-tab__body"><dl class="fact-list">'
           + '<dt>Within Campus Assist scope</dt><dd>' + item.campusAssist + '</dd>'
           + '<dt>Disconnection required</dt><dd>' + item.disconnection + '</dd>'
           + '<dt>Estimated collection</dt><dd>' + item.collectionDays + ' business days after approval</dd>'
-          + '</dl></div>';
-
-        html += '<div class="detail-panel"><h3>Cost information</h3><dl class="fact-list">'
+          + '</dl></div></details>'
+          + '<details class="detail-tab"><summary>Cost information</summary><div class="detail-tab__body"><dl class="fact-list">'
           + '<dt>Transport funding</dt><dd>' + item.transportFunding + '</dd>'
           + '<dt>Disconnection funding</dt><dd>' + item.disconnectionFunding + '</dd>'
-          + '</dl></div>';
+          + '</dl></div></details>';
       }
 
-      if (isShared(item)) {
-        html += '<div class="detail-panel"><h3>Contact</h3>'
-          + '<p style="font-size:1.4rem;margin:0">Arrange access through the reuse store team, quoting item ID ' + item.id + '.</p></div>';
-      }
-
-      html += '</div><aside class="detail-side">';
-
-      if (!isShared(item)) {
-        html += '<button class="btn btn-primary" onclick="addToCart(\'' + item.id + '\')">Add to cart</button>';
-      }
-
-      html += '<button class="btn btn-secondary" onclick="addToViewingList(\'' + item.id + '\')">Add to viewing list</button>'
-        + '<button class="btn btn-secondary" onclick="askQuestion(\'' + item.id + '\')">Ask a question</button>'
-        + '<p style="font-size:1.2rem;color:var(--uom-muted);margin:0.8rem 0 0">Item ID <strong>' + item.id + '</strong> &middot; quote this when contacting the reuse store team.</p>'
-        + '</aside></div>';
+      html += '</div></div>';
 
       return html;
+    }
+
+    function showGalleryPhoto(index) {
+      var image = document.getElementById('detail-gallery-image');
+      var thumbnails = document.querySelectorAll('.gallery__thumb');
+      if (!image || !thumbnails.length) return;
+
+      var current = Array.prototype.indexOf.call(thumbnails, document.querySelector('.gallery__thumb.is-active'));
+      var next = index === -1 || index === 1 ? current + index : index;
+      if (next < 0) next = thumbnails.length - 1;
+      if (next >= thumbnails.length) next = 0;
+
+      image.src = thumbnails[next].querySelector('img').src;
+      image.alt = thumbnails[next].getAttribute('aria-label');
+      thumbnails.forEach(function(thumbnail, thumbnailIndex) {
+        thumbnail.classList.toggle('is-active', thumbnailIndex === next);
+      });
     }
 
     function arrangementTooltip(arrangement) {
@@ -1325,6 +1531,15 @@
         + '</div>';
     }
 
+    function sellingView() {
+      return '<div class="prose">'
+        + '<h2>Selling</h2>'
+        + '<div class="callout">Selling and buying items through the reuse store are not live yet, but we expect this feature to be available in the near future.</div>'
+        + '<p>We are currently assessing demand based on interest and usage numbers. This will help us understand whether a selling option would be useful for the Faculty.</p>'
+        + '<p>If you would like to sell your item, please contact <a href="mailto:reuse-store@unimelb.edu.au">reuse-store@unimelb.edu.au</a> for more information.</p>'
+        + '</div>';
+    }
+
     /* ─────────────── Render ─────────────── */
     function render() {
       document.querySelectorAll('.store-tab').forEach(function(tab) {
@@ -1340,6 +1555,8 @@
         content.innerHTML = detailView(getItem(state.detailId));
       } else if (state.tab === 'requests') {
         content.innerHTML = myRequestsView();
+      } else if (state.tab === 'selling') {
+        content.innerHTML = sellingView();
       } else if (state.tab === 'shared') {
         content.innerHTML = browseView(
           '<div class="callout"><strong>Shared equipment</strong> stays in the donor\'s lab and is available for other researchers to book and use. '
@@ -1435,7 +1652,11 @@
       html += state.cart.map(function(line) {
         var item = getItem(line.id);
         return '<div class="cart-line">'
-          + '<div class="cart-line__thumb">No photo</div>'
+          + '<div class="cart-line__thumb">'
+            + (item.photos && item.photos.length
+              ? '<img src="' + photoUrl(item.photos[0]) + '" alt="' + escapeHtml(item.name) + '" />'
+              : 'No photo')
+          + '</div>'
           + '<div class="cart-line__body">'
             + '<p class="cart-line__name">' + escapeHtml(item.name) + '</p>'
             + '<div class="tag-row" style="margin-bottom:0.6rem">'
@@ -1498,17 +1719,6 @@
     document.getElementById('filter-location').addEventListener('change', function(e) {
       state.filters.location = e.target.value;
       render();
-    });
-
-    document.getElementById('filter-serviced').addEventListener('change', function(e) {
-      state.filters.serviced = e.target.value;
-      render();
-    });
-
-    document.getElementById('advanced-toggle').addEventListener('click', function() {
-      var panel = document.getElementById('advanced-panel');
-      var open = panel.classList.toggle('is-open');
-      this.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
 
     document.getElementById('cart-button').addEventListener('click', openCart);

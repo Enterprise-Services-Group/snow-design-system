@@ -35,20 +35,22 @@
     .site-brand__sub { display: block; font-size: 1.2rem; color: var(--uom-muted); font-weight: 400; }
 
     .site-nav { margin-left: auto; display: flex; align-items: center; gap: var(--uom-space-md); }
-    .site-nav a { font-size: 1.4rem; color: var(--uom-navy); text-decoration: none; }
-    .site-nav a:hover { text-decoration: underline; }
+    .site-nav a:not(.btn-donate) { font-size: 1.4rem; color: var(--uom-navy); text-decoration: none; }
+    .site-nav a:not(.btn-donate):hover { text-decoration: underline; }
 
     .btn-donate {
-      background: var(--uom-btn-primary-bg);
-      color: var(--uom-btn-primary-fg);
+      background: var(--uom-blue);
+      color: var(--uom-white);
       font-size: var(--uom-font-size-base);
       font-weight: var(--uom-font-weight-medium);
-      padding: 0.8rem 1.6rem;
-      border-radius: var(--uom-radius-sm);
+      padding: 1rem 1.8rem;
+      border: 2px solid var(--uom-blue);
+      border-radius: var(--uom-radius);
       text-decoration: none;
       white-space: nowrap;
+      display: inline-block;
     }
-    .btn-donate:hover, .btn-donate:focus { background: var(--uom-btn-hover-bg); color: var(--uom-white); text-decoration: none; }
+    .btn-donate:hover, .btn-donate:focus { background: var(--uom-btn-hover-bg); border-color: var(--uom-btn-hover-bg); color: var(--uom-white); text-decoration: none; }
 
     /* ── Hero ── */
     .hero {
@@ -75,27 +77,28 @@
 
     .btn-ghost {
       display: inline-block;
-      border: 1px solid rgba(255,255,255,0.6);
+      border: 2px solid var(--uom-blue);
       color: var(--uom-white);
-      background: transparent;
-      font-size: 1.4rem;
-      padding: 0.8rem 1.6rem;
-      border-radius: var(--uom-radius-sm);
+      background: var(--uom-blue);
+      font-size: var(--uom-font-size-base);
+      font-weight: var(--uom-font-weight-medium);
+      padding: 1rem 1.8rem;
+      border-radius: var(--uom-radius);
       text-decoration: none;
+      white-space: nowrap;
     }
-    .btn-ghost:hover { background: rgba(255,255,255,0.12); color: var(--uom-white); text-decoration: none; }
+    .btn-ghost:hover, .btn-ghost:focus { background: var(--uom-btn-hover-bg); border-color: var(--uom-btn-hover-bg); color: var(--uom-white); text-decoration: none; }
 
-    .hero__collage {
-      flex: 0 0 38rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.8rem;
-    }
-    .hero__collage img {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
+    .hero__image {
+      flex: 0 0 44rem;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
       border-radius: var(--uom-radius-sm);
+    }
+    .hero__image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
     }
 
@@ -162,7 +165,7 @@
 
     @media (max-width: 900px) {
       .hero__grid { flex-direction: column; align-items: flex-start; }
-      .hero__collage { flex-basis: auto; width: 100%; }
+      .hero__image { flex-basis: auto; width: 100%; }
       .site-nav { width: 100%; margin-left: 0; flex-wrap: wrap; }
     }
   </style>
@@ -175,14 +178,14 @@
         <img src="assets/logo.png" alt="The University of Melbourne" />
         <span class="site-brand__title">
           Faculty of Science Lab Reuse Initiative
-          <span class="site-brand__sub">Research equipment and consumables reuse programme</span>
+          <span class="site-brand__sub">Research equipment and consumables reuse program</span>
         </span>
       </a>
       <nav class="site-nav" aria-label="Primary">
         <a href="#how-it-works">How it works</a>
         <a href="#faq">FAQ</a>
         <a href="reuse-store.html">Browse the store</a>
-        <a class="btn-donate" href="ServiceNow_form_prototype_ver2.html">Click to donate</a>
+        <a class="btn-donate" href="ServiceNow_form_prototype_ver2.html">+ Click to donate</a>
       </nav>
     </div>
   </header>
@@ -192,7 +195,7 @@
     <div class="wrap hero__grid">
       <div class="hero__copy">
         <span class="hero__badge">FACULTY OF SCIENCE &middot; SUSTAINABILITY</span>
-        <h1>Give lab equipment a second life</h1>
+        <h1>Faculty of Science Lab Reuse Initiative</h1>
         <p>
           Every year the Faculty disposes of working equipment, glassware and unopened consumables
           simply because one lab no longer needs them. The Lab Reuse Initiative connects those items
@@ -200,15 +203,12 @@
           usable kit out of landfill.
         </p>
         <div class="hero__actions">
-          <a class="btn-donate" href="ServiceNow_form_prototype_ver2.html">Click to donate an item</a>
+          <a class="btn-donate" href="ServiceNow_form_prototype_ver2.html"> + Click to donate</a>
           <a class="btn-ghost" href="reuse-store.html">Browse available items</a>
         </div>
       </div>
-      <div class="hero__collage">
-        <img src="assets/Dummy%20Photos/Equipment%20American%20Scientific%20Products%20Vortex%20Mixer.jpeg" alt="Vortex mixer" />
-        <img src="assets/Dummy%20Photos/Pyrex%20Glass%20bottle%201000%20mL.jpeg" alt="Pyrex glass bottle" />
-        <img src="assets/Dummy%20Photos/Sorenson%20Pipette%20tips%205-10%20uL%20Filtered%2C%20sterile%2C%20universal%20fit.jpeg" alt="Sterile filtered pipette tips" />
-        <img src="assets/Dummy%20Photos/Cabinet.jpeg" alt="Steel laboratory storage cabinet" />
+      <div class="hero__image">
+        <img src="assets/hero%20image.jpg" alt="Researcher working with microscopes in a laboratory" />
       </div>
     </div>
   </section>
@@ -218,7 +218,7 @@
     <div class="wrap">
       <h2>What is the Lab Reuse Initiative?</h2>
       <p class="section__lead">
-        A Faculty-wide programme, supported by the Sustainability Office, that lists surplus laboratory
+        A Faculty-wide program, supported by the Sustainability Office, that lists surplus laboratory
         items in a single online store. Staff and students across Western Edge can browse what is
         available, request items free of charge, and arrange collection with help from the reuse team.
       </p>
@@ -229,7 +229,7 @@
         </div>
         <div class="info-card">
           <h3>Free to receive</h3>
-          <p>Items in the store are offered at no cost to Faculty of Science labs, teaching programmes and student projects. You only need to say how the item will be used.</p>
+          <p>Items in the store are offered at no cost to Faculty of Science labs, teaching program and student projects. You only need to say how the item will be used.</p>
         </div>
         <div class="info-card">
           <h3>Safety checked</h3>
@@ -262,12 +262,12 @@
         <div class="step">
           <span class="step__num">3</span>
           <h3>Published to the store</h3>
-          <p>The listing appears in the online store where staff and students can filter by category, condition, availability and access requirements.</p>
+          <p>The listing appears in the online store where researchers can filter by category, condition, availability and access requirements. Some items may also be transported to the reuse store on campus to view in person.</p>
         </div>
         <div class="step">
           <span class="step__num">4</span>
           <h3>Request and match</h3>
-          <p>An interested lab adds the item to their cart and submits a request explaining the intended use. The reuse team confirms the match with you.</p>
+          <p>An interested researcher adds the item to their cart and submits a request explaining the intended use. The reuse team confirms the match with you.</p>
         </div>
         <div class="step">
           <span class="step__num">5</span>
@@ -312,22 +312,11 @@
     </div>
   </section>
 
-  <!-- ── CTA ── -->
-  <section class="section">
-    <div class="wrap">
-      <div class="cta">
-        <h2>Have something your lab no longer needs?</h2>
-        <p>Take a few photos, note the model and condition, and list it in about ten minutes. Someone across the Faculty is probably looking for it.</p>
-        <a class="btn-donate" href="ServiceNow_form_prototype_ver2.html">Click to donate</a>
-      </div>
-    </div>
-  </section>
-
   <footer class="site-footer">
     <div class="wrap footer-grid">
       <div>
         <h3>Lab Reuse Initiative</h3>
-        <p style="font-size:1.3rem;margin:0">A Faculty of Science programme supported by the Sustainability Office.</p>
+        <p style="font-size:1.3rem;margin:0">A Faculty of Science program supported by the Sustainability Office.</p>
       </div>
       <div>
         <h3>Take part</h3>
