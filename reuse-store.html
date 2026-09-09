@@ -6,7 +6,12 @@
   <title>Faculty of Science Lab Reuse Store</title>
   <link rel="stylesheet" href="css/uom-snow.css" />
   <style>
-    body { background: var(--uom-bg); }
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--uom-bg);
+    }
 
     /* ── Top zone ─────────────────────────────────────── */
     .store-header {
@@ -168,6 +173,8 @@
       margin: 0 auto;
       padding: var(--uom-space-lg) var(--uom-space-md);
       display: flex;
+      flex: 1 0 auto;
+      width: 100%;
       gap: var(--uom-space-lg);
       align-items: flex-start;
     }
