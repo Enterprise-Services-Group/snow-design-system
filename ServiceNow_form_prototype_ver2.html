@@ -207,6 +207,59 @@
       color: var(--uom-blue);
       margin: var(--uom-space-sm) 0 var(--uom-space-md);
     }
+
+    .photo-previews {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 8rem));
+      gap: var(--uom-space-sm);
+      margin-top: var(--uom-space-sm);
+    }
+
+    .photo-preview {
+      margin: 0;
+      min-width: 0;
+      position: relative;
+    }
+
+    .photo-preview img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius-sm);
+      background: var(--uom-bg);
+    }
+
+    .photo-preview figcaption {
+      margin-top: 0.3rem;
+      overflow: hidden;
+      color: var(--uom-muted);
+      font-size: 1.1rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .photo-preview__remove {
+      position: absolute;
+      top: 0.4rem;
+      right: 0.4rem;
+      width: 2.2rem;
+      height: 2.2rem;
+      padding: 0;
+      border: 1px solid var(--uom-white);
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.7);
+      color: var(--uom-white);
+      cursor: pointer;
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+
+    .photo-preview__remove:hover,
+    .photo-preview__remove:focus-visible {
+      background: var(--uom-navy);
+    }
   </style>
 </head>
 <body>
@@ -402,11 +455,12 @@
             <div class="file-upload-wrapper">
               <label class="file-upload-btn">
                 Choose files
-                <input type="file" id="f-photos" name="photos" accept=".jpg,.jpeg,.png,.heic" multiple required aria-label="Upload item photos" />
+                <input type="file" id="f-photos" name="photos" accept=".jpg,.jpeg,.png,.heic" multiple required data-max-files="4" aria-label="Upload 1 to 4 item photos" />
               </label>
               <span class="file-upload-name" id="f-photos-name">No files chosen</span>
             </div>
-            <span class="help-block">At least one photo is required, up to a maximum of four. Ideally include multiple angles plus close-ups of any damage or wear.</span>
+            <div class="photo-previews" id="f-photos-previews" aria-live="polite" aria-label="Selected photo previews"></div>
+            <span class="help-block">Select 1 to 4 photos. Ideally include multiple angles plus close-ups of any damage or wear.</span>
           </div>
 
           <div class="form-group required">
@@ -859,10 +913,61 @@
       document.getElementById('btn-submit').disabled = false;
     }
 
+    var photoPreviewUrls = [];
+
+    function updatePhotoPreviews(input) {
+      var previewContainer = document.getElementById('f-photos-previews');
+      if (!previewContainer || input.id !== 'f-photos') return;
+
+      photoPreviewUrls.forEach(function(url) { URL.revokeObjectURL(url); });
+      photoPreviewUrls = [];
+      previewContainer.replaceChildren();
+
+      Array.from(input.files).forEach(function(file, fileIndex) {
+        var url = URL.createObjectURL(file);
+        photoPreviewUrls.push(url);
+
+        var figure = document.createElement('figure');
+        figure.className = 'photo-preview';
+        var image = document.createElement('img');
+        image.src = url;
+        image.alt = 'Preview of ' + file.name;
+        var caption = document.createElement('figcaption');
+        caption.textContent = file.name;
+        var removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.className = 'photo-preview__remove';
+        removeButton.setAttribute('aria-label', 'Remove ' + file.name);
+        removeButton.title = 'Remove photo';
+        removeButton.textContent = 'X';
+        removeButton.addEventListener('click', function() {
+          var remainingFiles = new DataTransfer();
+          Array.from(input.files).forEach(function(selectedFile, selectedIndex) {
+            if (selectedIndex !== fileIndex) remainingFiles.items.add(selectedFile);
+          });
+          input.files = remainingFiles.files;
+          updateFileLabels();
+        });
+        figure.appendChild(image);
+        figure.appendChild(removeButton);
+        figure.appendChild(caption);
+        previewContainer.appendChild(figure);
+      });
+    }
+
     function updateFileLabels() {
       document.querySelectorAll('input[type="file"]').forEach(function(input) {
         var nameEl = document.getElementById(input.id + '-name');
         if (!nameEl) return;
+        updatePhotoPreviews(input);
+        if (input.id === 'f-photos') {
+          var maxFiles = Number(input.dataset.maxFiles) || 4;
+          if (input.files.length > maxFiles) {
+            markError(input, 'Only a maximum of 4 photos can be uploaded.');
+          } else {
+            clearFieldError(input);
+          }
+        }
         if (!input.files.length) {
           nameEl.textContent = 'No files chosen';
           return;
@@ -1046,7 +1151,8 @@
       }
 
       var photos = document.getElementById('f-photos');
-      if (isFieldVisible(photos) && photos.files.length > 4) {
+      var maxPhotos = Number(photos.dataset.maxFiles) || 4;
+      if (isFieldVisible(photos) && photos.files.length > maxPhotos) {
         var photoMessage = 'Upload a maximum of four photos.';
         markError(photos, photoMessage);
         issues.push({ field: photos, message: photoMessage });
