@@ -1,0 +1,77 @@
+/*
+ * UoM ServiceNow Design System — Design Tokens
+ * Extracted from University of Melbourne Staff Services portal (ServiceNow)
+ * Source: Faculty of Science Lab Operations Request & FEIT Lab Services forms
+ */
+
+:root {
+  /* ── Brand colours ─────────────────────────────────── */
+  --uom-blue:            #0076de;   /* Primary action, links, badges     */
+  --uom-navy:            #004576;   /* Header logo block, headings       */
+  --uom-link-alt:        #366996;   /* Secondary link / button text      */
+
+  /* ── Neutral palette ────────────────────────────────── */
+  --uom-body:            #191414;   /* Body text                         */
+  --uom-muted:           #666666;   /* Muted / secondary text            */
+  --uom-white:           #ffffff;
+  --uom-bg:              #f9f9f9;   /* Page & component background       */
+  --uom-bg-hover:        #f6f6f6;   /* Hover state background            */
+  --uom-border:          #cccccc;
+  --uom-border-subtle:   #d7d7d7;
+  --uom-border-input:    #bdc0c4;
+  --uom-disabled:        #eeeeee;
+
+  /* ── Button colours ─────────────────────────────────── */
+  --uom-btn-primary-bg:  #0076de;
+  --uom-btn-primary-fg:  #ffffff;
+  --uom-btn-hover-bg:    #005bb5;
+  --uom-btn-secondary-bg:#e0e0e0;
+  --uom-btn-secondary-fg:#366996;
+
+  /* ── Alert / status colours ─────────────────────────── */
+  --uom-success-bg:      #d2f1cf;
+  --uom-success-fg:      #205a1a;
+  --uom-info-bg:         #e1eaf5;
+  --uom-info-fg:         #234268;
+  --uom-warning-bg:      #fffbcc;
+  --uom-warning-fg:      #807600;
+  --uom-danger-bg:       #ea4f62;
+  --uom-danger-fg:       #fdeef0;
+  --uom-required:        #cc0000;
+
+  /* ── Typography ─────────────────────────────────────── */
+  --uom-font:            "Roboto", Helvetica, Verdana, sans-serif;
+  --uom-font-size-base:  1.4rem;    /* 14px at default 62.5% root       */
+  --uom-font-size-sm:    1.2rem;
+  --uom-font-size-lg:    1.8rem;
+  --uom-font-size-xl:    2.4rem;
+  --uom-font-size-xxl:   3.2rem;
+  --uom-line-height:     1.5;
+  --uom-font-weight-normal: 300;
+  --uom-font-weight-medium: 500;
+  --uom-font-weight-bold:   700;
+
+  /* ── Spacing ─────────────────────────────────────────── */
+  --uom-space-xs:   0.4rem;
+  --uom-space-sm:   0.8rem;
+  --uom-space-md:   1.6rem;
+  --uom-space-lg:   2.4rem;
+  --uom-space-xl:   4.0rem;
+
+  /* ── Radii ───────────────────────────────────────────── */
+  --uom-radius-sm:  0.3rem;
+  --uom-radius:     0.4rem;
+  --uom-radius-lg:  1.0rem;
+
+  /* ── Shadows ─────────────────────────────────────────── */
+  --uom-shadow:     0.2rem 0.2rem 1rem 0 rgba(0, 0, 0, 0.1);
+  --uom-shadow-sm:  0 0 0.4rem 0.3rem #eeeeee;
+  --uom-shadow-focus: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+                      0 0 2px rgba(102, 175, 233, 0.6);
+
+  /* ── Layout ──────────────────────────────────────────── */
+  --uom-header-height:   9rem;
+  --uom-logo-size:       8.8rem;
+  --uom-logo-offset:     4rem;
+  --uom-container-max:   1200px;
+}

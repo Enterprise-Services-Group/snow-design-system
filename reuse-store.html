@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faculty of Science Lab Reuse Store</title>
+  <link rel="stylesheet" href="css/uom-snow.css" />
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--uom-bg);
+    }
+
+    /* ── Top zone ─────────────────────────────────────── */
+    .store-header {
+      background: var(--uom-white);
+      border-bottom: 1px solid var(--uom-border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .store-header__top {
+      max-width: var(--uom-container-max);
+      margin: 0 auto;
+      padding: var(--uom-space-md);
+      display: flex;
+      align-items: center;
+      gap: var(--uom-space-md);
+    }
+
+    .store-brand {
+      display: flex;
+      align-items: center;
+      gap: var(--uom-space-md);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .store-brand:hover, .store-brand:focus { text-decoration: none; }
+    .store-brand:hover .store-brand__title { color: var(--uom-blue); }
+
+    .store-brand img { width: 6.4rem; height: 6.4rem; display: block; }
+
+    .store-brand__title {
+      font-size: 2.2rem;
+      font-weight: 500;
+      color: var(--uom-navy);
+      line-height: 1.2;
+    }
+
+    .store-brand__sub {
+      display: block;
+      font-size: 1.2rem;
+      color: var(--uom-muted);
+      font-weight: 400;
+    }
+
+    .store-search {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+    }
+
+    .store-search input {
+      width: 100%;
+      padding: 0.9rem 3.6rem 0.9rem 1.2rem;
+      font-family: var(--uom-font);
+      font-size: 1.4rem;
+      border: 1px solid var(--uom-border-input);
+      border-radius: 3rem;
+    }
+
+    .store-search__icon {
+      position: absolute;
+      right: 1.4rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--uom-muted);
+      pointer-events: none;
+    }
+
+    .store-utility {
+      display: flex;
+      align-items: center;
+      gap: var(--uom-space-sm);
+      flex-shrink: 0;
+    }
+
+    .btn-donate {
+      background: var(--uom-btn-primary-bg);
+      color: var(--uom-btn-primary-fg);
+      border: none;
+      border-radius: var(--uom-radius);
+      padding: 1rem 1.6rem;
+      font-family: var(--uom-font);
+      font-size: var(--uom-font-size-base);
+      font-weight: var(--uom-font-weight-medium);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .btn-donate:hover, .btn-donate:focus { background: var(--uom-btn-hover-bg); color: var(--uom-white); }
+
+    .cart-button {
+      position: relative;
+      width: 4.4rem;
+      height: 4.4rem;
+      border-radius: 50%;
+      background: var(--uom-navy);
+      color: var(--uom-white);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cart-button__badge {
+      position: absolute;
+      top: -0.4rem;
+      right: -0.4rem;
+      min-width: 2rem;
+      height: 2rem;
+      padding: 0 0.5rem;
+      border-radius: 1rem;
+      background: var(--uom-blue);
+      color: var(--uom-white);
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--uom-white);
+    }
+
+    /* ── Tabs ─────────────────────────────────────────── */
+    .store-tabs {
+      max-width: var(--uom-container-max);
+      margin: 0 auto;
+      padding: 0 var(--uom-space-md);
+      display: flex;
+      gap: var(--uom-space-lg);
+      flex-wrap: wrap;
+    }
+
+    .store-tab {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      padding: 1.2rem 0;
+      font-family: var(--uom-font);
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--uom-body);
+      cursor: pointer;
+    }
+
+    .store-tab:hover { color: var(--uom-blue); }
+
+    .store-tab.is-active {
+      color: var(--uom-navy);
+      border-bottom-color: var(--uom-blue);
+    }
+
+    /* ── Middle zone ──────────────────────────────────── */
+    .store-main {
+      max-width: var(--uom-container-max);
+      margin: 0 auto;
+      padding: var(--uom-space-lg) var(--uom-space-md);
+      display: flex;
+      flex: 1 0 auto;
+      width: 100%;
+      gap: var(--uom-space-lg);
+      align-items: flex-start;
+    }
+
+    .store-sidebar {
+      flex: 0 0 26rem;
+      width: 26rem;
+      background: var(--uom-white);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius);
+      padding: var(--uom-space-md);
+      position: sticky;
+      top: 14rem;
+      max-height: calc(100vh - 16rem);
+      overflow-y: auto;
+    }
+
+    .store-content { flex: 1; min-width: 0; }
+
+    .filter-group { border-bottom: 1px solid var(--uom-border-subtle); padding-bottom: var(--uom-space-md); margin-bottom: var(--uom-space-md); }
+    .filter-group:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    .filter-group__title {
+      font-size: 1.3rem;
+      font-weight: var(--uom-font-weight-bold);
+      text-transform: uppercase;
+      letter-spacing: 0.08rem;
+      color: var(--uom-navy);
+      margin: 0 0 var(--uom-space-sm);
+    }
+
+    .filter-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06rem;
+      padding: 0.3rem 0;
+      cursor: pointer;
+    }
+
+    .filter-option input { margin-top: 0.3rem; flex-shrink: 0; }
+
+    .filter-select {
+      width: 100%;
+      padding: 0.7rem;
+      font-family: var(--uom-font);
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06rem;
+      border: 1px solid var(--uom-border-input);
+      border-radius: var(--uom-radius);
+      background: var(--uom-white);
+    }
+
+    /* ── Result bar and filter tags ───────────────────── */
+    .result-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--uom-space-md);
+      flex-wrap: wrap;
+      margin-bottom: var(--uom-space-md);
+    }
+
+    .result-count { font-size: 1.4rem; color: var(--uom-muted); }
+    .result-count strong { color: var(--uom-body); }
+
+    .filter-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: var(--uom-space-md); }
+
+    .filter-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--uom-info-bg);
+      color: var(--uom-info-fg);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: 2rem;
+      padding: 0.4rem 1rem;
+      font-size: 1.2rem;
+    }
+
+    .filter-tag button {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      font-size: 1.4rem;
+      line-height: 1;
+      padding: 0;
+    }
+
+    .clear-all {
+      background: none;
+      border: none;
+      color: var(--uom-blue);
+      font-family: var(--uom-font);
+      font-size: 1.2rem;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* ── Item grid ────────────────────────────────────── */
+    .item-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--uom-space-md);
+    }
+
+    @media (max-width: 820px) { .item-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 520px) { .item-grid { grid-template-columns: minmax(0, 1fr); } }
+
+    .item-card {
+      background: var(--uom-white);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .item-card__media {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      flex: 0 0 auto;
+      overflow: hidden;
+      background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 10px, #e8e8e8 10px, #e8e8e8 20px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--uom-muted);
+      font-size: 1.2rem;
+    }
+
+    .item-card__media img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .item-card__code {
+      position: absolute;
+      top: var(--uom-space-sm);
+      left: var(--uom-space-sm);
+      background: var(--uom-navy);
+      color: var(--uom-white);
+      font-family: var(--uom-font);
+      font-size: 1.1rem;
+      font-weight: var(--uom-font-weight-bold);
+      letter-spacing: 0.12rem;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border-radius: var(--uom-radius-sm);
+    }
+
+    .item-card__new {
+      position: absolute;
+      top: var(--uom-space-sm);
+      right: var(--uom-space-sm);
+      background: var(--uom-blue);
+      color: var(--uom-white);
+      font-family: var(--uom-font);
+      font-size: 1.1rem;
+      font-weight: var(--uom-font-weight-bold);
+      padding: 0.3rem 0.7rem;
+      border-radius: var(--uom-radius-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.12rem;
+    }
+
+    .item-card__body { padding: var(--uom-space-md); flex: 1; display: flex; flex-direction: column; gap: 0.8rem; min-width: 0; }
+
+    .item-card__name {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--uom-navy);
+      margin: 0;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .item-card__meta { font-size: 1.2rem; color: var(--uom-muted); margin: 0; overflow-wrap: anywhere; }
+
+    .item-card__avail {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      margin-top: auto;
+      font-size: 1.2rem;
+      color: var(--uom-muted);
+    }
+
+    .item-card__qty { color: var(--uom-navy); font-weight: 500; white-space: nowrap; }
+
+    .tag-row { display: flex; flex-wrap: wrap; gap: 0.5rem; min-width: 0; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--uom-font);
+      font-size: var(--uom-font-size-sm);
+      font-weight: var(--uom-font-weight-medium);
+      padding: 0.3rem 0.7rem;
+      border-radius: var(--uom-radius-sm);
+      border: 1px solid transparent;
+      max-width: 100%;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      line-height: 1.3;
+    }
+
+    .tag--code {
+      background: var(--uom-bg);
+      color: var(--uom-navy);
+      border-color: var(--uom-border-subtle);
+      font-weight: var(--uom-font-weight-bold);
+      letter-spacing: 0.08rem;
+    }
+
+    .tag--qty { background: var(--uom-info-bg); color: var(--uom-info-fg); border-color: var(--uom-border-subtle); }
+    .tag--category {
+      background: var(--uom-info-bg);
+      color: var(--uom-info-fg);
+      border-color: var(--uom-border-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.08rem;
+      font-weight: var(--uom-font-weight-bold);
+      font-size: 1.1rem;
+    }
+    .tag--green { background: var(--uom-success-bg); color: var(--uom-success-fg); border-color: var(--uom-success-fg); }
+    .tag--amber { background: var(--uom-warning-bg); color: var(--uom-warning-fg); border-color: var(--uom-warning-fg); }
+    .tag--red { background: var(--uom-danger-fg); color: var(--uom-required); border-color: var(--uom-required); }
+    .tag--grey { background: var(--uom-disabled); color: var(--uom-muted); border-color: var(--uom-border); }
+    .tag--navy { background: var(--uom-navy); color: var(--uom-white); }
+    .tag--outline { background: var(--uom-white); color: var(--uom-navy); border-color: var(--uom-navy); }
+
+    .item-card__actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      padding: 0 var(--uom-space-md) var(--uom-space-md);
+    }
+
+    .item-card__actions .btn { width: 100%; text-align: center; font-size: 1.3rem; font-weight: 400; padding: 0.7rem 0.8rem; }
+
+    .empty-state {
+      background: var(--uom-white);
+      border: 1px dashed var(--uom-border);
+      border-radius: var(--uom-radius);
+      padding: var(--uom-space-xl);
+      text-align: center;
+      color: var(--uom-muted);
+    }
+
+    /* ── Detail view ──────────────────────────────────── */
+    .detail-layout { display: block; }
+    .detail-main { min-width: 0; }
+
+    .detail-side {
+      background: var(--uom-white);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius);
+      padding: var(--uom-space-md);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .detail-overview { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(30rem, 0.9fr); gap: var(--uom-space-lg); align-items: start; }
+
+    .detail-summary { display: flex; flex-direction: column; gap: var(--uom-space-md); }
+
+    .detail-summary .detail-panel { margin-bottom: 0; }
+
+    .detail-title-row { display: flex; align-items: center; justify-content: space-between; gap: var(--uom-space-md); }
+
+    .detail-title-row h3 { min-width: 0; }
+
+    .detail-panel {
+      background: var(--uom-white);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius);
+      padding: var(--uom-space-md) var(--uom-space-lg);
+      margin-bottom: var(--uom-space-md);
+    }
+
+    .detail-panel h3 {
+      font-size: 1.5rem;
+      color: var(--uom-navy);
+      margin: 0 0 var(--uom-space-sm);
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid var(--uom-border-subtle);
+    }
+
+    .gallery { display: flex; flex-direction: column; gap: 0.8rem; }
+
+    .gallery__main {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 10px, #e8e8e8 10px, #e8e8e8 20px);
+      border-radius: var(--uom-radius-sm);
+      overflow: hidden;
+    }
+
+    .gallery__main img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+    .gallery__arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3.6rem;
+      height: 3.6rem;
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 69, 118, 0.88);
+      color: var(--uom-white);
+      font-size: 2.4rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .gallery__arrow:hover, .gallery__arrow:focus { background: var(--uom-blue); }
+    .gallery__arrow--prev { left: 0.8rem; }
+    .gallery__arrow--next { right: 0.8rem; }
+
+    .gallery__thumbs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.8rem; }
+
+    .gallery__thumb {
+      aspect-ratio: 1;
+      border: 2px solid transparent;
+      border-radius: var(--uom-radius-sm);
+      overflow: hidden;
+      padding: 0;
+      background: var(--uom-bg);
+      cursor: pointer;
+    }
+
+    .gallery__thumb.is-active { border-color: var(--uom-blue); }
+    .gallery__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .gallery__slot {
+      aspect-ratio: 1;
+      background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 10px, #e8e8e8 10px, #e8e8e8 20px);
+      border-radius: var(--uom-radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-size: 1.1rem;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .gallery__slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .fact-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem var(--uom-space-md); margin: 0; font-size: 1.3rem; }
+    .fact-list dt { color: var(--uom-muted); }
+    .fact-list dd { margin: 0 0 0.6rem; font-weight: 500; }
+
+    .id-line { display: flex; align-items: center; gap: 0.8rem; margin: 0.4rem 0 var(--uom-space-sm); }
+
+    .id-code {
+      font-family: var(--uom-font);
+      font-size: var(--uom-font-size-base);
+      font-weight: var(--uom-font-weight-bold);
+      letter-spacing: 0.08rem;
+      color: var(--uom-navy);
+      background: var(--uom-bg);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius-sm);
+      padding: 0.3rem 0.7rem;
+    }
+
+    .copy-btn {
+      background: none;
+      border: 1px solid var(--uom-border);
+      border-radius: var(--uom-radius-sm);
+      padding: 0.3rem 0.7rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      font-family: var(--uom-font);
+      color: var(--uom-link-alt);
+    }
+
+    .detail-tabs { margin-top: var(--uom-space-lg); }
+    .detail-tabs--summary { margin-top: var(--uom-space-md); }
+    details.detail-tab { background: var(--uom-white); border: 1px solid var(--uom-border-subtle); border-radius: var(--uom-radius); margin-bottom: 0.8rem; }
+    details.detail-tab summary { cursor: pointer; font-weight: 500; font-size: 1.5rem; color: var(--uom-navy); padding: var(--uom-space-md); }
+    details.detail-tab[open] summary { border-bottom: 1px solid var(--uom-border-subtle); }
+    .detail-tab__body { padding: var(--uom-space-md); }
+
+    .back-link {
+      background: none;
+      border: none;
+      color: var(--uom-blue);
+      font-family: var(--uom-font);
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: var(--uom-space-md);
+    }
+
+    /* ── Cart drawer ──────────────────────────────────── */
+    .drawer-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 50;
+    }
+
+    .drawer-backdrop.is-open { display: block; }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(44rem, 100%);
+      height: 100%;
+      background: var(--uom-white);
+      z-index: 51;
+      transform: translateX(100%);
+      transition: transform 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-drawer.is-open { transform: translateX(0); }
+
+    .cart-drawer__head {
+      background: var(--uom-navy);
+      color: var(--uom-white);
+      padding: var(--uom-space-md) var(--uom-space-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-drawer__head h2 { color: var(--uom-white); font-size: 1.8rem; margin: 0; }
+
+    .cart-drawer__close {
+      background: none;
+      border: none;
+      color: var(--uom-white);
+      font-size: 2.4rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .cart-drawer__body { flex: 1; overflow-y: auto; padding: var(--uom-space-md) var(--uom-space-lg); }
+    .cart-drawer__foot { border-top: 1px solid var(--uom-border-subtle); padding: var(--uom-space-md) var(--uom-space-lg); display: flex; gap: 0.8rem; }
+    .cart-drawer__foot .btn { font-weight: 400; }
+
+    .cart-line { display: flex; gap: var(--uom-space-sm); padding: var(--uom-space-sm) 0; border-bottom: 1px solid var(--uom-border-subtle); }
+
+    .cart-line__thumb {
+      flex: 0 0 6rem;
+      height: 6rem;
+      background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 8px, #e8e8e8 8px, #e8e8e8 16px);
+      border-radius: var(--uom-radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: #999;
+    }
+
+    .cart-line__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit; }
+
+    .cart-line__body { flex: 1; min-width: 0; }
+    .cart-line__name { font-size: 1.3rem; font-weight: 500; margin: 0 0 0.4rem; }
+
+    .qty-control { display: inline-flex; align-items: center; border: 1px solid var(--uom-border); border-radius: var(--uom-radius-sm); }
+    .qty-control button { background: none; border: none; width: 2.4rem; height: 2.4rem; cursor: pointer; font-size: 1.4rem; line-height: 1; }
+    .qty-control span { min-width: 2.4rem; text-align: center; font-size: 1.3rem; }
+
+    .link-btn {
+      background: none;
+      border: none;
+      color: var(--uom-required);
+      font-family: var(--uom-font);
+      font-size: 1.2rem;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
+
+    /* ── Static tab content ───────────────────────────── */
+    .prose { background: var(--uom-white); border: 1px solid var(--uom-border-subtle); border-radius: var(--uom-radius); padding: var(--uom-space-lg); }
+    .prose h2 { color: var(--uom-navy); font-size: 1.8rem; margin-top: 0; }
+    .prose h3 { color: var(--uom-navy); font-size: 1.5rem; margin-bottom: 0.4rem; }
+    .prose p, .prose li { font-size: 1.4rem; }
+
+    .step-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: var(--uom-space-md); margin-top: var(--uom-space-md); }
+    .step { background: var(--uom-bg); border: 1px solid var(--uom-border-subtle); border-radius: var(--uom-radius); padding: var(--uom-space-md); }
+    .step__num { width: 3rem; height: 3rem; border-radius: 50%; background: var(--uom-navy); color: var(--uom-white); display: flex; align-items: center; justify-content: center; font-weight: 700; margin-bottom: 0.8rem; }
+
+    .request-table { width: 100%; border-collapse: collapse; font-size: 1.3rem; }
+    .request-table th, .request-table td { text-align: left; padding: 0.8rem 1rem; border-bottom: 1px solid var(--uom-border-subtle); }
+    .request-table thead th { background: var(--uom-navy); color: var(--uom-white); font-weight: 500; }
+
+    .callout { background: var(--uom-info-bg); border-left: 4px solid var(--uom-blue); border-radius: var(--uom-radius); padding: var(--uom-space-md); font-size: 1.4rem; margin-bottom: var(--uom-space-md); }
+    .callout--warn { background: var(--uom-warning-bg); border-left-color: var(--uom-warning-fg); }
+
+    /* ── Footer ───────────────────────────────────────── */
+    .store-footer { background: var(--uom-navy); color: var(--uom-white); margin-top: var(--uom-space-xl); padding: var(--uom-space-xl) var(--uom-space-md) var(--uom-space-lg); }
+    .store-footer__inner { max-width: var(--uom-container-max); margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr)); gap: var(--uom-space-lg); }
+    .store-footer h4 { color: var(--uom-white); font-size: 1.4rem; margin: 0 0 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .store-footer a { color: #b9d9f5; font-size: 1.3rem; }
+    .store-footer ul { list-style: none; padding: 0; margin: 0; }
+    .store-footer li { margin-bottom: 0.5rem; }
+    .store-footer p { font-size: 1.3rem; color: #cfe0f0; margin: 0 0 0.6rem; }
+    .store-footer__base { max-width: var(--uom-container-max); margin: var(--uom-space-lg) auto 0; padding-top: var(--uom-space-md); border-top: 1px solid rgba(255,255,255,0.2); font-size: 1.2rem; color: #cfe0f0; }
+
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    @media (max-width: 900px) {
+      .store-main { flex-direction: column; }
+      .store-sidebar { position: static; width: 100%; flex: 0 0 auto; max-height: none; }
+      .detail-overview { grid-template-columns: 1fr; }
+      .detail-side { width: 100%; }
+      .store-header__top { flex-wrap: wrap; }
+      .store-search { order: 3; flex-basis: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════ TOP ZONE ══════════════════════════ -->
+  <header class="store-header">
+    <div class="store-header__top">
+      <a class="store-brand" href="#" onclick="goTab('browse'); return false;">
+        <img src="assets/logo.png" alt="The University of Melbourne" />
+        <span class="store-brand__title">
+          Faculty of Science Lab Reuse Store
+          <span class="store-brand__sub">Research equipment and consumables reuse initiative</span>
+        </span>
+      </a>
+
+      <div class="store-search">
+        <label class="sr-only" for="search-input">Search items</label>
+        <input type="search" id="search-input" placeholder="Search by name, item ID, or keyword" />
+        <span class="store-search__icon" aria-hidden="true">&#9906;</span>
+      </div>
+
+      <div class="store-utility">
+        <a class="btn-donate" href="ServiceNow_form_prototype_ver2.html">+ Donate an item</a>
+        <button class="cart-button" id="cart-button" aria-label="Open cart">
+          <span aria-hidden="true" style="font-size:1.8rem">&#128722;</span>
+          <span class="cart-button__badge" id="cart-count">0</span>
+        </button>
+      </div>
+    </div>
+
+    <nav class="store-tabs" aria-label="Primary">
+      <button class="store-tab" onclick="window.location.href='home.html'">Home</button>
+      <button class="store-tab is-active" data-tab="browse" onclick="goTab('browse')">Browse all items</button>
+      <button class="store-tab" data-tab="recent" onclick="goTab('recent')">Recently added</button>
+      <button class="store-tab" data-tab="shared" onclick="goTab('shared')">Shared equipment</button>
+      <button class="store-tab" data-tab="selling" onclick="goTab('selling')">Selling</button>
+      <button class="store-tab" data-tab="requests" onclick="goTab('requests')">My requests</button>
+    </nav>
+  </header>
+
+  <!-- ══════════════════════════ MIDDLE ZONE ═══════════════════════ -->
+  <main class="store-main" id="store-main">
+
+    <!-- Sidebar filters -->
+    <aside class="store-sidebar" id="sidebar" aria-label="Filters">
+      <div class="filter-group">
+        <h3 class="filter-group__title">Category</h3>
+        <div id="filter-category"></div>
+      </div>
+
+      <div class="filter-group">
+        <h3 class="filter-group__title">Condition</h3>
+        <div id="filter-condition"></div>
+      </div>
+
+      <div class="filter-group" id="arrangement-group">
+        <h3 class="filter-group__title">Arrangement type</h3>
+        <div id="filter-arrangement"></div>
+      </div>
+
+      <div class="filter-group">
+        <h3 class="filter-group__title">Availability</h3>
+        <div id="filter-availability"></div>
+      </div>
+
+      <div class="filter-group">
+        <h3 class="filter-group__title">Location</h3>
+        <select class="filter-select" id="filter-location">
+          <option value="">Any Western Edge</option>
+          <option>BioSciences 2 (Building 122)</option>
+          <option>BioSciences 4 (Building 147)</option>
+          <option>Redmond Barry (Building 115)</option>
+          <option>School of Chemistry (Building 153)</option>
+          <option>Reuse store (Building 184)</option>
+          <option>Cross-campus (Dookie / Werribee)</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <h3 class="filter-group__title">Size and access</h3>
+        <div id="filter-access"></div>
+      </div>
+
+    </aside>
+
+    <!-- Main content -->
+    <div class="store-content" id="content"></div>
+  </main>
+
+  <!-- ══════════════════════════ CART DRAWER ═══════════════════════ -->
+  <div class="drawer-backdrop" id="drawer-backdrop" onclick="closeCart()"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="Your cart" aria-hidden="true">
+    <div class="cart-drawer__head">
+      <h2 id="cart-title">Your cart (0 items)</h2>
+      <button class="cart-drawer__close" onclick="closeCart()" aria-label="Close cart">&times;</button>
+    </div>
+    <div class="cart-drawer__body" id="cart-body"></div>
+    <div class="cart-drawer__foot">
+      <button class="btn btn-secondary" onclick="closeCart()">Continue browsing</button>
+      <a class="btn btn-primary" id="cart-submit" href="ServiceNow_receiver_form_prototype.html" style="flex:1;text-align:center">Submit request</a>
+    </div>
+  </aside>
+
+  <!-- ══════════════════════════ FOOTER ════════════════════════════ -->
+  <footer class="store-footer">
+    <div class="store-footer__inner">
+      <div>
+        <h4>Reuse store team</h4>
+        <p>Faculty of Science, Western Edge</p>
+        <p><a href="mailto:reuse-store@unimelb.edu.au">reuse-store@unimelb.edu.au</a></p>
+        <p>Store hours: Tue &amp; Thu, 10am - 3pm</p>
+      </div>
+      <div>
+        <h4>Related services</h4>
+        <ul>
+          <li><a href="#">Furniture and Equipment Reuse Service</a></li>
+          <li><a href="#">Research Infrastructure initiative</a></li>
+          <li><a href="#">Campus Assist</a></li>
+          <li><a href="#">Chemical Safety and Waste</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Get started</h4>
+        <ul>
+          <li><a href="ServiceNow_form_prototype_ver2.html">Donate an item</a></li>
+          <li><a href="ServiceNow_receiver_form_prototype.html">Request items in your cart</a></li>
+          <li><a href="home.html#how-it-works">How it works</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Sustainability</h4>
+        <p>Every item reused keeps working equipment out of landfill and reduces unnecessary procurement across the Faculty.</p>
+      </div>
+    </div>
+    <div class="store-footer__base">
+      &copy; 2026 The University of Melbourne &middot; Faculty of Science Lab Reuse Store &middot; Pilot service
+    </div>
+  </footer>
+
+  <script>
+    /* ─────────────── Reference data ─────────────── */
+    var CATEGORIES = [
+      { value: 'Equipment - small', prefix: 'ES' },
+      { value: 'Equipment - large', prefix: 'EL' },
+      { value: 'Equipment - specialised', prefix: 'EX' },
+      { value: 'Glassware and plasticware', prefix: 'GP' },
+      { value: 'Consumables', prefix: 'CO' },
+      { value: 'Storage and lab furniture', prefix: 'SF' },
+      { value: 'Other', prefix: 'OT' }
+    ];
+
+    var CONDITIONS = ['Fully working', 'Working with minor issues', 'Needs repair', 'Not working'];
+    var ARRANGEMENTS = ['Full donation', 'Occasional access', 'Open shared donation'];
+    var AVAILABILITIES = ['Available now', 'Reserved', 'Awaiting collection', 'Available in store to view'];
+    var ACCESS_OPTIONS = ['Fits in a standard lift', 'Requires ground floor or freight lift access', 'Requires disconnection', 'Over 200kg'];
+
+    // Placeholder catalogue; real listings are generated from approved Form 1 submissions.
+    var PHOTO_DIR = 'assets/Dummy Photos/';
+
+    // Filenames contain spaces and punctuation, so they are encoded at render time.
+    function photoUrl(name) { return PHOTO_DIR.split('/').map(encodeURIComponent).join('/') + encodeURIComponent(name); }
+
+    var ITEMS = [
+      {
+        id: 'ES-014', name: 'Benchtop centrifuge', category: 'Equipment - small', qty: 1,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available in store to view',
+        location: 'Reuse store (Building 184)', school: 'School of BioSciences', listed: 6, finalCall: '30 October 2026',
+        serviced: 'Serviced in last 5 years', access: ['Fits in a standard lift'],
+        description: 'Compact benchtop centrifuge used for routine sample prep in a molecular biology lab. Rotor and lid latch in good order. Comes with two rotors and original power lead.',
+        dimensions: '38 x 42 x 30 cm', weight: '18 kg', power: 'Standard socket', storage: 'None required',
+        manufacturer: 'Eppendorf 5424', age: '2019', serviceRecords: 'Available',
+        hazardous: 'No', decontamination: 'Not applicable', handling: 'Two-person lift recommended',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5-10',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Equipment American Scientific Products Vortex Mixer.jpeg', 'Model 700C Vertical Pipette Puller UVC.jpeg', 'Mat rubber drainage mat.jpeg', 'Tools nut and bolt kit set.jpeg']
+      },
+      {
+        id: 'EL-007', name: 'Under-bench laboratory fridge', category: 'Equipment - large', qty: 1,
+        condition: 'Working with minor issues', arrangement: 'Full donation', availability: 'Available now',
+        location: 'BioSciences 2 (Building 122)', school: 'School of BioSciences', listed: 21, finalCall: '15 November 2026',
+        serviced: 'Not serviced in last 5 years', access: ['Requires ground floor or freight lift access'],
+        description: 'Under-bench 4C laboratory fridge. Cools reliably but the door seal is perished and should be replaced. Interior shelving complete and clean.',
+        dimensions: '60 x 60 x 85 cm', weight: '52 kg', power: 'Standard socket', storage: 'Keep upright during transport',
+        manufacturer: 'Labec LF-150', age: '2015', serviceRecords: 'Partial',
+        hazardous: 'Yes', decontamination: 'Decontaminated - certificate on file', handling: 'Transport upright; allow 4 hours before switching on',
+        viewing: 'donor', campusAssist: 'Yes', disconnection: 'No', collectionDays: '10',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Cabinet.jpeg', 'Thermo Scientific Filter Unit 150 mL Nalgene 50 mm rapid flow.jpeg', 'Mat rubber drainage mat.jpeg']
+      },
+      {
+        id: 'EX-003', name: 'HPLC system (Agilent 1200)', category: 'Equipment - specialised', qty: 1,
+        condition: 'Fully working', arrangement: 'Open shared donation', availability: 'Available now',
+        location: 'School of Chemistry (Building 153)', school: 'School of Chemistry', listed: 12, finalCall: 'Not applicable - shared item',
+        serviced: 'Serviced in last 5 years', access: ['Requires disconnection', 'Over 200kg'],
+        description: 'Fully operational HPLC system available for shared use in place. Suitable for routine separations. Method development support available from the host lab by arrangement.',
+        dimensions: '120 x 60 x 90 cm', weight: '210 kg', power: '3-phase', storage: 'Temperature-controlled lab only',
+        manufacturer: 'Agilent 1200 Series', age: '2017', serviceRecords: 'Available',
+        hazardous: 'Yes', decontamination: 'Solvent lines flushed; records available', handling: 'Specialist relocation only',
+        viewing: 'donor', donorEmail: 'chem.hplc.lab@unimelb.edu.au',
+        booking: 'Contact the host lab with at least 5 business days notice.',
+        accessScope: 'Faculty-wide', training: 'Training required before first use',
+        consumables: 'Bring your own solvents and columns', sessionLimit: 'Maximum 4 hours per booking',
+        photos: ['Tools SLM Instruments Model PH-SE-928 Photomultiplier Tube.jpeg', 'Thermo Scientific Filter Unit 150 mL Nalgene 50 mm rapid flow.jpeg', 'Glassware glass to metal graded seals.jpeg', 'Pyrex Glass bottle 1000 mL.jpeg']
+      },
+      {
+        id: 'GP-032', name: '500 mL Erlenmeyer flasks', category: 'Glassware and plasticware', qty: 6,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available in store to view',
+        location: 'Reuse store (Building 184)', school: 'School of Chemistry', listed: 3, finalCall: '20 October 2026',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Six borosilicate Erlenmeyer flasks, 500 mL. No chips or star cracks. Previously used with aqueous buffers only. Washed and autoclaved before listing.',
+        dimensions: '10 x 10 x 18 cm each', weight: '0.4 kg each', power: 'No power required', storage: 'None required',
+        manufacturer: 'Schott Duran', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Not applicable - aqueous buffers only', handling: 'Pack with padding for transport',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Pyrex Glass bottle 1000 mL.jpeg', 'Glassware glass to metal graded seals.jpeg', 'Mortar : Pestle.jpeg']
+      },
+      {
+        id: 'CO-018', name: 'Sterile filter pipette tips, 10 uL', category: 'Consumables', qty: 12,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Reuse store (Building 184)', school: 'School of BioSciences', listed: 2, finalCall: '10 December 2026',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Twelve unopened racks of sterile filtered pipette tips, 10 uL, universal fit. In date until 2028. Surplus from a project that changed platform.',
+        dimensions: '12 x 9 x 6 cm per rack', weight: '0.2 kg per rack', power: 'No power required', storage: 'Keep sealed and dry',
+        manufacturer: 'Sorenson', age: '2025', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Not applicable - unopened sterile stock', handling: 'None',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Sorenson Pipette tips 5-10 uL Filtered, sterile, universal fit.jpeg', 'Eppendorf Pipette tips .jpeg', 'Invitrogen Kit iPrep PureLink Virus Kit (Component Label).jpeg', 'Econ-O-Pak Tools disposable surgical pad.jpeg']
+      },
+      {
+        id: 'SF-021', name: 'Steel laboratory storage cabinet', category: 'Storage and lab furniture', qty: 2,
+        condition: 'Working with minor issues', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Redmond Barry (Building 115)', school: 'School of Geography', listed: 27, finalCall: '5 November 2026',
+        serviced: 'Unknown', access: ['Requires ground floor or freight lift access'],
+        description: 'Two lockable steel storage cabinets with adjustable shelves. Surface scratches and one missing key barrel on the second unit. Structurally sound.',
+        dimensions: '90 x 45 x 180 cm', weight: '65 kg each', power: 'No power required', storage: 'None required',
+        manufacturer: 'Unknown', age: 'Approximately 12 years', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Not applicable - storage cabinet only', handling: 'Empty before moving; two-person lift',
+        viewing: 'donor', campusAssist: 'Yes', disconnection: 'No', collectionDays: '10',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Cabinet.jpeg', 'Tools nut and bolt kit set.jpeg', 'Mat rubber drainage mat.jpeg']
+      },
+      {
+        id: 'EX-011', name: 'Upright compound microscope', category: 'Equipment - specialised', qty: 1,
+        condition: 'Fully working', arrangement: 'Occasional access', availability: 'Reserved',
+        location: 'BioSciences 4 (Building 147)', school: 'School of BioSciences', listed: 9, finalCall: '28 October 2026',
+        serviced: 'Serviced in last 5 years', access: ['Fits in a standard lift'],
+        description: 'Teaching-grade upright compound microscope with 4x, 10x, 40x and 100x objectives. Optics clean, stage moves smoothly. Donor teaches one subject a year and needs occasional access.',
+        dimensions: '25 x 40 x 45 cm', weight: '9 kg', power: 'Standard socket', storage: 'Dust cover provided',
+        manufacturer: 'Olympus CX23', age: '2020', serviceRecords: 'Available',
+        hazardous: 'No', decontamination: 'Not applicable - non-contact equipment', handling: 'Carry by arm and base',
+        viewing: 'donor', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        accessNotes: 'The donor may need to access this item occasionally for up to one week per year, with 10 days notice.',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Model 700C Vertical Pipette Puller UVC.jpeg', 'Tools SLM Instruments Model PH-SE-928 Photomultiplier Tube.jpeg', 'Glassware glass to metal graded seals.jpeg']
+      },
+      {
+        id: 'EL-019', name: 'CO2 incubator', category: 'Equipment - large', qty: 1,
+        condition: 'Needs repair', arrangement: 'Full donation', availability: 'Available now',
+        location: 'BioSciences 2 (Building 122)', school: 'School of BioSciences', listed: 15, finalCall: '12 November 2026',
+        serviced: 'Not serviced in last 5 years', access: ['Requires ground floor or freight lift access', 'Requires disconnection'],
+        description: 'CO2 incubator with a faulty CO2 sensor. Heating and door seals work correctly. Suitable for a lab able to replace the sensor, or for parts.',
+        dimensions: '65 x 70 x 90 cm', weight: '95 kg', power: 'Standard socket', storage: 'Requires CO2 line connection',
+        manufacturer: 'Thermo Series 8000', age: '2013', serviceRecords: 'Partial',
+        hazardous: 'Yes', decontamination: 'Decontaminated - certificate on file', handling: 'Requires gas line disconnection by trades',
+        viewing: 'donor', campusAssist: 'No - external contractor required', disconnection: 'Yes', collectionDays: '15',
+        transportFunding: 'To be discussed', disconnectionFunding: 'To be discussed',
+        photos: ['Thermo Scientific Filter Unit 150 mL Nalgene 50 mm rapid flow.jpeg', 'Cabinet.jpeg', 'Mat rubber drainage mat.jpeg']
+      },
+      {
+        id: 'ES-027', name: 'Magnetic stirrer hotplates', category: 'Equipment - small', qty: 3,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available in store to view',
+        location: 'Reuse store (Building 184)', school: 'School of Chemistry', listed: 4, finalCall: '18 November 2026',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Three magnetic stirrer hotplates with ceramic tops. All heat and stir correctly. Minor staining on one top plate. Stir bars not included.',
+        dimensions: '20 x 20 x 10 cm each', weight: '2.5 kg each', power: 'Standard socket', storage: 'None required',
+        manufacturer: 'IKA C-MAG HS 7', age: '2018', serviceRecords: 'Not available',
+        hazardous: 'Yes', decontamination: 'Surfaces cleaned and wipe-tested', handling: 'None',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Equipment American Scientific Products Vortex Mixer.jpeg', 'Mortar : Pestle.jpeg', 'Pyrex Glass bottle 1000 mL.jpeg']
+      },
+      {
+        id: 'EX-024', name: 'Real-time PCR machine', category: 'Equipment - specialised', qty: 1,
+        condition: 'Fully working', arrangement: 'Open shared donation', availability: 'Available now',
+        location: 'BioSciences 4 (Building 147)', school: 'School of BioSciences', listed: 18, finalCall: 'Not applicable - shared item',
+        serviced: 'Serviced in last 5 years', access: ['Fits in a standard lift'],
+        description: 'Real-time PCR instrument available for shared use in the host lab. Block and optics recently serviced. Booking sheet managed by the host research group.',
+        dimensions: '35 x 50 x 40 cm', weight: '34 kg', power: 'Standard socket', storage: 'Temperature-controlled lab',
+        manufacturer: 'Bio-Rad CFX96', age: '2021', serviceRecords: 'Available',
+        hazardous: 'Yes', decontamination: 'Block decontaminated between users', handling: 'Instrument remains in place',
+        viewing: 'donor', donorEmail: 'biosci.pcr.core@unimelb.edu.au',
+        booking: 'Email the host lab with at least 3 business days notice.',
+        accessScope: 'School only', training: 'Short induction required',
+        consumables: 'Bring your own plates, seals and reagents', sessionLimit: 'Maximum 6 hours per booking',
+        photos: ['Invitrogen Kit iPrep PureLink Virus Kit (Component Label).jpeg', 'Tools SLM Instruments Model PH-SE-928 Photomultiplier Tube.jpeg', 'Eppendorf Pipette tips .jpeg']
+      },
+      {
+        id: 'SF-009', name: 'Mobile stainless steel bench', category: 'Storage and lab furniture', qty: 1,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Awaiting collection',
+        location: 'School of Chemistry (Building 153)', school: 'School of Chemistry', listed: 33, finalCall: '25 October 2026',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Mobile stainless steel bench on lockable castors. Solid work surface with lower shelf. Already matched to a receiving lab; collection is being scheduled.',
+        dimensions: '120 x 60 x 90 cm', weight: '45 kg', power: 'No power required', storage: 'None required',
+        manufacturer: 'Unknown', age: 'Approximately 8 years', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Not applicable - non-contact surface', handling: 'Lock castors during transport',
+        viewing: 'donor', campusAssist: 'Yes', disconnection: 'No', collectionDays: '10',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Mat rubber drainage mat.jpeg', 'Cabinet.jpeg', 'Tools nut and bolt kit set.jpeg']
+      },
+      {
+        id: 'OT-005', name: 'Wall-mounted sanitiser dispensers', category: 'Other', qty: 4,
+        condition: 'Not working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Cross-campus (Dookie / Werribee)', school: 'Faculty operations', listed: 11, finalCall: '8 December 2026',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Four wall-mounted sanitiser dispensing stations. Pump mechanisms have failed on all units. Listed for parts, teaching use, or refurbishment.',
+        dimensions: '20 x 15 x 40 cm each', weight: '1.8 kg each', power: 'Battery operated', storage: 'None required',
+        manufacturer: 'Unknown', age: '2021', serviceRecords: 'Not available',
+        hazardous: 'Yes', decontamination: 'Reservoirs emptied and rinsed', handling: 'None',
+        viewing: 'donor', campusAssist: 'No - external contractor required', disconnection: 'No', collectionDays: '15',
+        transportFunding: 'To be discussed', disconnectionFunding: 'Not applicable',
+        photos: [' Hand Sanitizer Dispensing Station.jpeg', 'Econ-O-Pak Tools disposable surgical pad.jpeg', 'Tools nut and bolt kit set.jpeg']
+      },
+      {
+        id: 'GP-041', name: '100 mL graduated cylinders', category: 'Glassware and plasticware', qty: 8,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Reuse store (Building 184)', school: 'School of Chemistry', listed: 5, finalCall: '22 November 2026',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Eight clear graduated cylinders suitable for routine measuring and teaching laboratory use. Clean and free from visible chips or cracks.',
+        dimensions: '5 x 5 x 25 cm each', weight: '0.2 kg each', power: 'No power required', storage: 'None required',
+        manufacturer: 'Duran', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Washed and dried', handling: 'Handle as laboratory glassware',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['100 mL graduated cylinder.jpeg']
+      },
+      {
+        id: 'CO-026', name: 'ART pipette tips, 10 uL', category: 'Consumables', qty: 6,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Reuse store (Building 184)', school: 'School of BioSciences', listed: 7, finalCall: '1 December 2026',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Six unopened packs of 10 uL ART filtered pipette tips. Suitable for compatible pipettes and stored in their original packaging.',
+        dimensions: '12 x 9 x 6 cm per pack', weight: '0.2 kg per pack', power: 'No power required', storage: 'Keep sealed and dry',
+        manufacturer: 'ART', age: '2025', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Not applicable - unopened stock', handling: 'Keep packaging dry',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['ART Pipette tips 10 uL REACH 2140-HR.jpeg']
+      },
+      {
+        id: 'EX-031', name: 'Centrilutor micro-electroeluter', category: 'Equipment - specialised', qty: 1,
+        condition: 'Working with minor issues', arrangement: 'Full donation', availability: 'Available in store to view',
+        location: 'BioSciences 4 (Building 147)', school: 'School of BioSciences', listed: 14, finalCall: '6 December 2026',
+        serviced: 'Not serviced in last 5 years', access: ['Fits in a standard lift'],
+        description: 'Amicon Centrilutor micro-electroeluter for specialised sample preparation. Powers on and is offered with the accessories shown.',
+        dimensions: '35 x 30 x 25 cm', weight: '8 kg', power: 'Standard socket', storage: 'Bench storage',
+        manufacturer: 'Amicon', age: 'Unknown', serviceRecords: 'Partial',
+        hazardous: 'Yes', decontamination: 'Cleaned; history to be confirmed', handling: 'Two-person lift recommended',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5-10',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Amicon Equipment Centrilutor micro-electroeluter.jpeg']
+      },
+      {
+        id: 'CO-027', name: 'Eppendorf pipette-tip refill boxes', category: 'Consumables', qty: 10,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Reuse store (Building 184)', school: 'School of BioSciences', listed: 10, finalCall: '5 December 2026',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Empty Eppendorf refill boxes in various sizes for laboratories reusing compatible tip racks and storage systems.',
+        dimensions: '30 x 20 x 10 cm each', weight: '0.3 kg each', power: 'No power required', storage: 'Keep dry',
+        manufacturer: 'Eppendorf', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Clean and empty', handling: 'None',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Eppendorf Pipette tips various sizes empty refill box.jpeg']
+      },
+      {
+        id: 'EX-032', name: 'Laboratory microscope', category: 'Equipment - specialised', qty: 1,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'BioSciences 2 (Building 122)', school: 'School of BioSciences', listed: 8, finalCall: '10 December 2026',
+        serviced: 'Serviced in last 5 years', access: ['Fits in a standard lift'],
+        description: 'Laboratory microscope suitable for teaching, inspection, and routine sample viewing. Offered with the accessories shown.',
+        dimensions: '30 x 35 x 45 cm', weight: '8 kg', power: 'Standard socket', storage: 'Dust cover recommended',
+        manufacturer: 'Unknown', age: 'Unknown', serviceRecords: 'Available',
+        hazardous: 'No', decontamination: 'Not applicable - non-contact equipment', handling: 'Carry by arm and base',
+        viewing: 'donor', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Equipment Microscopes.jpeg']
+      },
+      {
+        id: 'OT-006', name: 'Trinitron display monitor', category: 'Other', qty: 1,
+        condition: 'Working with minor issues', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Reuse store (Building 184)', school: 'Faculty operations', listed: 16, finalCall: '14 December 2026',
+        serviced: 'Unknown', access: ['Requires ground floor or freight lift access'],
+        description: 'Older Trinitron display available for specialist teaching, demonstration, or parts use. Power and display condition should be checked before collection.',
+        dimensions: '50 x 50 x 50 cm', weight: '35 kg', power: 'Standard socket', storage: 'Keep upright',
+        manufacturer: 'Sony Trinitron', age: 'Unknown', serviceRecords: 'Not available',
+        hazardous: 'No', decontamination: 'Wiped down', handling: 'Two-person lift; keep upright',
+        viewing: 'store', campusAssist: 'No - external contractor required', disconnection: 'No', collectionDays: '15',
+        transportFunding: 'To be discussed', disconnectionFunding: 'Not applicable',
+        photos: ['Equipment Trinitron TV Various.jpeg']
+      },
+      {
+        id: 'GP-042', name: 'Laboratory funnels', category: 'Glassware and plasticware', qty: 10,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available in store to view',
+        location: 'Reuse store (Building 184)', school: 'School of Chemistry', listed: 19, finalCall: '18 December 2026',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Assorted laboratory funnels for transferring liquids and powders. Clean and suitable for general non-hazardous teaching or research use.',
+        dimensions: '10 x 10 x 15 cm each', weight: '0.1 kg each', power: 'No power required', storage: 'None required',
+        manufacturer: 'Unknown', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Washed and dried', handling: 'Handle as laboratory glassware',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Funnel.jpeg']
+      },
+      {
+        id: 'EL-028', name: 'Incubator shelf', category: 'Equipment - large', qty: 2,
+        condition: 'Working with minor issues', arrangement: 'Full donation', availability: 'Available now',
+        location: 'BioSciences 2 (Building 122)', school: 'School of BioSciences', listed: 22, finalCall: '20 December 2026',
+        serviced: 'Unknown', access: ['Requires ground floor or freight lift access'],
+        description: 'Two circular-hole shelves removed from laboratory incubator equipment. Check dimensions against the receiving unit before requesting.',
+        dimensions: '60 cm diameter each', weight: '5 kg each', power: 'No power required', storage: 'Store flat',
+        manufacturer: 'Unknown', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'Yes', decontamination: 'Cleaned; history to be confirmed', handling: 'Protect edges during transport',
+        viewing: 'donor', campusAssist: 'Yes', disconnection: 'No', collectionDays: '10',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Incubator Shelf circle holes.jpeg']
+      },
+      {
+        id: 'SF-030', name: 'Metal freezer racks', category: 'Storage and lab furniture', qty: 20,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Reuse store (Building 184)', school: 'School of BioSciences', listed: 25, finalCall: '8 January 2027',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Metal freezer racks for standard-sized storage boxes. Offered individually or as a group, subject to availability.',
+        dimensions: '14 x 14 x 30 cm each', weight: '1 kg each', power: 'No power required', storage: 'Keep dry',
+        manufacturer: 'Unknown', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Wiped down', handling: 'None',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Metal freezer racks for standard sized boxes..jpeg']
+      },
+      {
+        id: 'GP-043', name: 'Quick-seal glass centrifuge tubes', category: 'Glassware and plasticware', qty: 24,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Reuse store (Building 184)', school: 'School of Chemistry', listed: 28, finalCall: '12 January 2027',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Quick-seal glass centrifuge tubes for compatible laboratory workflows. Inspect seals and confirm rotor compatibility before use.',
+        dimensions: '2 x 2 x 10 cm each', weight: '0.1 kg each', power: 'No power required', storage: 'Store in protective packaging',
+        manufacturer: 'Unknown', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Washed and dried', handling: 'Handle as laboratory glassware',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Tubes Quick-seal centrifuge tube, glass.jpeg']
+      },
+      {
+        id: 'GP-044', name: 'Petri dishes', category: 'Glassware and plasticware', qty: 30,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available now',
+        location: 'Reuse store (Building 184)', school: 'School of BioSciences', listed: 30, finalCall: '15 January 2027',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Assorted Petri dishes for teaching, sample handling, or non-hazardous culture demonstrations. Condition varies by pack.',
+        dimensions: '9 cm diameter each', weight: '0.1 kg each', power: 'No power required', storage: 'Keep covered and dry',
+        manufacturer: 'Unknown', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Washed and dried', handling: 'Handle carefully',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Petri Dishes culture.jpeg']
+      },
+      {
+        id: 'SF-031', name: 'Laboratory storage tubes', category: 'Storage and lab furniture', qty: 40,
+        condition: 'Fully working', arrangement: 'Full donation', availability: 'Available in store to view',
+        location: 'Reuse store (Building 184)', school: 'School of BioSciences', listed: 34, finalCall: '20 January 2027',
+        serviced: 'Unknown', access: ['Fits in a standard lift'],
+        description: 'Assorted storage tubes and holders for organising small laboratory components. Offered as a mixed lot.',
+        dimensions: 'Various sizes', weight: '0.1 kg each', power: 'No power required', storage: 'Keep dry',
+        manufacturer: 'Unknown', age: 'Unknown', serviceRecords: 'Not applicable',
+        hazardous: 'No', decontamination: 'Cleaned and empty', handling: 'None',
+        viewing: 'store', campusAssist: 'Yes', disconnection: 'No', collectionDays: '5',
+        transportFunding: 'Covered by Sustainability Office', disconnectionFunding: 'Not applicable',
+        photos: ['Storage tube storage.jpeg']
+      }
+    ];
+
+    /* ─────────────── State ─────────────── */
+    var state = {
+      tab: 'browse',
+      detailId: null,
+      search: '',
+      filters: { category: [], condition: [], arrangement: [], availability: [], access: [], location: '', serviced: '' },
+      cart: []
+    };
+
+    try {
+      var saved = localStorage.getItem('fos-reuse-cart');
+      if (saved) state.cart = JSON.parse(saved);
+    } catch (e) { state.cart = []; }
+
+    function saveCart() {
+      try { localStorage.setItem('fos-reuse-cart', JSON.stringify(state.cart)); } catch (e) { /* storage unavailable */ }
+    }
+
+    /* ─────────────── Helpers ─────────────── */
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, function(c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    function conditionTagClass(condition) {
+      if (condition === 'Fully working') return 'tag--green';
+      if (condition === 'Working with minor issues') return 'tag--amber';
+      if (condition === 'Needs repair') return 'tag--red';
+      return 'tag--grey';
+    }
+
+    function arrangementShort(arrangement) {
+      if (arrangement === 'Full donation') return 'Donation';
+      if (arrangement === 'Occasional access') return 'Occasional access';
+      return 'Shared';
+    }
+
+    function isShared(item) { return item.arrangement === 'Open shared donation'; }
+    function isNew(item) { return item.listed <= 30; }
+    function getItem(id) { return ITEMS.find(function(i) { return i.id === id; }); }
+
+    /* ─────────────── Filtering ─────────────── */
+    function matchesFilters(item) {
+      var f = state.filters;
+
+      if (f.category.length && f.category.indexOf(item.category) === -1) return false;
+      if (f.condition.length && f.condition.indexOf(item.condition) === -1) return false;
+      if (f.arrangement.length && f.arrangement.indexOf(item.arrangement) === -1) return false;
+      if (f.availability.length && f.availability.indexOf(item.availability) === -1) return false;
+      if (f.location && item.location !== f.location) return false;
+      if (f.serviced && item.serviced !== f.serviced) return false;
+
+      if (f.access.length && !f.access.every(function(a) { return item.access.indexOf(a) !== -1; })) return false;
+
+      if (state.search) {
+        var haystack = (item.id + ' ' + item.name + ' ' + item.category + ' ' + item.description + ' ' + item.school).toLowerCase();
+        if (haystack.indexOf(state.search.toLowerCase()) === -1) return false;
+      }
+
+      if (state.tab === 'shared' && !isShared(item)) return false;
+      if (state.tab !== 'shared' && isShared(item)) return false;
+      if (state.tab === 'recent' && !isNew(item)) return false;
+
+      return true;
+    }
+
+    function visibleItems() {
+      var list = ITEMS.filter(matchesFilters);
+      if (state.tab === 'recent') list.sort(function(a, b) { return a.listed - b.listed; });
+      return list;
+    }
+
+    /* ─────────────── Sidebar rendering ─────────────── */
+    function renderCheckboxFilter(containerId, key, options) {
+      var container = document.getElementById(containerId);
+      container.innerHTML = '';
+      options.forEach(function(option) {
+        var value = typeof option === 'string' ? option : option.value;
+        var label = document.createElement('label');
+        label.className = 'filter-option';
+        var input = document.createElement('input');
+        input.type = 'checkbox';
+        input.value = value;
+        input.checked = state.filters[key].indexOf(value) !== -1;
+        input.addEventListener('change', function() {
+          if (input.checked) state.filters[key].push(value);
+          else state.filters[key] = state.filters[key].filter(function(v) { return v !== value; });
+          render();
+        });
+        label.appendChild(input);
+        label.appendChild(document.createTextNode(value));
+        container.appendChild(label);
+      });
+    }
+
+    function renderSidebar() {
+      renderCheckboxFilter('filter-category', 'category', CATEGORIES);
+      renderCheckboxFilter('filter-condition', 'condition', CONDITIONS);
+      renderCheckboxFilter('filter-arrangement', 'arrangement',
+        state.tab === 'shared' ? ARRANGEMENTS : ARRANGEMENTS.filter(function(a) { return a !== 'Open shared donation'; }));
+      renderCheckboxFilter('filter-availability', 'availability', AVAILABILITIES);
+      renderCheckboxFilter('filter-access', 'access', ACCESS_OPTIONS);
+
+      document.getElementById('filter-location').value = state.filters.location;
+
+      // Arrangement is fixed on the shared tab, so the filter is disabled there.
+      var group = document.getElementById('arrangement-group');
+      var lockArrangement = state.tab === 'shared';
+      group.style.opacity = lockArrangement ? '0.45' : '1';
+      group.querySelectorAll('input').forEach(function(input) { input.disabled = lockArrangement; });
+    }
+
+    function activeFilterTags() {
+      var tags = [];
+      ['category', 'condition', 'arrangement', 'availability', 'access'].forEach(function(key) {
+        state.filters[key].forEach(function(value) { tags.push({ key: key, value: value }); });
+      });
+      if (state.filters.location) tags.push({ key: 'location', value: state.filters.location });
+      if (state.filters.serviced) tags.push({ key: 'serviced', value: state.filters.serviced });
+      if (state.search) tags.push({ key: 'search', value: 'Search: ' + state.search });
+      return tags;
+    }
+
+    function removeFilter(key, value) {
+      if (key === 'location' || key === 'serviced') state.filters[key] = '';
+      else if (key === 'search') { state.search = ''; document.getElementById('search-input').value = ''; }
+      else state.filters[key] = state.filters[key].filter(function(v) { return v !== value; });
+      render();
+    }
+
+    function clearAllFilters() {
+      state.filters = { category: [], condition: [], arrangement: [], availability: [], access: [], location: '', serviced: '' };
+      state.search = '';
+      document.getElementById('search-input').value = '';
+      render();
+    }
+
+    /* ─────────────── Card rendering ─────────────── */
+    function itemCardHtml(item) {
+      var actions = isShared(item)
+        ? ''
+        : '<button class="btn btn-secondary" onclick="addToCart(\'' + item.id + '\')">Add to cart</button>';
+
+      return '<article class="item-card">'
+        + '<div class="item-card__media">'
+          + (item.photos && item.photos.length
+              ? '<img src="' + photoUrl(item.photos[0]) + '" alt="' + escapeHtml(item.name) + '" loading="lazy" />'
+              : '<span>Photo to be added</span>')
+          + '<span class="item-card__code">' + escapeHtml(item.id) + '</span>'
+          + (isNew(item) ? '<span class="item-card__new">New</span>' : '')
+        + '</div>'
+        + '<div class="item-card__body">'
+          + '<h3 class="item-card__name">' + escapeHtml(item.name) + '</h3>'
+          + '<div class="tag-row">'
+            + '<span class="tag tag--category">' + escapeHtml(item.category) + '</span>'
+          + '</div>'
+          + '<div class="tag-row">'
+            + '<span class="tag ' + conditionTagClass(item.condition) + '">' + item.condition + '</span>'
+            + '<span class="tag tag--outline">' + arrangementShort(item.arrangement) + '</span>'
+          + '</div>'
+          + '<div class="item-card__avail">'
+            + '<span>' + item.availability + '</span>'
+            + '<span class="item-card__qty">QTY ' + item.qty + '</span>'
+          + '</div>'
+        + '</div>'
+        + '<div class="item-card__actions">'
+          + '<button class="btn btn-primary" onclick="openDetail(\'' + item.id + '\')">View details</button>'
+          + actions
+        + '</div>'
+      + '</article>';
+    }
+
+    /* ─────────────── Views ─────────────── */
+    function browseView(introHtml) {
+      var items = visibleItems();
+      var tags = activeFilterTags();
+
+      var tagsHtml = '';
+      if (tags.length) {
+        tagsHtml = '<div class="filter-tags">'
+          + tags.map(function(t) {
+              return '<span class="filter-tag">' + escapeHtml(t.value)
+                + '<button onclick="removeFilter(\'' + t.key + '\', \'' + escapeHtml(t.value).replace(/'/g, "\\'") + '\')" aria-label="Remove filter">&times;</button></span>';
+            }).join('')
+          + '<button class="clear-all" onclick="clearAllFilters()">Clear all</button></div>';
+      }
+
+      var grid = items.length
+        ? '<div class="item-grid">' + items.map(itemCardHtml).join('') + '</div>'
+        : '<div class="empty-state"><p>No items match your filters.</p><button class="btn btn-secondary" onclick="clearAllFilters()">Clear all filters</button></div>';
+
+      return (introHtml || '')
+        + '<div class="result-bar"><span class="result-count">Showing <strong>' + items.length + '</strong> of ' + ITEMS.length + ' items</span></div>'
+        + tagsHtml
+        + grid;
+    }
+
+    function detailView(item) {
+      var html = '<button class="back-link" onclick="closeDetail()">&larr; Back to results</button>';
+
+      var photos = item.photos || [];
+      var firstPhoto = photos[0]
+        ? '<img id="detail-gallery-image" src="' + photoUrl(photos[0]) + '" alt="' + escapeHtml(item.name) + ' photo 1" />'
+        : '<span>Photo to be added</span>';
+      var galleryControls = photos.length > 1
+        ? '<button class="gallery__arrow gallery__arrow--prev" onclick="showGalleryPhoto(-1)" aria-label="Previous photo">&#8249;</button>'
+          + '<button class="gallery__arrow gallery__arrow--next" onclick="showGalleryPhoto(1)" aria-label="Next photo">&#8250;</button>'
+        : '';
+      var thumbnails = photos.map(function(photo, index) {
+        return '<button class="gallery__thumb' + (index === 0 ? ' is-active' : '') + '" onclick="showGalleryPhoto(' + index + ')" aria-label="View photo ' + (index + 1) + '">'
+          + '<img src="' + photoUrl(photo) + '" alt="" loading="lazy" /></button>';
+      }).join('');
+
+      html += '<div class="detail-layout"><div class="detail-overview">'
+        + '<div class="detail-main">'
+        + '<div class="detail-panel"><h3>Photos</h3><div class="gallery">'
+        + '<div class="gallery__main">' + firstPhoto + galleryControls + '</div>'
+        + (thumbnails ? '<div class="gallery__thumbs">' + thumbnails + '</div>' : '')
+        + '</div></div></div>'
+        + '<div class="detail-summary">'
+        + '<div class="detail-panel">'
+          + '<div class="detail-title-row"><h3 style="border:none;font-size:2.2rem;margin-bottom:0.4rem">' + escapeHtml(item.name) + '</h3>'
+          + '<span class="tag tag--navy">' + item.availability + '</span></div>'
+          + '<div class="id-line"><span class="id-code">' + item.id + '</span>'
+          + '<button class="copy-btn" onclick="copyId(\'' + item.id + '\', this)">Copy ID</button></div>'
+          + '<div class="tag-row">'
+            + '<span class="tag tag--category">' + escapeHtml(item.category) + '</span>'
+            + '<span class="tag ' + conditionTagClass(item.condition) + '">' + item.condition + '</span>'
+            + '<span class="tag tag--outline" title="' + arrangementTooltip(item.arrangement) + '">' + item.arrangement + '</span>'
+          + '</div>'
+        + '</div>'
+        + '<div class="detail-panel"><h3>Description</h3><p style="font-size:1.4rem;margin:0">' + escapeHtml(item.description) + '</p></div>'
+        + '<div class="detail-panel"><h3>Key facts</h3><dl class="fact-list">'
+          + '<dt>Category</dt><dd>' + escapeHtml(item.category) + '</dd>'
+          + '<dt>QTY</dt><dd>' + item.qty + '</dd>'
+          + '<dt>Condition</dt><dd>' + item.condition + '</dd>'
+          + '<dt>Last serviced</dt><dd>' + item.serviced + '</dd>'
+          + '<dt>Location</dt><dd>' + escapeHtml(item.location) + '</dd>'
+          + '<dt>Listed</dt><dd>' + item.listed + ' days ago</dd>'
+          + '<dt>Final call date</dt><dd>' + item.finalCall + '</dd>'
+          + '</dl><p style="font-size:1.2rem;color:var(--uom-muted);margin:0">Precise room details are shared once a request is confirmed.</p>'
+          + (isShared(item) ? '<div class="detail-panel" style="margin-top:var(--uom-space-md)"><h3>Contact and booking</h3>'
+            + (item.donorEmail ? '<p style="font-size:1.4rem;margin:0 0 var(--uom-space-sm)"><strong>Donor email:</strong> <a href="mailto:' + item.donorEmail + '">' + item.donorEmail + '</a></p>' : '')
+            + (item.booking ? '<p style="font-size:1.4rem;margin:0"><strong>Booking information:</strong> ' + escapeHtml(item.booking) + '</p>' : '<p style="font-size:1.4rem;margin:0">Arrange access through the reuse store team, quoting item ID ' + item.id + '.</p>')
+            + '</div>' : '')
+          + '</div>'
+        + '<aside class="detail-side">'
+          + (!isShared(item) ? '<button class="btn btn-primary" onclick="addToCart(\'' + item.id + '\')">Add to cart</button>' : '')
+          + '<p style="font-size:1.2rem;color:var(--uom-muted);margin:0.8rem 0 0">Item ID <strong>' + item.id + '</strong> &middot; quote this when contacting the reuse store team.</p>'
+        + '</aside>'
+        + '</div></div>'
+        + '<div class="detail-tabs">'
+        + '<details class="detail-tab"><summary>Specifications</summary><div class="detail-tab__body"><dl class="fact-list">'
+          + '<dt>Dimensions</dt><dd>' + item.dimensions + '</dd>'
+          + '<dt>Approximate weight</dt><dd>' + item.weight + '</dd>'
+          + '<dt>Power requirements</dt><dd>' + item.power + '</dd>'
+          + '<dt>Special storage</dt><dd>' + item.storage + '</dd>'
+          + '<dt>Manufacturer / model</dt><dd>' + escapeHtml(item.manufacturer) + '</dd>'
+          + '<dt>Age or year of purchase</dt><dd>' + item.age + '</dd>'
+          + '<dt>Service records</dt><dd>' + item.serviceRecords + '</dd>'
+        + '</dl>'
+        + (isShared(item) ? '<div style="margin-top:var(--uom-space-md)"><h3>Availability and viewing</h3>' + availabilityBlock(item) + '</div>' : '')
+        + '</div></details>'
+        + '<details class="detail-tab"><summary>Safety and handling</summary><div class="detail-tab__body"><dl class="fact-list">'
+          + '<dt>Hazardous material history</dt><dd>' + item.hazardous + '</dd>'
+          + '<dt>Decontamination status</dt><dd>' + escapeHtml(item.decontamination) + '</dd>'
+          + '<dt>Special handling</dt><dd>' + escapeHtml(item.handling) + '</dd>'
+        + '</dl></div></details>'
+        + (!isShared(item) ? '<details class="detail-tab"><summary>Availability and viewing</summary><div class="detail-tab__body">' + availabilityBlock(item) + '</div></details>' : '');
+
+      if (!isShared(item)) {
+        html += '<details class="detail-tab"><summary>Delivery and logistics</summary><div class="detail-tab__body"><dl class="fact-list">'
+          + '<dt>Within Campus Assist scope</dt><dd>' + item.campusAssist + '</dd>'
+          + '<dt>Disconnection required</dt><dd>' + item.disconnection + '</dd>'
+          + '<dt>Estimated collection</dt><dd>' + item.collectionDays + ' business days after approval</dd>'
+          + '</dl></div></details>'
+          + '<details class="detail-tab"><summary>Cost information</summary><div class="detail-tab__body"><dl class="fact-list">'
+          + '<dt>Transport funding</dt><dd>' + item.transportFunding + '</dd>'
+          + '<dt>Disconnection funding</dt><dd>' + item.disconnectionFunding + '</dd>'
+          + '</dl></div></details>';
+      }
+
+      html += '</div></div>';
+
+      return html;
+    }
+
+    function showGalleryPhoto(index) {
+      var image = document.getElementById('detail-gallery-image');
+      var thumbnails = document.querySelectorAll('.gallery__thumb');
+      if (!image || !thumbnails.length) return;
+
+      var current = Array.prototype.indexOf.call(thumbnails, document.querySelector('.gallery__thumb.is-active'));
+      var next = index === -1 || index === 1 ? current + index : index;
+      if (next < 0) next = thumbnails.length - 1;
+      if (next >= thumbnails.length) next = 0;
+
+      image.src = thumbnails[next].querySelector('img').src;
+      image.alt = thumbnails[next].getAttribute('aria-label');
+      thumbnails.forEach(function(thumbnail, thumbnailIndex) {
+        thumbnail.classList.toggle('is-active', thumbnailIndex === next);
+      });
+    }
+
+    function arrangementTooltip(arrangement) {
+      if (arrangement === 'Full donation') return 'Ownership transfers to you.';
+      if (arrangement === 'Occasional access') return 'Ownership transfers, but the donor may need occasional access.';
+      return 'Item stays in the donor lab; you book time to use it.';
+    }
+
+    function availabilityBlock(item) {
+      var viewing = item.viewing === 'store'
+        ? '<p style="font-size:1.4rem"><strong>Viewing:</strong> Available to view in store during opening hours (Tue &amp; Thu, 10am - 3pm). No booking needed.</p>'
+        : '<p style="font-size:1.4rem"><strong>Viewing:</strong> Viewable by arrangement in the donor\'s lab. The reuse store team will coordinate with the donor.</p>';
+
+      if (item.arrangement === 'Full donation') {
+        return '<div class="callout">This item is available for full transfer. If you request it, you will become the owner.</div>' + viewing;
+      }
+
+      if (item.arrangement === 'Occasional access') {
+        return '<div class="callout">This item is available for transfer, but the donor has requested occasional access.</div>'
+          + '<p style="font-size:1.4rem"><strong>Access conditions:</strong> ' + escapeHtml(item.accessNotes) + '</p>'
+          + viewing;
+      }
+
+      return '<div class="callout callout--warn">This item remains in the donor\'s lab and is available for shared use. You do not take ownership.</div>'
+        + '<dl class="fact-list">'
+        + '<dt>Booking process</dt><dd>' + escapeHtml(item.booking) + '</dd>'
+        + '<dt>Access restrictions</dt><dd>' + item.accessScope + '</dd>'
+        + '<dt>Training</dt><dd>' + item.training + '</dd>'
+        + '<dt>Consumables</dt><dd>' + item.consumables + '</dd>'
+        + '<dt>Session limits</dt><dd>' + item.sessionLimit + '</dd>'
+        + '</dl>' + viewing;
+    }
+
+    function myRequestsView() {
+      return '<div class="prose">'
+        + '<h2>My requests</h2>'
+        + '<p>Your active requests are tracked in ServiceNow. This view shows a summary; open a ticket to see full detail and correspondence.</p>'
+        + '<table class="request-table"><thead><tr><th>Ticket</th><th>Items</th><th>Submitted</th><th>Status</th></tr></thead><tbody>'
+          + '<tr><td>REQ0048213</td><td>ES-014, GP-032</td><td>21 August 2026</td><td><span class="tag tag--amber">Awaiting donor confirmation</span></td></tr>'
+          + '<tr><td>REQ0047980</td><td>SF-009</td><td>12 August 2026</td><td><span class="tag tag--green">Collection scheduled</span></td></tr>'
+          + '<tr><td>REQ0047512</td><td>CO-018</td><td>29 July 2026</td><td><span class="tag tag--grey">Completed</span></td></tr>'
+        + '</tbody></table>'
+        + '<p style="margin-top:var(--uom-space-md)"><a href="#">Open my full ServiceNow request queue</a></p>'
+        + '</div>';
+    }
+
+    function sellingView() {
+      return '<div class="prose">'
+        + '<h2>Selling</h2>'
+        + '<div class="callout">Selling and buying items through the reuse store are not live yet, but we expect this feature to be available in the near future.</div>'
+        + '<p>We are currently assessing demand based on interest and usage numbers. This will help us understand whether a selling option would be useful for the Faculty.</p>'
+        + '<p>If you would like to sell your item, please contact <a href="mailto:reuse-store@unimelb.edu.au">reuse-store@unimelb.edu.au</a> for more information.</p>'
+        + '</div>';
+    }
+
+    /* ─────────────── Render ─────────────── */
+    function render() {
+      document.querySelectorAll('.store-tab').forEach(function(tab) {
+        tab.classList.toggle('is-active', tab.dataset.tab === state.tab);
+      });
+
+      var showSidebar = ['browse', 'recent', 'shared'].indexOf(state.tab) !== -1 && !state.detailId;
+      document.getElementById('sidebar').style.display = showSidebar ? '' : 'none';
+
+      var content = document.getElementById('content');
+
+      if (state.detailId) {
+        content.innerHTML = detailView(getItem(state.detailId));
+      } else if (state.tab === 'requests') {
+        content.innerHTML = myRequestsView();
+      } else if (state.tab === 'selling') {
+        content.innerHTML = sellingView();
+      } else if (state.tab === 'shared') {
+        content.innerHTML = browseView(
+          '<div class="callout"><strong>Shared equipment</strong> stays in the donor\'s lab and is available for other researchers to book and use. '
+          + 'You don\'t take ownership &mdash; you arrange time to use the item in place. Each shared item has its own booking process, listed in the item description. '
+          + 'Contact details are provided so you can arrange access directly with the donor.</div>');
+      } else if (state.tab === 'recent') {
+        content.innerHTML = browseView(
+          '<div class="callout">Items listed in the last 30 days, newest first. '
+          + '<a href="#" onclick="alert(\'Prototype: this would subscribe you to a weekly digest of new listings.\'); return false;">Subscribe to weekly updates</a></div>');
+      } else {
+        content.innerHTML = browseView('');
+      }
+
+      renderSidebar();
+      renderCart();
+    }
+
+    /* ─────────────── Navigation ─────────────── */
+    function goTab(tab) {
+      state.tab = tab;
+      state.detailId = null;
+      if (tab === 'shared') state.filters.arrangement = [];
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      render();
+    }
+
+    function openDetail(id) {
+      state.detailId = id;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      render();
+    }
+
+    function closeDetail() {
+      state.detailId = null;
+      render();
+    }
+
+    /* ─────────────── Cart ─────────────── */
+    function addToCart(id) {
+      var item = getItem(id);
+
+      var line = state.cart.find(function(l) { return l.id === id; });
+      if (line) {
+        if (line.qty < item.qty) line.qty++;
+      } else {
+        state.cart.push({ id: id, qty: 1 });
+      }
+      saveCart();
+      render();
+      openCart();
+    }
+
+    function removeFromCart(id) {
+      state.cart = state.cart.filter(function(l) { return l.id !== id; });
+      saveCart();
+      render();
+    }
+
+    function changeQty(id, delta) {
+      var line = state.cart.find(function(l) { return l.id === id; });
+      if (!line) return;
+      var item = getItem(id);
+      line.qty = Math.max(1, Math.min(item.qty, line.qty + delta));
+      saveCart();
+      render();
+    }
+
+    function renderCart() {
+      var count = state.cart.reduce(function(sum, line) { return sum + line.qty; }, 0);
+      document.getElementById('cart-count').textContent = count;
+      document.getElementById('cart-title').textContent = 'Your cart (' + state.cart.length + (state.cart.length === 1 ? ' item)' : ' items)');
+
+      var body = document.getElementById('cart-body');
+
+      if (!state.cart.length) {
+        body.innerHTML = '<div class="empty-state" style="border:none;padding:var(--uom-space-lg) 0">'
+          + '<p>Your cart is empty.</p><p style="font-size:1.2rem">Browse the catalogue and add items to request them together in one form.</p></div>';
+        document.getElementById('cart-submit').style.pointerEvents = 'none';
+        document.getElementById('cart-submit').style.opacity = '0.5';
+        return;
+      }
+
+      document.getElementById('cart-submit').style.pointerEvents = '';
+      document.getElementById('cart-submit').style.opacity = '';
+
+      var arrangements = state.cart.map(function(line) { return getItem(line.id).arrangement; });
+      var mixed = arrangements.indexOf('Open shared donation') !== -1 && arrangements.some(function(a) { return a !== 'Open shared donation'; });
+
+      var html = mixed
+        ? '<div class="callout callout--warn" style="font-size:1.3rem">Your cart contains a mix of full donation and shared items. The reuse store team will arrange access for shared items when they process your request.</div>'
+        : '';
+
+      html += state.cart.map(function(line) {
+        var item = getItem(line.id);
+        return '<div class="cart-line">'
+          + '<div class="cart-line__thumb">'
+            + (item.photos && item.photos.length
+              ? '<img src="' + photoUrl(item.photos[0]) + '" alt="' + escapeHtml(item.name) + '" />'
+              : 'No photo')
+          + '</div>'
+          + '<div class="cart-line__body">'
+            + '<p class="cart-line__name">' + escapeHtml(item.name) + '</p>'
+            + '<div class="tag-row" style="margin-bottom:0.6rem">'
+              + '<span class="tag tag--code">' + item.id + '</span>'
+              + '<span class="tag tag--category">' + escapeHtml(item.category) + '</span>'
+              + '<span class="tag tag--outline">' + arrangementShort(item.arrangement) + '</span>'
+            + '</div>'
+            + '<div style="display:flex;align-items:center;gap:1rem">'
+              + '<span class="qty-control">'
+                + '<button onclick="changeQty(\'' + item.id + '\', -1)" aria-label="Decrease quantity">-</button>'
+                + '<span>' + line.qty + '</span>'
+                + '<button onclick="changeQty(\'' + item.id + '\', 1)" aria-label="Increase quantity">+</button>'
+              + '</span>'
+              + '<span style="font-size:1.2rem;color:var(--uom-muted)">of ' + item.qty + ' available</span>'
+              + '<button class="link-btn" onclick="removeFromCart(\'' + item.id + '\')">Remove</button>'
+            + '</div>'
+          + '</div>'
+        + '</div>';
+      }).join('');
+
+      body.innerHTML = html;
+    }
+
+    function openCart() {
+      document.getElementById('cart-drawer').classList.add('is-open');
+      document.getElementById('drawer-backdrop').classList.add('is-open');
+      document.getElementById('cart-drawer').setAttribute('aria-hidden', 'false');
+    }
+
+    function closeCart() {
+      document.getElementById('cart-drawer').classList.remove('is-open');
+      document.getElementById('drawer-backdrop').classList.remove('is-open');
+      document.getElementById('cart-drawer').setAttribute('aria-hidden', 'true');
+    }
+
+    /* ─────────────── Item actions ─────────────── */
+    function addToViewingList(id) {
+      if (!isShared(getItem(id))) addToCart(id);
+      alert('Prototype: ' + id + ' has been flagged for viewing. This carries through to the viewing question on the request form.');
+    }
+
+    function askQuestion(id) {
+      alert('Prototype: this opens a short question form about ' + id + ', routed to the reuse store team.');
+    }
+
+    function copyId(id, button) {
+      navigator.clipboard.writeText(id).then(function() {
+        button.textContent = 'Copied';
+        setTimeout(function() { button.textContent = 'Copy ID'; }, 1500);
+      });
+    }
+
+    /* ─────────────── Events ─────────────── */
+    document.getElementById('search-input').addEventListener('input', function(e) {
+      state.search = e.target.value.trim();
+      state.detailId = null;
+      render();
+    });
+
+    document.getElementById('filter-location').addEventListener('change', function(e) {
+      state.filters.location = e.target.value;
+      render();
+    });
+
+    document.getElementById('cart-button').addEventListener('click', openCart);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeCart();
+    });
+
+    render();
+  </script>
+
+</body>
+</html>

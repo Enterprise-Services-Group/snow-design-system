@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UoM SNOW Design System</title>
+  <link rel="stylesheet" href="css/uom-snow.css" />
+  <style>
+    /* ── Design-system page styles ── */
+    body { padding-top: 0; }
+
+    .ds-nav {
+      position: sticky;
+      top: 9rem;
+      max-height: calc(100vh - 9rem);
+      overflow-y: auto;
+      padding: var(--uom-space-md) var(--uom-space-md) var(--uom-space-md) 0;
+    }
+    .ds-nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .ds-nav ul li a {
+      display: block;
+      padding: 0.5rem 0;
+      font-size: 1.3rem;
+      color: var(--uom-muted);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      padding-left: 1.2rem;
+      transition: all 0.15s;
+    }
+    .ds-nav ul li a:hover {
+      color: var(--uom-blue);
+      border-left-color: var(--uom-blue);
+    }
+    .ds-nav ul li + li { margin-top: 0.2rem; }
+
+    .ds-layout {
+      display: flex;
+      gap: var(--uom-space-xl);
+      max-width: var(--uom-container-max);
+      margin: 0 auto;
+      padding: var(--uom-space-lg) var(--uom-space-md);
+    }
+    .ds-layout__sidebar {
+      flex: 0 0 18rem;
+      min-width: 18rem;
+    }
+    .ds-layout__content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .ds-intro {
+      background-color: var(--uom-navy);
+      color: var(--uom-white);
+      padding: var(--uom-space-xl) 0;
+      margin-bottom: 0;
+    }
+    .ds-intro .uom-container { max-width: var(--uom-container-max); margin: 0 auto; padding: 0 var(--uom-space-md); }
+    .ds-intro h1 {
+      color: var(--uom-white);
+      font-size: 3.2rem;
+      margin-bottom: var(--uom-space-xs);
+    }
+    .ds-intro p { color: rgba(255,255,255,0.75); font-size: 1.6rem; margin: 0; }
+
+    .ds-intro__badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.9);
+      font-size: 1.2rem;
+      padding: 0.3rem 1rem;
+      border-radius: 2rem;
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.08rem;
+      font-weight: 500;
+    }
+
+    code {
+      font-family: monospace;
+      font-size: 1.3rem;
+      background: var(--uom-bg);
+      color: var(--uom-navy);
+      border: 1px solid var(--uom-border-subtle);
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.3rem;
+    }
+
+    .ds-token-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.3rem;
+    }
+    .ds-token-table th {
+      text-align: left;
+      padding: 0.8rem 1.2rem;
+      background: var(--uom-bg);
+      border-bottom: 2px solid var(--uom-border-subtle);
+      font-weight: 500;
+      color: var(--uom-navy);
+    }
+    .ds-token-table td {
+      padding: 0.8rem 1.2rem;
+      border-bottom: 1px solid var(--uom-border-subtle);
+      vertical-align: middle;
+    }
+    .ds-token-table tr:last-child td { border-bottom: none; }
+
+    .ds-color-dot {
+      display: inline-block;
+      width: 1.6rem;
+      height: 1.6rem;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.1);
+      vertical-align: middle;
+      margin-right: 0.8rem;
+    }
+
+    .ds-example {
+      background: var(--uom-white);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius);
+      padding: var(--uom-space-lg);
+      margin-bottom: var(--uom-space-sm);
+    }
+
+    .ds-live-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+      gap: var(--uom-space-md);
+      margin-bottom: var(--uom-space-xl);
+    }
+
+    .ds-live-card {
+      background: var(--uom-white);
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius);
+      padding: var(--uom-space-lg);
+    }
+
+    .ds-live-card h3 {
+      margin: 0 0 0.8rem;
+      font-size: 1.8rem;
+      color: var(--uom-navy);
+    }
+
+    .ds-live-card p {
+      margin: 0 0 var(--uom-space-md);
+      font-size: 1.4rem;
+      color: var(--uom-text);
+    }
+
+    .ds-live-card a {
+      font-size: 1.4rem;
+      font-weight: 500;
+    }
+
+    .ds-header-preview {
+      border: 1px solid var(--uom-border-subtle);
+      border-radius: var(--uom-radius);
+      overflow: hidden;
+      margin-bottom: var(--uom-space-sm);
+    }
+    .ds-header-preview .uom-header {
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      .ds-layout { flex-direction: column; }
+      .ds-layout__sidebar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════ HEADER ═══ -->
+  <header class="uom-header" role="banner">
+    <div class="uom-header__inner">
+      <div class="uom-header__logo-block">
+        <img src="assets/logo.png" alt="The University of Melbourne" />
+      </div>
+      <div class="uom-header__breadcrumb">
+        <nav aria-label="breadcrumb">
+          <ol class="uom-breadcrumb">
+            <li><a href="#">Staff Services</a></li>
+            <li aria-current="page">Design System</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="uom-header__right">
+        <div class="uom-avatar" aria-label="User avatar" role="img">JD</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════ INTRO ════ -->
+  <div class="ds-intro">
+    <div class="uom-container">
+      <div class="ds-intro__badge">University of Melbourne · ServiceNow</div>
+      <h1>SNOW Design System</h1>
+      <p>Visual language, components, and patterns for UoM Staff Services portal forms — extracted from the live ServiceNow environment.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ LAYOUT ══ -->
+  <div class="ds-layout">
+
+    <!-- Sidebar navigation -->
+    <aside class="ds-layout__sidebar" aria-label="Design system sections">
+      <nav class="ds-nav">
+        <ul>
+          <li><a href="#live-pages">Live Pages</a></li>
+          <li><a href="#tokens">Design Tokens</a></li>
+          <li><a href="#colours">Colour Palette</a></li>
+          <li><a href="#typography">Typography</a></li>
+          <li><a href="#header">Header / Navbar</a></li>
+          <li><a href="#breadcrumb">Breadcrumb</a></li>
+          <li><a href="#panels">Panels / Cards</a></li>
+          <li><a href="#inputs">Form Inputs</a></li>
+          <li><a href="#selects">Selects & Dropdowns</a></li>
+          <li><a href="#radios">Radios & Checkboxes</a></li>
+          <li><a href="#fileupload">File Upload</a></li>
+          <li><a href="#buttons">Buttons</a></li>
+          <li><a href="#alerts">Alerts & Banners</a></li>
+          <li><a href="#badges">Badges</a></li>
+          <li><a href="#validation">Validation States</a></li>
+          <li><a href="#footer">Footer</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="ds-layout__content">
+
+      <section id="live-pages" class="ds-section">
+        <h2>Live Pages</h2>
+        <p>Use this page as the entry point after deployment. The main prototype pages below are all static HTML and will work directly on GitHub Pages.</p>
+
+        <div class="ds-live-links">
+          <article class="ds-live-card">
+            <h3>Initiative Home</h3>
+            <p>Landing page for the Faculty of Science Lab Reuse Initiative.</p>
+            <a href="home.html">Open home.html</a>
+          </article>
+
+          <article class="ds-live-card">
+            <h3>Donate Form</h3>
+            <p>Primary ServiceNow-style donation form prototype.</p>
+            <a href="ServiceNow_form_prototype_ver2.html">Open donation form</a>
+          </article>
+
+          <article class="ds-live-card">
+            <h3>Reuse Store</h3>
+            <p>Browse available items before submitting a request.</p>
+            <a href="reuse-store.html">Open reuse-store.html</a>
+          </article>
+
+          <article class="ds-live-card">
+            <h3>Request Form</h3>
+            <p>Receiver request flow for claiming items from the store.</p>
+            <a href="ServiceNow_receiver_form_prototype.html">Open request form</a>
+          </article>
+        </div>
+      </section>
+
+      <!-- ── Design Tokens ──────────────────────────────────── -->
+      <section id="tokens" class="ds-section">
+        <h2>Design Tokens</h2>
+        <p>All visual values are defined as CSS custom properties in <code>css/tokens.css</code>. Import them before component styles.</p>
+
+        <table class="ds-token-table">
+          <thead>
+            <tr><th>Token</th><th>Value</th><th>Usage</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>--uom-blue</code></td><td><span class="ds-color-dot" style="background:#0076de"></span>#0076de</td><td>Primary actions, links, badges</td></tr>
+            <tr><td><code>--uom-navy</code></td><td><span class="ds-color-dot" style="background:#004576"></span>#004576</td><td>Header logo block, page headings</td></tr>
+            <tr><td><code>--uom-body</code></td><td><span class="ds-color-dot" style="background:#191414"></span>#191414</td><td>Body text</td></tr>
+            <tr><td><code>--uom-muted</code></td><td><span class="ds-color-dot" style="background:#666666"></span>#666666</td><td>Secondary / placeholder text</td></tr>
+            <tr><td><code>--uom-bg</code></td><td><span class="ds-color-dot" style="background:#f9f9f9;border:1px solid #ddd"></span>#f9f9f9</td><td>Page background</td></tr>
+            <tr><td><code>--uom-border</code></td><td><span class="ds-color-dot" style="background:#cccccc"></span>#cccccc</td><td>Input, panel borders</td></tr>
+            <tr><td><code>--uom-font</code></td><td colspan="2">"Roboto", Helvetica, Verdana, sans-serif</td></tr>
+            <tr><td><code>--uom-radius</code></td><td colspan="2">0.4rem</td></tr>
+            <tr><td><code>--uom-shadow</code></td><td colspan="2">0.2rem 0.2rem 1rem 0 rgba(0,0,0,0.1)</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <hr class="uom-divider" />
+
+      <!-- ── Colour Palette ─────────────────────────────────── -->
+      <section id="colours" class="ds-section">
+        <h2>Colour Palette</h2>
+
+        <h3 style="font-size:1.5rem;margin-bottom:1.2rem">Brand</h3>
+        <div class="ds-component-row">
+          <div class="ds-swatch">
+            <div class="ds-swatch__color" style="background:#0076de"></div>
+            <div class="ds-swatch__name">UoM Blue</div>
+            <div class="ds-swatch__value">#0076de</div>
+          </div>
+          <div class="ds-swatch">
+            <div class="ds-swatch__color" style="background:#004576"></div>
+            <div class="ds-swatch__name">UoM Navy</div>
+            <div class="ds-swatch__value">#004576</div>
+          </div>
+          <div class="ds-swatch">
+            <div class="ds-swatch__color" style="background:#366996"></div>
+            <div class="ds-swatch__name">Link Alt</div>
+            <div class="ds-swatch__value">#366996</div>
+          </div>
+        </div>
+
+        <h3 style="font-size:1.5rem;margin-bottom:1.2rem">Neutrals</h3>
+        <div class="ds-component-row">
+          <div class="ds-swatch">
+            <div class="ds-swatch__color" style="background:#191414"></div>
+            <div class="ds-swatch__name">Body Text</div>
+            <div class="ds-swatch__value">#191414</div>
+          </div>
+          <div class="ds-swatch">
+            <div class="ds-swatch__color" style="background:#666666"></div>
+            <div class="ds-swatch__name">Muted</div>
+            <div class="ds-swatch__value">#666666</div>
+          </div>
+          <div class="ds-swatch">
+            <div class="ds-swatch__color" style="background:#cccccc"></div>
+            <div class="ds-swatch__name">Border</div>
+            <div class="ds-swatch__value">#cccccc</div>
+          </div>
+          <div class="ds-swatch">
+            <div class="ds-swatch__color" style="background:#eeeeee;border:1px solid #ddd"></div>
+            <div class="ds-swatch__name">Disabled</div>
+            <div class="ds-swatch__value">#eeeeee</div>
+          </div>
+          <div class="ds-swatch">
+            <div class="ds-swatch__color" style="background:#f9f9f9;border:1px solid #eee"></div>
+            <div class="ds-swatch__name">Background</div>
+            <div class="ds-swatch__value">#f9f9f9</div>
+          </div>
+        </div>
+
+        <h3 style="font-size:1.5rem;margin-bottom:1.2rem">Status</h3>
+        <div class="ds-component-row">
+          <div class="ds-swatch">
+            <div class="ds-swatch__color" style="background:#d2f1cf"></div>
+            <div class="ds-swatch__name">Success</div>
+            <div class="ds-swatch__value">#d2f1cf</div>
+          </div>
+          <div class="ds-swatch">
+            <div class="ds-swatch__color" style="background:#e1eaf5"></div>
+            <div class="ds-swatch__name">Info</div>
+            <div class="ds-swatch__value">#e1eaf5</div>
+          </div>
+          <div class="ds-swatch">
+            <div class="ds-swatch__color" style="background:#fffbcc"></div>
+            <div class="ds-swatch__name">Warning</div>
+            <div class="ds-swatch__value">#fffbcc</div>
+          </div>
+          <div class="ds-swatch">
+            <div class="ds-swatch__color" style="background:#ea4f62"></div>
+            <div class="ds-swatch__name">Danger</div>
+            <div class="ds-swatch__value">#ea4f62</div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="uom-divider" />
+
+      <!-- ── Typography ─────────────────────────────────────── -->
+      <section id="typography" class="ds-section">
+        <h2>Typography</h2>
+        <p>Font: <strong>Roboto</strong> (weights 300, 500, 700) · Base size: <code>1.4rem (14px)</code> at 62.5% root.</p>
+        <div class="ds-example">
+          <h1 style="color:var(--uom-navy);margin-bottom:0.4rem">Heading 1 — 3.2rem</h1>
+          <h2 style="color:var(--uom-navy);margin-bottom:0.4rem">Heading 2 — 2.4rem</h2>
+          <h3 style="color:var(--uom-navy);margin-bottom:0.4rem">Heading 3 — 2.0rem</h3>
+          <h4 style="margin-bottom:0.4rem">Heading 4 — 1.8rem</h4>
+          <h5 style="margin-bottom:0.4rem">Heading 5 — 1.6rem</h5>
+          <p style="margin-bottom:0.4rem">Body text — 1.4rem / font-weight 300. The University of Melbourne Staff Services portal.</p>
+          <p><a href="#">Link — colour #0076de</a> · <span style="color:var(--uom-muted)">Muted text — #666666</span></p>
+        </div>
+      </section>
+
+      <hr class="uom-divider" />
+
+      <!-- ── Header ─────────────────────────────────────────── -->
+      <section id="header" class="ds-section">
+        <h2>Header / Navbar</h2>
+        <p>9rem tall · White background · Dark navy logo block (8.8rem × 9rem) offset 4rem from left · Box shadow <code>0.2rem 0.2rem 1rem 0 rgba(0,0,0,0.1)</code>.</p>
+        <div class="ds-header-preview">
+          <header class="uom-header" role="banner" style="position:relative">
+            <div class="uom-header__inner">
+              <div class="uom-header__logo-block">
+                <img src="assets/logo.png" alt="The University of Melbourne" />
+              </div>
+              <div class="uom-header__breadcrumb">
+                <nav aria-label="breadcrumb">
+                  <ol class="uom-breadcrumb">
+                    <li><a href="#">Staff Services</a></li>
+                    <li><a href="#">Request Something</a></li>
+                    <li aria-current="page">Form Title</li>
+                  </ol>
+                </nav>
+              </div>
+              <div class="uom-header__right">
+                <div class="uom-avatar">JD</div>
+              </div>
+            </div>
+          </header>
+        </div>
+        <p style="font-size:1.3rem;color:var(--uom-muted)">Class: <code>.uom-header</code> · Logo block: <code>.uom-header__logo-block</code></p>
+      </section>
+
+      <hr class="uom-divider" />
+
+      <!-- ── Breadcrumb ─────────────────────────────────────── -->
+      <section id="breadcrumb" class="ds-section">
+        <h2>Breadcrumb</h2>
+        <div class="ds-example">
+          <nav aria-label="breadcrumb">
+            <ol class="uom-breadcrumb">
+              <li><a href="#">Staff Services</a></li>
+              <li><a href="#">Request Something</a></li>
+              <li aria-current="page">Faculty of Science Lab Operations Request</li>
+            </ol>
+          </nav>
+        </div>
+        <p style="font-size:1.3rem;color:var(--uom-muted)">Class: <code>.uom-breadcrumb</code> · Separator rendered via CSS <code>::before</code> — no extra markup required.</p>
+      </section>
+
+      <hr class="uom-divider" />
+
+      <!-- ── Panels ─────────────────────────────────────────── -->
+      <section id="panels" class="ds-section">
+        <h2>Panels / Cards</h2>
+        <div class="ds-example">
+          <div class="uom-panel">
+            <div class="uom-panel__header">
+              <h3 class="uom-panel__title">Panel Title</h3>
+            </div>
+            <div class="uom-panel__body">
+              <p>Panel body content. Use panels to group related form sections or information blocks.</p>
+            </div>
+            <div class="uom-panel__footer">
+              <button class="btn btn-primary">Submit</button>
+              <button class="btn btn-secondary">Cancel</button>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:1.3rem;color:var(--uom-muted)">Classes: <code>.uom-panel</code> · <code>.uom-panel__header</code> · <code>.uom-panel__body</code> · <code>.uom-panel__footer</code></p>
+      </section>
+
+      <hr class="uom-divider" />
+
+      <!-- ── Form Inputs ─────────────────────────────────────── -->
+      <section id="inputs" class="ds-section">
+        <h2>Form Inputs</h2>
+
+        <div class="ds-example">
+          <!-- Default -->
+          <div class="form-group">
+            <label class="control-label" for="ex-input-default">Text input</label>
+            <input type="text" id="ex-input-default" class="form-control" placeholder="e.g. John Smith" />
+          </div>
+
+          <!-- Required -->
+          <div class="form-group required">
+            <label class="control-label" for="ex-input-required">Required field</label>
+            <input type="text" id="ex-input-required" class="form-control" placeholder="This field is required" />
+          </div>
+
+          <!-- With help text -->
+          <div class="form-group">
+            <label class="control-label" for="ex-input-help">With help text</label>
+            <input type="text" id="ex-input-help" class="form-control" />
+            <span class="help-block">Please enter your full name as it appears on your staff ID.</span>
+          </div>
+
+          <!-- Disabled -->
+          <div class="form-group">
+            <label class="control-label" for="ex-input-disabled">Disabled</label>
+            <input type="text" id="ex-input-disabled" class="form-control" disabled value="Read-only value" />
+          </div>
+
+          <!-- Textarea -->
+          <div class="form-group required">
+            <label class="control-label" for="ex-textarea">Textarea</label>
+            <textarea id="ex-textarea" class="form-control" placeholder="Describe your request in detail…"></textarea>
+          </div>
+
+          <!-- Date -->
+          <div class="form-group">
+            <label class="control-label" for="ex-date">Date picker</label>
+            <input type="date" id="ex-date" class="form-control" />
+          </div>
+        </div>
+
+        <p style="font-size:1.3rem;color:var(--uom-muted)">
+          Classes: <code>.form-group</code> · <code>.form-group.required</code> · <code>.control-label</code> · <code>.form-control</code> · <code>.help-block</code>
+        </p>
+      </section>
+
+      <hr class="uom-divider" />
+
+      <!-- ── Selects ─────────────────────────────────────────── -->
+      <section id="selects" class="ds-section">
+        <h2>Selects &amp; Dropdowns</h2>
+        <div class="ds-example">
+          <div class="form-group required">
+            <label class="control-label" for="ex-select">Faculty / School</label>
+            <select id="ex-select" class="form-control">
+              <option value="">-- Select faculty --</option>
+              <option>Faculty of Engineering and Information Technology</option>
+              <option>Faculty of Science</option>
+              <option>Faculty of Medicine, Dentistry and Health Sciences</option>
+              <option>Faculty of Arts</option>
+              <option>Faculty of Business and Economics</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <p style="font-size:1.3rem;color:var(--uom-muted)">Use <code>select.form-control</code> — custom arrow icon injected via CSS background-image.</p>
+      </section>
+
+      <hr class="uom-divider" />
+
+      <!-- ── Radios & Checkboxes ─────────────────────────────── -->
+      <section id="radios" class="ds-section">
+        <h2>Radios &amp; Checkboxes</h2>
+        <div class="ds-example">
+          <div class="form-group">
+            <label class="control-label">Urgency</label>
+            <div class="radio-group inline" role="group" aria-label="Urgency level">
+              <label class="radio-item">
+                <input type="radio" name="urgency" value="low" checked />
+                Low
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="urgency" value="medium" />
+                Medium
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="urgency" value="high" />
+                High
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:var(--uom-space-md)">
+            <label class="control-label">Condition</label>
+            <div class="radio-group" role="group" aria-label="Equipment condition">
+              <label class="radio-item"><input type="radio" name="condition" value="excellent" checked /> Excellent — fully operational, no defects</label>
+              <label class="radio-item"><input type="radio" name="condition" value="good" /> Good — minor cosmetic wear only</label>
+              <label class="radio-item"><input type="radio" name="condition" value="fair" /> Fair — functional but requires attention</label>
+              <label class="radio-item"><input type="radio" name="condition" value="poor" /> Poor — limited functionality</label>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:var(--uom-space-md)">
+            <label class="control-label">Acknowledgements</label>
+            <div class="radio-group">
+              <label class="checkbox-item">
+                <input type="checkbox" checked />
+                I confirm the equipment is available for re-use and has been decontaminated.
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" />
+                I agree to the University's asset transfer policy.
+              </label>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:1.3rem;color:var(--uom-muted)">Classes: <code>.radio-group</code> · <code>.radio-group.inline</code> · <code>.radio-item</code> · <code>.checkbox-item</code></p>
+      </section>
+
+      <hr class="uom-divider" />
+
+      <!-- ── File Upload ─────────────────────────────────────── -->
+      <section id="fileupload" class="ds-section">
+        <h2>File Upload</h2>
+        <div class="ds-example">
+          <div class="form-group">
+            <label class="control-label" for="ex-file">Supporting documentation</label>
+            <div class="file-upload-wrapper">
+              <label class="file-upload-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Choose file
+                <input type="file" id="ex-file" aria-label="Upload supporting documentation" />
+              </label>
+              <span class="file-upload-name" id="ex-file-name">No file chosen</span>
+            </div>
+            <span class="help-block">Accepted formats: PDF, DOCX, JPG, PNG. Max size: 10 MB.</span>
+          </div>
+        </div>
+        <p style="font-size:1.3rem;color:var(--uom-muted)">Classes: <code>.file-upload-wrapper</code> · <code>.file-upload-btn</code> · <code>.file-upload-name</code></p>
+      </section>
+
+      <hr class="uom-divider" />
+
+      <!-- ── Buttons ─────────────────────────────────────────── -->
+      <section id="buttons" class="ds-section">
+        <h2>Buttons</h2>
+
+        <h4 style="font-size:1.4rem;margin-bottom:1rem">Variants</h4>
+        <div class="ds-example">
+          <div class="ds-component-row" style="align-items:center">
+            <button class="btn btn-primary">Primary</button>
+            <button class="btn btn-secondary">Secondary</button>
+            <button class="btn btn-danger">Danger</button>
+          </div>
+        </div>
+
+        <h4 style="font-size:1.4rem;margin:1.6rem 0 1rem">Sizes</h4>
+        <div class="ds-example">
+          <div class="ds-component-row" style="align-items:center">
+            <button class="btn btn-primary btn-lg">Large</button>
+            <button class="btn btn-primary">Default</button>
+            <button class="btn btn-primary btn-sm">Small</button>
+          </div>
+        </div>
+
+        <h4 style="font-size:1.4rem;margin:1.6rem 0 1rem">States</h4>
+        <div class="ds-example">
+          <div class="ds-component-row">
+            <button class="btn btn-primary" disabled>Disabled</button>
+            <button class="btn btn-secondary" disabled>Disabled</button>
+          </div>
+        </div>
+
+        <p style="font-size:1.3rem;color:var(--uom-muted)">Classes: <code>.btn</code> + <code>.btn-primary</code> / <code>.btn-secondary</code> / <code>.btn-danger</code> · Sizes: <code>.btn-sm</code> <code>.btn-lg</code></p>
+      </section>
+
+      <hr class="uom-divider" />
+
+      <!-- ── Alerts ──────────────────────────────────────────── -->
+      <section id="alerts" class="ds-section">
+        <h2>Alerts &amp; Banners</h2>
+        <div class="ds-example">
+          <div class="alert alert-success" role="alert">
+            <span class="alert__icon" aria-hidden="true">✓</span>
+            <div>
+              <div class="alert__title">Request submitted</div>
+              Your request has been received and assigned reference number REQ0012345.
+            </div>
+          </div>
+          <div class="alert alert-info" role="alert">
+            <span class="alert__icon" aria-hidden="true">ℹ</span>
+            <div>
+              <div class="alert__title">Heads up</div>
+              Equipment loan requests are processed within 5 business days.
+            </div>
+          </div>
+          <div class="alert alert-warning" role="alert">
+            <span class="alert__icon" aria-hidden="true">⚠</span>
+            <div>
+              <div class="alert__title">Action required</div>
+              Please attach the pre-purchase approval form before submitting.
+            </div>
+          </div>
+          <div class="alert alert-danger" role="alert">
+            <span class="alert__icon" aria-hidden="true">✕</span>
+            <div>
+              <div class="alert__title">Submission failed</div>
+              An error occurred. Please try again or contact the IT Service Desk.
+            </div>
+          </div>
+        </div>
+        <p style="font-size:1.3rem;color:var(--uom-muted)">Classes: <code>.alert</code> + <code>.alert-success</code> / <code>.alert-info</code> / <code>.alert-warning</code> / <code>.alert-danger</code></p>
+      </section>
+
+      <hr class="uom-divider" />
+
+      <!-- ── Badges ──────────────────────────────────────────── -->
+      <section id="badges" class="ds-section">
+        <h2>Badges</h2>
+        <div class="ds-example">
+          <div class="ds-component-row" style="align-items:center">
+            <span class="badge">Primary</span>
+            <span class="badge badge-secondary">Secondary</span>
+            <span class="badge badge-success">Success</span>
+            <span class="badge badge-warning">Warning</span>
+            <span class="badge badge-danger">Danger</span>
+          </div>
+        </div>
+        <p style="font-size:1.3rem;color:var(--uom-muted)">Class: <code>.badge</code> + optional variant modifier.</p>
+      </section>
+
+      <hr class="uom-divider" />
+
+      <!-- ── Validation ──────────────────────────────────────── -->
+      <section id="validation" class="ds-section">
+        <h2>Validation States</h2>
+        <div class="ds-example">
+          <div class="form-group required has-error">
+            <label class="control-label" for="ex-val-error">Faculty / School</label>
+            <select id="ex-val-error" class="form-control" aria-describedby="ex-val-error-msg">
+              <option value="">-- Select faculty --</option>
+            </select>
+            <span class="error-message" id="ex-val-error-msg" role="alert">This field is required.</span>
+          </div>
+          <div class="form-group required form-group-has-focus">
+            <label class="control-label" for="ex-val-focus">Description (focused)</label>
+            <textarea id="ex-val-focus" class="form-control" style="border-color:#66afe9;box-shadow:inset 0 1px 1px rgba(0,0,0,.075), 0 0 2px rgba(102,175,233,.6)"></textarea>
+          </div>
+        </div>
+        <p style="font-size:1.3rem;color:var(--uom-muted)">Error class: <code>.form-group.has-error</code> · Focus highlight: <code>.form-group.form-group-has-focus</code> · Error text: <code>.error-message</code></p>
+      </section>
+
+      <hr class="uom-divider" />
+
+      <!-- ── Footer ─────────────────────────────────────────── -->
+      <section id="footer" class="ds-section">
+        <h2>Footer</h2>
+        <div class="ds-header-preview">
+          <footer class="uom-footer">
+            <div class="uom-footer__inner">
+              <div class="uom-footer__lockup">
+                <img src="assets/lockup.png" alt="The University of Melbourne" />
+              </div>
+              <ul class="uom-footer__links">
+                <li><a href="#">Privacy</a></li>
+                <li><a href="#">Accessibility</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">Copyright</a></li>
+              </ul>
+            </div>
+            <span class="uom-footer__copy">© 2026 The University of Melbourne · Staff Services</span>
+          </footer>
+        </div>
+        <p style="font-size:1.3rem;color:var(--uom-muted)">Class: <code>.uom-footer</code> · Lockup image filtered to white via CSS <code>filter: brightness(0) invert(1)</code>.</p>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ FOOTER ══ -->
+  <footer class="uom-footer">
+    <div class="uom-footer__inner">
+      <div class="uom-footer__lockup">
+        <img src="assets/lockup.png" alt="The University of Melbourne" />
+      </div>
+      <ul class="uom-footer__links">
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Accessibility</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Copyright</a></li>
+      </ul>
+    </div>
+    <span class="uom-footer__copy">© 2026 The University of Melbourne · SNOW Design System</span>
+  </footer>
+
+  <script>
+    // Update file name label on selection
+    document.querySelectorAll('input[type="file"]').forEach(function(input) {
+      input.addEventListener('change', function() {
+        var nameEl = document.getElementById(this.id + '-name');
+        if (nameEl) {
+          nameEl.textContent = this.files.length ? this.files[0].name : 'No file chosen';
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
